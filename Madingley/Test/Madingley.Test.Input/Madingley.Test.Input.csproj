@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{7ABA0EE4-A7CD-4DC8-8EDF-7A4C7CD115B8}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Madingley.Test.Input</RootNamespace>
+    <AssemblyName>Madingley.Test.Input</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Data.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Expected\Cows no NPP\1 Cell\1 Year\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows no NPP\1 Cell\1 Year\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows\1 Cell\10 Years\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows\1 Cell\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Cows\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Marine\1 Cell\10 Years\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Marine\1 Cell\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Marine\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Marine\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Marine\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Terrestrial\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Terrestrial\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected\Terrestrial\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Initial Model State Setup\SpecificLocations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows no NPP\1 Cell\1 Year\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\Initial Model State Setup\SpecificLocations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\1 Year\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\Initial Model State Setup\SpecificLocations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\1 Cell\10 Years\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Cows\4 Cells\10 Years\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\Initial Model State Setup\SpecificLocations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\1 Year\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\Initial Model State Setup\SpecificLocations.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\1 Cell\10 Years\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Marine\4 Cells\10 Years\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\1 Year\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\Ecological Definition Files\EcologicalParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\Ecological Definition Files\StockFunctionalGroupDefinitions.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\Environmental Data Layer List\EnvironmentalDataLayers.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\FileLocationParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\Initial Model State Setup\Scenarios.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Model setup\Terrestrial\4 Cells\10 Years\SimulationControlParameters.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Expected\Cows\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expected\Marine\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expected\Terrestrial\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Madingley.Common\Madingley.Common.csproj">
+      <Project>{3bde02d3-451b-4dbc-876a-aa8c1e8faacd}</Project>
+      <Name>Madingley.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\SDSlite\ScientificDataSet\ScientificDataSet.csproj">
+      <Project>{24d8613c-e1e9-4d7b-abaa-051eed4e5dbc}</Project>
+      <Name>ScientificDataSet</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Madingley.Test.Common\Madingley.Test.Common.csproj">
+      <Project>{ba7bf917-401f-4bc5-a907-d921c1c02040}</Project>
+      <Name>Madingley.Test.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

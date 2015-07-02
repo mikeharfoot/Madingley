@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{B7672BC1-A8FB-406C-9690-91316B7BCC5F}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Madingley.Model</RootNamespace>
+    <AssemblyName>Madingley.Model</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Madingley.Model.xml</DocumentationFile>
+    <NoWarn>1573,1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Madingley.Model.xml</DocumentationFile>
+    <NoWarn>1573,1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Ecology\Ecological processes cohorts\Activity.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\AdvectiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\CommonDispersalMethods.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\DiffusiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\ResponsiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\Technical code\IDispersalImplementation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\Technical code\TAdvectiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\Technical code\TDiffusiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal implementations\Technical code\TResponsiveDispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Dispersal.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating implementations\RevisedHerbivory.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating implementations\RevisedPredation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating implementations\Technical code\IEatingImplementation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating implementations\Technical code\TRevisedHerbivory.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating implementations\Technical code\TRevisedPredation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Eating.cs" />
+    <Compile Include="Ecology\EcologicalParameters.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism implementations\MetabolismEctotherm.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism implementations\MetabolismEndotherm.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism implementations\Technical code\IMetabolismImplementation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism implementations\Technical code\TMetabolismEctotherm.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism implementations\Technical code\TMetabolismEndotherm.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Metabolism.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\BackgroundMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\SenescenceMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\StarvationMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\Technical code\IMortalityImplementation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\Technical code\TBackgroundMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\Technical code\TSenescenceMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality implementations\Technical code\TStarvationMortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Mortality.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Reproduction implementations\ReproductionBasic.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Reproduction implementations\Technical code\IReproductionImplementation.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Reproduction implementations\Technical code\TReproductionBasic.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Reproduction.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Technical code\IEcologicalProcessAcrossGridCells.cs" />
+    <Compile Include="Ecology\Ecological processes cohorts\Technical code\IEcologicalProcessWithinGridCells.cs" />
+    <Compile Include="Impacts\ClimateChange.cs" />
+    <Compile Include="Impacts\Fisheries\ApplyFishingCatches.cs" />
+    <Compile Include="Impacts\Fisheries\FishTraits.cs" />
+    <Compile Include="Impacts\Fisheries\InputCatchData.cs" />
+    <Compile Include="Impacts\Fisheries\LWAllometries.cs" />
+    <Compile Include="Impacts\HANPP.cs" />
+    <Compile Include="Impacts\Harvesting.cs" />
+    <Compile Include="Impacts\ImpactsSpatialHandler.cs" />
+    <Compile Include="Model structure\ApplyCrossGridCellEcology.cs" />
+    <Compile Include="Model structure\ApplyEcology.cs" />
+    <Compile Include="Ecology\Ecological processes stocks\AutotrophProcessor.cs" />
+    <Compile Include="Model structure\Cohort.cs" />
+    <Compile Include="Model structure\CohortMerge.cs" />
+    <Compile Include="Model structure\EcologyCohort.cs" />
+    <Compile Include="Model structure\EcologyCrossGridCell.cs" />
+    <Compile Include="Model structure\EcologyStock.cs" />
+    <Compile Include="Model structure\FunctionalGroupDefinitions.cs" />
+    <Compile Include="Model structure\GridCell.cs" />
+    <Compile Include="Model structure\GridCellCohortHandler.cs" />
+    <Compile Include="Model structure\GridCellStockHandler.cs" />
+    <Compile Include="Model structure\InputModelState.cs" />
+    <Compile Include="Model structure\MadingleyModel.cs" />
+    <Compile Include="Model structure\MadingleyModelInitialisation.cs" />
+    <Compile Include="Model structure\ModelGrid.cs" />
+    <Compile Include="Ecology\Ecological processes stocks\RevisedTerrestrialPlantModel.cs" />
+    <Compile Include="Model structure\ScenarioParameterInitialisation.cs" />
+    <Compile Include="Model structure\Stock.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Output and tracking\Cross cell\CrossCellProcessTracker2.cs" />
+    <Compile Include="Output and tracking\GlobalProcessTracker2.cs" />
+    <Compile Include="Output and tracking\ProcessTracker2.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Converters.cs" />
+    <Compile Include="Utility classes\NonStaticSimpleRNG.cs" />
+    <Compile Include="Utility classes\Stopwatch.cs" />
+    <Compile Include="Utility classes\UtilityFunctions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Madingley.Common\Madingley.Common.csproj">
+      <Project>{3bde02d3-451b-4dbc-876a-aa8c1e8faacd}</Project>
+      <Name>Madingley.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

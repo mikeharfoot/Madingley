@@ -1,0 +1,12 @@
+Source,Folder,Filename,Extension,Dataset Name,Filetype,Internal Layer Name,Static,Resolution,Units
+Local,,LandSeaMask,.nc,land_sea_mask,nc,LandSeaMask,Y,year,
+Local,Land,hanpp_2005,.nc,HANPP,nc,HANPP,Y,year,gC/m2/year
+Local,Land,AvailableWaterCapacity,.nc,AWC,nc,AWC,Y,year,mm
+Local,Land,NPP,.nc,NPP,nc,LandNPP,Y,month,gC/m2/day
+Local,Ocean,OceanNPP,.nc,NPP,nc,OceanNPP,Y,month,gC/m2/day
+Local,Ocean,KennedyetalDTR_monthly_climatology,.nc,DTR,nc,OceanDTR,Y,month,degC
+FetchClimate,,,,temperature,,Temperature,Y,month,degC
+FetchClimate,,,,land_dtr,,LandDTR,Y,month,degC
+FetchClimate,,,,temperature_ocean,,OceanTemp,Y,month,degC
+FetchClimate,,,,precipitation,,Precipitation,Y,month,degC
+FetchClimate,,,,frost,,FrostDays,Y,month,degC

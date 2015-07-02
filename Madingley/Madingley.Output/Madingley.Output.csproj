@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A86A9D37-E890-4864-A9FB-013E25FE59BC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Madingley.Output</RootNamespace>
+    <AssemblyName>Madingley.Output</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Madingley.Output.xml</DocumentationFile>
+    <NoWarn>1573,1591</NoWarn>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Madingley.Output.xml</DocumentationFile>
+    <NoWarn>1573,1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Factory.cs" />
+    <Compile Include="GEMCrossCellProcessTracker.cs" />
+    <Compile Include="GEMGlobalProcessTracker.cs" />
+    <Compile Include="GEMProcessTracker.cs" />
+    <Compile Include="Model structure\ArraySDSConvert.cs" />
+    <Compile Include="Model structure\Cohort.cs" />
+    <Compile Include="Model structure\CreateSDSObject.cs" />
+    <Compile Include="Model structure\FunctionalGroupDefinitions.cs" />
+    <Compile Include="Model structure\GridCell.cs" />
+    <Compile Include="Model structure\GridCellCohortHandler.cs" />
+    <Compile Include="Model structure\GridCellStockHandler.cs" />
+    <Compile Include="Model structure\MadingleyModel.cs" />
+    <Compile Include="Model structure\ModelGrid.cs" />
+    <Compile Include="Model structure\Stock.cs" />
+    <Compile Include="Output and tracking\Cross cell\CrossCellProcessTracker.cs" />
+    <Compile Include="Output and tracking\Cross cell\DispersalTracker.cs" />
+    <Compile Include="Output and tracking\EatingTracker.cs" />
+    <Compile Include="Output and tracking\EcosytemMetrics.cs" />
+    <Compile Include="Output and tracking\ExtinctionTracker.cs" />
+    <Compile Include="Output and tracking\GlobalNPPTracker.cs" />
+    <Compile Include="Output and tracking\GlobalProcessTracker.cs" />
+    <Compile Include="Output and tracking\GrowthTracker.cs" />
+    <Compile Include="MadingleyModelOutput.cs" />
+    <Compile Include="Converters.cs" />
+    <Compile Include="Utility classes\MassBinsHandler.cs" />
+    <Compile Include="Model structure\MadingleyModelInitialisation.cs" />
+    <Compile Include="Output and tracking\MetabolismTracker.cs" />
+    <Compile Include="Output and tracking\MortalityTracker.cs" />
+    <Compile Include="Output and tracking\OutputCell.cs" />
+    <Compile Include="Output and tracking\OutputGlobal.cs" />
+    <Compile Include="Output and tracking\OutputGrid.cs" />
+    <Compile Include="Output and tracking\OutputModelState.cs" />
+    <Compile Include="Output and tracking\PredationTracker.cs" />
+    <Compile Include="Output and tracking\ProcessTracker.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Output and tracking\ReproductionTracker.cs" />
+    <Compile Include="Output and tracking\TextualOutput.cs" />
+    <Compile Include="Utility classes\NonStaticSimpleRNG.cs" />
+    <Compile Include="Utility classes\Stopwatch.cs" />
+    <Compile Include="Utility classes\UtilityFunctions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="FileLocationParameters.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="MassBinDefinitions.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="OutputControlParameters.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Madingley.Common\Madingley.Common.csproj">
+      <Project>{3bde02d3-451b-4dbc-876a-aa8c1e8faacd}</Project>
+      <Name>Madingley.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SDSlite\ScientificDataSet\ScientificDataSet.csproj">
+      <Project>{24d8613c-e1e9-4d7b-abaa-051eed4e5dbc}</Project>
+      <Name>ScientificDataSet</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
