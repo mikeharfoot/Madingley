@@ -1,8 +1,7 @@
-# Madingley
 The Madingley Model
 ===================
 
-This is the source code and data for the Madingley Model [link](http://www.madingleymodel.org/).
+This is the source code and data for the Madingley Model [http://www.madingleymodel.org/](http://www.madingleymodel.org/).
 
 What's New
 ----------
@@ -25,16 +24,16 @@ Other changes include:
 Installation
 ------------
 
-Input data comes from either the included netCDF files or **FetchClimate** [link](http://research.microsoft.com/en-us/projects/fetchclimate/) and model output is written to netCDF and TSV files.
-This solution includes a set of projects called **SDSLite** to manipulate these file types. It is a subset of **Scientific DataSet** [link](http://research.microsoft.com/en-us/projects/sds/) and
-[link](https://sds.codeplex.com/)
+Input data comes from either the included netCDF files or **FetchClimate** [http://research.microsoft.com/en-us/projects/fetchclimate/](http://research.microsoft.com/en-us/projects/fetchclimate/) and model output is written to netCDF and TSV files.
+This solution includes a set of projects called **SDSLite** to manipulate these file types. It is a subset of **Scientific DataSet** [http://research.microsoft.com/en-us/projects/sds/](http://research.microsoft.com/en-us/projects/sds/) and
+[https://sds.codeplex.com/](https://sds.codeplex.com/)
 
-SDSLite requires a platform dependent library available from [link](http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
+SDSLite requires a platform dependent library available from [http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html](http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
 
 ### Windows
 
-For Windows go to [link](http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html) and download the version of netCDF4 (without DAP) corresponding to your machine, either 32 or 64 bit. These are
-currently: [link](http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-32.exe) or [link](http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-64.exe)
+For Windows go to [http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html](http://www.unidata.ucar.edu/software/netcdf/docs/winbin.html) and download the version of netCDF4 (without DAP) corresponding to your machine, either 32 or 64 bit. These are
+currently: [http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-32.exe](http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-32.exe) or [http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-64.exe](http://www.unidata.ucar.edu/downloads/netcdf/ftp/netCDF4.3.3.1-NC4-64.exe)
 When you install this library select the option to add its location to your system PATH, so that SDSLite can find it.
 
 ### Linux
@@ -42,6 +41,10 @@ When you install this library select the option to add its location to your syst
 For Linux install pre-built netCDF-C libraries. For example on Ubuntu:
 
 `sudo apt-get install libnetcdf-dev`
+
+### MacOS
+
+TBD.
 
 Running the Model
 -----------------
