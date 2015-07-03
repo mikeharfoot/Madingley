@@ -98,6 +98,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ocean", "Ocean", "{59DABB40
 		Data\Original\Ocean\OceanNPP.nc = Data\Original\Ocean\OceanNPP.nc
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{545F4EAF-7138-4715-B963-DED9FE1D645A}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CodePlex|Any CPU = CodePlex|Any CPU
