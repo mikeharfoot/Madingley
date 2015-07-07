@@ -919,8 +919,8 @@ namespace Madingley
             MadingleyModel.JsonAddProperty(sb, "GridCellStocks", CohortsStocksToString(gc.GridCellStocks, new StockComparer(), Stock.ToString));
             MadingleyModel.JsonAddArray(sb, "CellEnvironment", MadingleyModel.KeyValueListListToString(gc.CellEnvironment, MadingleyModel.TToString<double>));
             MadingleyModel.JsonAddArray(sb, "Deltas", DeltasToString(gc.Deltas));
-            MadingleyModel.JsonAddProperty(sb, "_Latitude", gc._Latitude.ToString());
-            MadingleyModel.JsonAddProperty(sb, "_Longitude", gc._Longitude.ToString());
+            MadingleyModel.JsonAddProperty(sb, "_Latitude", gc._Latitude);
+            MadingleyModel.JsonAddProperty(sb, "_Longitude", gc._Longitude);
 
             return sb.ToString();
         }

@@ -1732,6 +1732,11 @@ namespace Madingley
             return sb.ToString();
         }
 
+        public static void JsonAddProperty(StringBuilder sb, string name, double value)
+        {
+            sb.AppendLine(String.Format("{0}: {1:G17},", name, value));
+        }
+
         public static void JsonAddProperty<TValue>(StringBuilder sb, string name, TValue value)
         {
             sb.AppendLine(String.Format("{0}: {1},", name, value));
