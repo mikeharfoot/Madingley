@@ -4,12 +4,26 @@ using System.Linq;
 
 namespace Madingley.Common
 {
+    /// <summary>
+    /// Sets of parameters to use for Ecological processes.
+    /// </summary>
     public class EcologicalParameters
     {
+        /// <summary>
+        /// Set of parameters
+        /// </summary>
         public IDictionary<string, double> Parameters { get; set; }
 
+        /// <summary>
+        /// List of valid time step units
+        /// </summary>
         public IEnumerable<string> TimeUnits { get; set; }
 
+        /// <summary>
+        /// EcologicalParameters constructor
+        /// </summary>
+        /// <param name="parameters">Set of parameters</param>
+        /// <param name="timeUnits">List of valid time step units</param>
         public EcologicalParameters(
             IDictionary<string, double> parameters,
             IEnumerable<string> timeUnits)
@@ -18,17 +32,26 @@ namespace Madingley.Common
             this.TimeUnits = timeUnits.OrderBy(m => m).ToArray();
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="e">EcologicalParameters to copy</param>
         public EcologicalParameters(EcologicalParameters e)
         {
             this.Parameters = new SortedList<string, double>(e.Parameters);
             this.TimeUnits = e.TimeUnits.ToArray();
         }
 
-        public override bool Equals(Object yo)
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if objects are both EcologicalParameters and equivalent; otherwise, false.</returns>
+        public override bool Equals(Object obj)
         {
-            if (yo == null) return false;
+            if (obj == null) return false;
 
-            var y = yo as EcologicalParameters;
+            var y = obj as EcologicalParameters;
             if ((Object)y == null) return false;
 
             return
@@ -36,6 +59,10 @@ namespace Madingley.Common
                 this.TimeUnits.SequenceEqual(y.TimeUnits);
         }
 
+        /// <summary>
+        /// Returns a hash code for the specified object.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return

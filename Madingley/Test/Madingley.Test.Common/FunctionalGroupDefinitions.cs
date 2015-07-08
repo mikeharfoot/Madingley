@@ -55,7 +55,7 @@ namespace Madingley.Test.Common
 
                     var propertyElements =
                         c.Properties.Select(property =>
-                                data.Properties.ContainsKey(property) ? data.Properties[property].ToString() : "");
+                                data.Properties.ContainsKey(property) ? data.Properties[property].ToString("G17") : "");
 
                     var allElements = definitionsElements.Concat(propertyElements);
 

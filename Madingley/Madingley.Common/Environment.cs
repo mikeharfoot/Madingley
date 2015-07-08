@@ -4,26 +4,69 @@ using System.Linq;
 
 namespace Madingley.Common
 {
+    /// <summary>
+    /// The Environment for a simulation - its geographic extent and environmental data.
+    /// </summary>
     public class Environment
     {
+        /// <summary>
+        /// Size of cells to be used in the model grid.
+        /// </summary>
         public double CellSize { get; set; }
 
+        /// <summary>
+        /// Lowest extent of the model grid in degrees.
+        /// </summary>
         public double BottomLatitude { get; set; }
 
+        /// <summary>
+        /// Uppermost extent of the model grid in degrees.
+        /// </summary>
         public double TopLatitude { get; set; }
 
+        /// <summary>
+        /// Leftmost extent of the model grid in degrees.
+        /// </summary>
         public double LeftmostLongitude { get; set; }
 
+        /// <summary>
+        /// Rightmost extent of the model grid in degrees.
+        /// </summary>
         public double RightmostLongitude { get; set; }
 
+        /// <summary>
+        /// String values for the units of each environmental data layer.
+        /// </summary>
         public IDictionary<string, string> Units { get; set; }
 
+        /// <summary>
+        /// Have specific locations have been specified?
+        /// </summary>
         public bool SpecificLocations { get; set; }
 
+        /// <summary>
+        /// Pairs of longitude and latitude indices for all active cells in the model grid.
+        /// </summary>
         public IList<Tuple<int, int>> FocusCells { get; set; }
 
+        /// <summary>
+        /// For each active cell, a set of environmental data. For each environment parameter will
+        /// be either an array with a single value, or an array with a value for each month
+        /// </summary>
         public IList<IDictionary<string, double[]>> CellEnvironment { get; set; }
 
+        /// <summary>
+        /// Environment constructor.
+        /// </summary>
+        /// <param name="cellSize">Size of cells to be used in the model grid.</param>
+        /// <param name="bottomLatitude">Lowest extent of the model grid in degrees.</param>
+        /// <param name="topLatitude">Uppermost extent of the model grid in degrees.</param>
+        /// <param name="leftmostLongitude">Leftmost extent of the model grid in degrees.</param>
+        /// <param name="rightmostLongitude">Rightmost extent of the model grid in degrees.</param>
+        /// <param name="units">String values for the units of each environmental data layer.</param>
+        /// <param name="specificLocations">Have specific locations have been specified?</param>
+        /// <param name="focusCells">Pairs of longitude and latitude indices for all active cells in the model grid.</param>
+        /// <param name="cellEnvironment">For each active cell, a set of environmental data.</param>
         public Environment(
             double cellSize,
             double bottomLatitude,
@@ -46,6 +89,10 @@ namespace Madingley.Common
             this.CellEnvironment = cellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="c"></param>
         public Environment(Environment c)
         {
             this.CellSize = c.CellSize;
@@ -59,11 +106,16 @@ namespace Madingley.Common
             this.CellEnvironment = c.CellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
         }
 
-        public override bool Equals(Object yo)
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if objects are both Environments and equivalent; otherwise, false.</returns>
+        public override bool Equals(Object obj)
         {
-            if (yo == null) return false;
+            if (obj == null) return false;
 
-            var y = yo as Environment;
+            var y = obj as Environment;
             if ((Object)y == null) return false;
 
             var comparer = new StringMapEqualityComparer<double[]>(new KeyValuePairEqualityComparer<double[]>(new ArrayEqualityComparer<double>(EqualityComparer<double>.Default)));
@@ -80,6 +132,10 @@ namespace Madingley.Common
                 this.CellEnvironment.SequenceEqual(y.CellEnvironment, comparer);
         }
 
+        /// <summary>
+        /// Returns a hash code for the specified object.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return

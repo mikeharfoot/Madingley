@@ -4,12 +4,26 @@ using System.Linq;
 
 namespace Madingley.Common
 {
+    /// <summary>
+    /// Defines a functional group, either a cohort or a stock
+    /// </summary>
     public class FunctionalGroupDefinition
     {
+        /// <summary>
+        /// Set of definitions
+        /// </summary>
         public IDictionary<string, string> Definitions { get; set; }
 
+        /// <summary>
+        /// Set of properties
+        /// </summary>
         public IDictionary<string, double> Properties { get; set; }
 
+        /// <summary>
+        /// FunctionalGroupDefinition constructor
+        /// </summary>
+        /// <param name="definitions">Set of definitions</param>
+        /// <param name="properties">Set of properties</param>
         public FunctionalGroupDefinition(
             IDictionary<string, string> definitions,
             IDictionary<string, double> properties)
@@ -18,25 +32,38 @@ namespace Madingley.Common
             this.Properties = new SortedList<string, double>(properties);
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="c"></param>
         public FunctionalGroupDefinition(FunctionalGroupDefinition c)
         {
             this.Definitions = new SortedList<string, string>(c.Definitions);
             this.Properties = new SortedList<string, double>(c.Properties);
         }
 
-        public override bool Equals(Object yo)
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if objects are both FunctionalGroupDefinitions and equivalent; otherwise, false.</returns>
+        public override bool Equals(Object obj)
         {
-            if (yo == null) return false;
+            if (obj == null) return false;
 
-            var y = yo as FunctionalGroupDefinition;
+            var y = obj as FunctionalGroupDefinition;
             if ((Object)y == null) return false;
 
             var ds = this.Definitions.SequenceEqual(y.Definitions, new KeyValuePairEqualityComparer<string>(EqualityComparer<String>.Default));
-            var ps = this.Properties.SequenceEqual(y.Properties, new KeyValuePairEqualityComparer<double>(new TolerantDoubleComparer(1L)));
+            var ps = this.Properties.SequenceEqual(y.Properties, new KeyValuePairEqualityComparer<double>(EqualityComparer<Double>.Default));
 
             return ds && ps;
         }
 
+        /// <summary>
+        /// Returns a hash code for the specified object.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return
@@ -45,14 +72,32 @@ namespace Madingley.Common
         }
     }
 
+    /// <summary>
+    /// A list of FunctionalGroupDefinitions, including the list of definition and property keys
+    /// </summary>
     public class FunctionalGroupDefinitions
     {
+        /// <summary>
+        /// List of FunctionalGroupDefinitions.
+        /// </summary>
         public IEnumerable<FunctionalGroupDefinition> Data { get; set; }
 
+        /// <summary>
+        /// List of definition keys.
+        /// </summary>
         public IEnumerable<string> Definitions { get; set; }
 
+        /// <summary>
+        /// List of property keys.
+        /// </summary>
         public IEnumerable<string> Properties { get; set; }
 
+        /// <summary>
+        /// FunctionalGroupDefinitions constructor.
+        /// </summary>
+        /// <param name="data">List of FunctionalGroupDefinitions.</param>
+        /// <param name="definitions">List of definition keys.</param>
+        /// <param name="properties">List of property keys.</param>
         public FunctionalGroupDefinitions(
             IEnumerable<FunctionalGroupDefinition> data,
             IEnumerable<string> definitions,
@@ -63,6 +108,10 @@ namespace Madingley.Common
             this.Properties = properties.OrderBy(m => m).ToArray();
         }
 
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="c">FunctionalGroupDefinitions to copy</param>
         public FunctionalGroupDefinitions(FunctionalGroupDefinitions c)
         {
             this.Data = c.Data.Select(d => new FunctionalGroupDefinition(d)).ToArray();
@@ -70,11 +119,16 @@ namespace Madingley.Common
             this.Properties = c.Properties.ToArray();
         }
 
-        public override bool Equals(Object yo)
+        /// <summary>
+        /// Determines whether the specified objects are equal.
+        /// </summary>
+        /// <param name="obj">The object to compare with the current object.</param>
+        /// <returns>true if objects are both FunctionalGroupDefinitionss and equivalent; otherwise, false.</returns>
+        public override bool Equals(Object obj)
         {
-            if (yo == null) return false;
+            if (obj == null) return false;
 
-            var y = yo as FunctionalGroupDefinitions;
+            var y = obj as FunctionalGroupDefinitions;
             if ((Object)y == null) return false;
 
             var ds = this.Data.SequenceEqual(y.Data);
@@ -84,6 +138,10 @@ namespace Madingley.Common
             return ds && dds && pps;
         }
 
+        /// <summary>
+        /// Returns a hash code for the specified object.
+        /// </summary>
+        /// <returns>A hash code for the current object.</returns>
         public override int GetHashCode()
         {
             return
