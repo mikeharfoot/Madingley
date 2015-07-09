@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Madingley.Output
 {
@@ -10,12 +8,10 @@ namespace Madingley.Output
     {
         public static Cohort ConvertCohort(Madingley.Common.Cohort c, byte functionalGroupIndex)
         {
-            var cohortID = c.IDs.Select(cs => (uint)cs).ToList();
-
             return new Cohort(
                 (uint)c.BirthTimeStep,
                 (uint)c.MaturityTimeStep,
-                cohortID,
+                c.IDs.Select(cs => (uint)cs).ToList(),
                 c.JuvenileMass,
                 c.AdultMass,
                 c.IndividualBodyMass,
@@ -133,7 +129,6 @@ namespace Madingley.Output
             i.LeftmostLongitude = (float)e.LeftmostLongitude;
             i.RightmostLongitude = (float)e.RightmostLongitude;
             i.PlanktonDispersalThreshold = outputSettings.PlanktonDispersalThreshold;
-            //i.InitialisationFileStrings = d.InitialisationFileStrings;
             i.InitialisationFileStrings = new SortedList<string, string>();
             i.SpecificLocations = e.SpecificLocations;
             i.InitialisationFileStrings.Add("OutputDetail", outputSettings.InitialisationFileStrings["OutputDetail"]);

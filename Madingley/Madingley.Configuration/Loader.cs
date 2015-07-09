@@ -24,6 +24,12 @@ namespace Madingley.Configuration
 
             var s = new ScenarioParameterInitialisation("Scenarios.csv", "", inputPath);
 
+            Func<Tuple<string, double, double>, Madingley.Common.ScenarioParameter> scenarioParameterConverter =
+                aa => new Madingley.Common.ScenarioParameter(aa.Item1, aa.Item2, aa.Item3);
+
+            Func<Tuple<string, int, SortedList<string, Tuple<string, double, double>>>, Madingley.Common.ScenarioParameters> scenarioParametersConverter =
+                a => new Madingley.Common.ScenarioParameters(a.Item1, a.Item2, a.Item3.ToDictionary(kv => kv.Key, kv => scenarioParameterConverter.Invoke(kv.Value)));
+
             return
                 new Madingley.Common.Configuration(
                     i.GlobalModelTimeStepUnit,
@@ -44,7 +50,7 @@ namespace Madingley.Configuration
                     ConvertFunctionalGroupDefinitions(i.StockFunctionalGroupDefinitions),
                     i.ImpactCellIndices.Select(ii => (int)ii),
                     i.ImpactAll,
-                    s.scenarioParameters.Select(a => new Madingley.Common.ScenarioParameters(a.Item1, a.Item2, a.Item3)),
+                    s.scenarioParameters.Select(scenarioParametersConverter),
                     0,
                     0,
                     new Madingley.Common.EcologicalParameters(EcologicalParameters.Parameters, EcologicalParameters.TimeUnits));

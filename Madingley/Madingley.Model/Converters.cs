@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Madingley
 {
@@ -10,12 +8,10 @@ namespace Madingley
     {
         public static Madingley.Common.Cohort ConvertCohortData(Cohort c)
         {
-            var cohortID = c.CohortID.Select(cs => (int)cs).ToArray();
-
             return new Madingley.Common.Cohort(
                 (int)c.BirthTimeStep,
                 (int)c.MaturityTimeStep,
-                cohortID,
+                c.CohortID.Select(cs => (int)cs).ToArray(),
                 c.JuvenileMass,
                 c.AdultMass,
                 c.IndividualBodyMass,
@@ -30,12 +26,10 @@ namespace Madingley
 
         public static Cohort ConvertCohort(Madingley.Common.Cohort c, byte functionalGroupIndex)
         {
-            var cohortID = c.IDs.Select(cs => (uint)cs).ToList();
-
             return new Cohort(
                 (uint)c.BirthTimeStep,
                 (uint)c.MaturityTimeStep,
-                cohortID,
+                 c.IDs.Select(cs => (uint)cs).ToList(),
                 c.JuvenileMass,
                 c.AdultMass,
                 c.IndividualBodyMass,
@@ -140,8 +134,6 @@ namespace Madingley
             Madingley.Common.Configuration d,
             Madingley.Common.Environment e)
         {
-            var focusCells = e.FocusCells.Select(a => new UInt32[] { (uint)a.Item1, (uint)a.Item2 }).ToList();
-
             var i = new MadingleyModelInitialisation("", "", "", "");
 
             i.GlobalModelTimeStepUnit = d.GlobalModelTimeStepUnit;
@@ -176,7 +168,7 @@ namespace Madingley
             {
                 i.EnviroStack = ConvertEnvironment(e.CellEnvironment);
             }
-            i.CellList = focusCells;
+            i.CellList = e.FocusCells.Select(a => new UInt32[] { (uint)a.Item1, (uint)a.Item2 }).ToList();
             i.TrackProcesses = true;
             i.TrackCrossCellProcesses = true;
             i.TrackGlobalProcesses = true;
@@ -210,10 +202,13 @@ namespace Madingley
 
         public static ScenarioParameterInitialisation ConvertScenarioParameters(IEnumerable<Madingley.Common.ScenarioParameters> scenarioParameters)
         {
-            var sp = scenarioParameters.Select(
-                a =>
-                    Tuple.Create(a.Label, a.SimulationNumber, new SortedList<string, Tuple<string, double, double>>(a.Parameters))
-            ).ToList();
+            Func<Madingley.Common.ScenarioParameter, Tuple<string, double, double>> scenarioParameterConverter =
+                aa => Tuple.Create(aa.ParamString, aa.ParamDouble1, aa.ParamDouble2);
+
+            Func<Madingley.Common.ScenarioParameters, Tuple<string, int, SortedList<string, Tuple<string, double, double>>>> scenarioParametersConverter =
+                a => Tuple.Create(a.Label, a.SimulationNumber, new SortedList<string, Tuple<string, double, double>>(a.Parameters.ToDictionary(kv => kv.Key, kv => scenarioParameterConverter.Invoke(kv.Value))));
+
+            var sp = scenarioParameters.Select(scenarioParametersConverter).ToList();
 
             return new ScenarioParameterInitialisation(sp);
         }

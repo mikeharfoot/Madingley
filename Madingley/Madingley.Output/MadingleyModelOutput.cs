@@ -26,11 +26,11 @@ namespace Madingley.Output
     {
         public MadingleyModel model;
 
-        public IList<IEnumerable<Madingley.Common.IProcessTracker>> processTrackers;
+        public IList<IEnumerable<Madingley.Common.IProcessTracker>> ProcessTracker { get; private set; }
 
-        public IEnumerable<Madingley.Common.IGlobalProcessTracker> globalProcessTrackers;
+        public IEnumerable<Madingley.Common.IGlobalProcessTracker> GlobalProcessTracker { get; private set; }
 
-        public IEnumerable<Madingley.Common.ICrossCellProcessTracker> crossCellProcessTrackers;
+        public IEnumerable<Madingley.Common.ICrossCellProcessTracker> CrossCellProcessTracker { get; private set; }
 
         public MadingleyModelOutput(
             string outputFilesSuffix,
@@ -44,49 +44,25 @@ namespace Madingley.Output
                 configuration,
                 environment);
 
-            this.processTrackers = new Madingley.Common.IProcessTracker[environment.FocusCells.Count()][];
+            this.ProcessTracker = new Madingley.Common.IProcessTracker[environment.FocusCells.Count()][];
             for (var cellIndex = 0; cellIndex < environment.FocusCells.Count(); cellIndex++)
             {
                 var processTracker = new GEMProcessTracker(cellIndex, this);
 
-                this.processTrackers[cellIndex] = new Madingley.Common.IProcessTracker[] { processTracker };
+                this.ProcessTracker[cellIndex] = new Madingley.Common.IProcessTracker[] { processTracker };
             }
 
             var globalProcessTracker = new GEMGlobalProcessTracker(this);
-            this.globalProcessTrackers = new Madingley.Common.IGlobalProcessTracker[] { globalProcessTracker };
+            this.GlobalProcessTracker = new Madingley.Common.IGlobalProcessTracker[] { globalProcessTracker };
 
             var crossCellProcessTracker = new GEMCrossCellProcessTracker(this);
-            this.crossCellProcessTrackers = new Madingley.Common.ICrossCellProcessTracker[] { crossCellProcessTracker };
+            this.CrossCellProcessTracker = new Madingley.Common.ICrossCellProcessTracker[] { crossCellProcessTracker };
 
             this.model = new MadingleyModel(
                 modelInitialisation,
                 outputFilesSuffix,
                 configuration.Simulation,
                 modelState);
-        }
-
-        public IList<IEnumerable<Madingley.Common.IProcessTracker>> ProcessTracker
-        {
-            get
-            {
-                return this.processTrackers;
-            }
-        }
-
-        public IEnumerable<Madingley.Common.IGlobalProcessTracker> GlobalProcessTracker
-        {
-            get
-            {
-                return this.globalProcessTrackers;
-            }
-        }
-
-        public IEnumerable<Madingley.Common.ICrossCellProcessTracker> CrossCellProcessTracker
-        {
-            get
-            {
-                return this.crossCellProcessTrackers;
-            }
         }
 
         public void EndTimestep(

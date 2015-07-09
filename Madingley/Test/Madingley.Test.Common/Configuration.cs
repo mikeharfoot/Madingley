@@ -9,7 +9,7 @@ namespace Madingley.Test.Common
     {
         public static Madingley.Common.ScenarioParameters[] RandomScenarioParameters(Random rnd, int length1, int length2)
         {
-            return Enumerable.Range(0, length2).Select(i => ScenarioParameters.RandomScenarioParameter(rnd, length1)).ToArray();
+            return Enumerable.Range(0, length2).Select(i => ScenarioParameters.RandomScenarioParameters(rnd, length1)).ToArray();
         }
 
         public static Madingley.Common.Configuration RandomConfiguration(Random rnd)

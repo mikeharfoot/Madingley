@@ -19,35 +19,27 @@ namespace Madingley.Environment
 
             var m = new MadingleyModel(mmi);
 
-            var unitsDictionary = mmi.Units.ToDictionary(kv => kv.Key, kv => kv.Value);
+            Func<uint[], Tuple<int, int>> convertCellIndices = e => Tuple.Create((int)e[0], (int)e[1]);
 
-            var focusCells =
-                m._CellList.Select(
-                    (uint[] e) =>
-                        Tuple.Create((int)e[0], (int)e[1]));
+            Func<uint[], Dictionary<string, double[]>> convertCellEnvironment =
+                cell =>
+                {
+                    var e = m.EcosystemModelGrid.GetCellEnvironment(cell[0], cell[1]);
 
-            var cellEnvironment =
-                focusCells.Select(
-                    cell =>
-                    {
-                        var e = m.EcosystemModelGrid.GetCellEnvironment((uint)cell.Item1, (uint)cell.Item2);
+                    return e.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray());
+                };
 
-                        return e.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray());
-                    });
-
-            var environment =
+            return
                 new Madingley.Common.Environment(
                     mmi.CellSize,
                     mmi.BottomLatitude,
                     mmi.TopLatitude,
                     mmi.LeftmostLongitude,
                     mmi.RightmostLongitude,
-                    unitsDictionary,
+                    mmi.Units,
                     m.SpecificLocations,
-                    focusCells,
-                    cellEnvironment);
-
-            return environment;
+                    m._CellList.Select(convertCellIndices),
+                    m._CellList.Select(convertCellEnvironment));
         }
     }
 }

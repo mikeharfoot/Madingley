@@ -5,57 +5,57 @@ using System.Linq;
 namespace Madingley.Common
 {
     /// <summary>
-    /// Parameters for running a scenario
+    /// Parameter for running a scenario
     /// </summary>
-    public class ScenarioParameters
+    public class ScenarioParameter
     {
         /// <summary>
-        /// Label.
+        /// ParamString.
         /// </summary>
-        public string Label { get; set; }
+        public string ParamString { get; set; }
 
         /// <summary>
-        /// Simulation number.
+        /// ParamDouble1.
         /// </summary>
-        public int SimulationNumber { get; set; }
+        public double ParamDouble1 { get; set; }
 
         /// <summary>
-        /// Set of parameters.
+        /// ParamDouble2.
         /// </summary>
-        public IDictionary<string, Tuple<string, double, double>> Parameters { get; set; }
+        public double ParamDouble2 { get; set; }
 
         /// <summary>
-        /// ScenarioParameters constructor
+        /// ScenarioParameter constructor
         /// </summary>
-        /// <param name="label">Label.</param>
-        /// <param name="simulationNumber">Simulation number.</param>
-        /// <param name="parameters">Parameters.</param>
-        public ScenarioParameters(
-            string label,
-            int simulationNumber,
-            IDictionary<string, Tuple<string, double, double>> parameters)
+        /// <param name="paramString">ParamString.</param>
+        /// <param name="paramDouble1">ParamDouble1.</param>
+        /// <param name="paramDouble2">ParamDouble2.</param>
+        public ScenarioParameter(
+            string paramString,
+            double paramDouble1,
+            double paramDouble2)
         {
-            this.Label = label;
-            this.SimulationNumber = simulationNumber;
-            this.Parameters = new SortedList<string, Tuple<string, double, double>>(parameters);
+            this.ParamString = paramString;
+            this.ParamDouble1 = paramDouble1;
+            this.ParamDouble2 = paramDouble2;
         }
 
         /// <summary>
         /// Copy constructor
         /// </summary>
         /// <param name="scenarioParameters">ScenarioParameters to copy</param>
-        public ScenarioParameters(ScenarioParameters scenarioParameters)
+        public ScenarioParameter(ScenarioParameter scenarioParameter)
         {
-            this.Label = scenarioParameters.Label;
-            this.SimulationNumber = scenarioParameters.SimulationNumber;
-            this.Parameters = new SortedList<string, Tuple<string, double, double>>(scenarioParameters.Parameters);
+            this.ParamString = scenarioParameter.ParamString;
+            this.ParamDouble1 = scenarioParameter.ParamDouble1;
+            this.ParamDouble2 = scenarioParameter.ParamDouble2;
         }
     }
 
     /// <summary>
     /// IEqualityComparer&lt;Tuple&lt;string, double, double&gt;&gt; for comparing ScenarioParameters.
     /// </summary>
-    public class ScenarioParameterComparer : IEqualityComparer<Tuple<string, double, double>>
+    public class ScenarioParameterComparer : IEqualityComparer<ScenarioParameter>
     {
         /// <summary>
         /// Method for comparing doubles.
@@ -77,7 +77,7 @@ namespace Madingley.Common
         /// <param name="x">The first object of type double to compare.</param>
         /// <param name="y">The second object of type double to compare.</param>
         /// <returns>true if objects are both ScenarioParameters and equivalent; otherwise, false.</returns>
-        public bool Equals(Tuple<string, double, double> x, Tuple<string, double, double> y)
+        public bool Equals(ScenarioParameter x, ScenarioParameter y)
         {
             //Check whether the compared objects reference the same data. 
             if (Object.ReferenceEquals(x, y)) return true;
@@ -87,9 +87,9 @@ namespace Madingley.Common
 
             //Check whether the products' properties are equal. 
             return
-                x.Item1.Equals(y.Item1) &&
-                DE.Equals(x.Item2, y.Item2) &&
-                DE.Equals(x.Item3, y.Item3);
+                x.ParamString.Equals(y.ParamString) &&
+                DE.Equals(x.ParamDouble1, y.ParamDouble1) &&
+                DE.Equals(x.ParamDouble2, y.ParamDouble2);
         }
 
         /// <summary>
@@ -97,15 +97,63 @@ namespace Madingley.Common
         /// </summary>
         /// <param name="obj">The Object for which a hash code is to be returned.</param>
         /// <returns>A hash code for the current object.</returns>
-        public int GetHashCode(Tuple<string, double, double> obj)
+        public int GetHashCode(ScenarioParameter obj)
         {
             //Check whether the object is null 
             if (Object.ReferenceEquals(obj, null)) return 0;
 
             return
-                obj.Item1.GetHashCode() ^
-                obj.Item2.GetHashCode() ^
-                obj.Item3.GetHashCode();
+                obj.ParamString.GetHashCode() ^
+                obj.ParamDouble1.GetHashCode() ^
+                obj.ParamDouble2.GetHashCode();
+        }
+    }
+
+    /// <summary>
+    /// Parameters for running a scenario
+    /// </summary>
+    public class ScenarioParameters
+    {
+        /// <summary>
+        /// Label.
+        /// </summary>
+        public string Label { get; set; }
+
+        /// <summary>
+        /// Simulation number.
+        /// </summary>
+        public int SimulationNumber { get; set; }
+
+        /// <summary>
+        /// Set of parameters.
+        /// </summary>
+        public IDictionary<string, ScenarioParameter> Parameters { get; set; }
+
+        /// <summary>
+        /// ScenarioParameters constructor
+        /// </summary>
+        /// <param name="label">Label.</param>
+        /// <param name="simulationNumber">Simulation number.</param>
+        /// <param name="parameters">Parameters.</param>
+        public ScenarioParameters(
+            string label,
+            int simulationNumber,
+            IDictionary<string, ScenarioParameter> parameters)
+        {
+            this.Label = label;
+            this.SimulationNumber = simulationNumber;
+            this.Parameters = new SortedList<string, ScenarioParameter>(parameters);
+        }
+
+        /// <summary>
+        /// Copy constructor
+        /// </summary>
+        /// <param name="scenarioParameters">ScenarioParameters to copy</param>
+        public ScenarioParameters(ScenarioParameters scenarioParameters)
+        {
+            this.Label = scenarioParameters.Label;
+            this.SimulationNumber = scenarioParameters.SimulationNumber;
+            this.Parameters = new SortedList<string, ScenarioParameter>(scenarioParameters.Parameters);
         }
     }
 
@@ -146,7 +194,7 @@ namespace Madingley.Common
             return
                 x.Label.Equals(y.Label) &&
                 x.SimulationNumber.Equals(y.SimulationNumber) &&
-                x.Parameters.SequenceEqual(y.Parameters, new KeyValuePairEqualityComparer<Tuple<string, double, double>>(new ScenarioParameterComparer(this.DE)));
+                x.Parameters.SequenceEqual(y.Parameters, new KeyValuePairEqualityComparer<ScenarioParameter>(new ScenarioParameterComparer(this.DE)));
         }
 
         /// <summary>
