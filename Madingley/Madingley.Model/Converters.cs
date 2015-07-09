@@ -30,7 +30,7 @@ namespace Madingley
 
         public static Cohort ConvertCohort(Madingley.Common.Cohort c, byte functionalGroupIndex)
         {
-            var cohortID = c.CohortID.Select(cs => (uint)cs).ToList();
+            var cohortID = c.IDs.Select(cs => (uint)cs).ToList();
 
             return new Cohort(
                 (uint)c.BirthTimeStep,

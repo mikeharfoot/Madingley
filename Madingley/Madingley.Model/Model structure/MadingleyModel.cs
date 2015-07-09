@@ -199,9 +199,9 @@ namespace Madingley
         private StopWatch TimeStepTimer;
         private StopWatch EcologyTimer;
         private StopWatch OutputTimer;
-        /// <summary>
-        /// An array of instances of the output class to deal with grid cell outputs
-        /// </summary>
+//        /// <summary>
+//        /// An array of instances of the output class to deal with grid cell outputs
+//        /// </summary>
 //        private OutputCell[] CellOutputs;
 
         /// <summary>
@@ -219,26 +219,26 @@ namespace Madingley
         /// </summary>
         private GlobalProcessTracker TrackGlobalProcesses;
 
-        /// <summary>
-        /// An instance of OutputModelState to output the state of all
-        /// cohorts and stocks in the model at a particular time
-        /// </summary>
+//        /// <summary>
+//        /// An instance of OutputModelState to output the state of all
+//        /// cohorts and stocks in the model at a particular time
+//        /// </summary>
 //        private OutputModelState WriteModelState;
 
-        /// <summary>
-        /// An instance of OutputModelState to output the state of all
-        /// cohorts and stocks in the model at a particular time
-        /// </summary>
-        private InputModelState ReadModelState;
+//        /// <summary>
+//        /// An instance of OutputModelState to output the state of all
+//        /// cohorts and stocks in the model at a particular time
+//        /// </summary>
+//        private InputModelState ReadModelState;
 
-        /// <summary>
-        /// An instance of the output class to deal with global outputs
-        /// </summary>
+//        /// <summary>
+//        /// An instance of the output class to deal with global outputs
+//        /// </summary>
 //        private OutputGlobal GlobalOutputs;
 
-        /// <summary>
-        /// An instance of the output class to deal with gridded outputs
-        /// </summary>
+//        /// <summary>
+//        /// An instance of the output class to deal with gridded outputs
+//        /// </summary>
 //        private OutputGrid GridOutputs;
 
         /// <summary>
@@ -320,16 +320,11 @@ namespace Madingley
         }
 
         /// <summary>
-        /// Initializes the ecosystem model
+        /// Initializes the ecosystem model.
         /// </summary>
-        /// <param name="initialisation">An instance of the model initialisation class</param> 
-        /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
-        /// <param name="scenarioIndex">The index of the scenario being run</param>
-        /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
-        /// <param name="globalModelTimeStepUnit">The time step unit used in the model</param>
-        /// <param name="simulation">The index of the simulation being run</param>
-        /// <param name="o">Output class</param>
-        /// <param name="nextCohortID">Next cohort id</param>
+        /// <param name="modelState">Existing model state, or null.</param> 
+        /// <param name="configuration">Configuration.</param>
+        /// <param name="environment">Environment.</param>
         public MadingleyModel(
             Madingley.Common.ModelState modelState,
             Madingley.Common.Configuration configuration,
@@ -509,7 +504,9 @@ namespace Madingley
         /// <param name="initialisation">The initialization details for the current set of model simulations</param>
         /// <param name="startTimeStep">Which time step to start from</param>
         /// <param name="originalNumTimeSteps">The original number of time steps before reducing to a year</param>
+        /// <param name="output">Output interface implementation</param>
         /// <param name="progress">Progress reporting callback</param>
+        /// <param name="cancellation">Cancellation token to stop run</param>
         public void RunMadingley(MadingleyModelInitialisation initialisation, uint startTimeStep, uint originalNumTimeSteps, Madingley.Common.IOutput output, IProgress<double> progress, System.Threading.CancellationToken cancellation)
 #else
         /// <summary>
@@ -558,7 +555,7 @@ namespace Madingley
 #if true
                  this.TrackGlobalProcesses.TimeStep = this.CurrentTimeStep;
 
-                 this.TrackCrossCellProcesses.RecordDispersalForACellData = null;
+                 this.TrackCrossCellProcesses.GridCellDispersals = null;
 #endif
 
                  // Initialise cross grid cell ecology
@@ -642,14 +639,14 @@ namespace Madingley
 
                 output.EndTimestep((int)this.CurrentTimeStep, endTimestepModelStateData);
 
-                if (this.TrackCrossCellProcesses.RecordDispersalForACellData != null)
+                if (this.TrackCrossCellProcesses.GridCellDispersals != null)
                 {
                     foreach (var o in output.CrossCellProcessTracker)
                     {
-                        o.RecordDispersals(this.CurrentTimeStep, this.TrackCrossCellProcesses.RecordDispersalForACellData, this.Dispersals);
+                        o.RecordDispersals((int)this.CurrentTimeStep, this.TrackCrossCellProcesses.GridCellDispersals, (int)this.Dispersals);
                     }
                 }
-                this.TrackCrossCellProcesses.RecordDispersalForACellData = null;
+                this.TrackCrossCellProcesses.GridCellDispersals = null;
 
                 output.SaveTimestep((int)this.CurrentTimeStep);
 
@@ -946,6 +943,7 @@ namespace Madingley
         /// <param name="initialisation">An instance of the model initialisation class</param> 
         /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
+        /// <param name="simulation">Simulation number</param>
         public void SetUpModelGrid(MadingleyModelInitialisation initialisation,
             ScenarioParameterInitialisation scenarioParameters, int scenarioIndex, int simulation)
         {

@@ -90,20 +90,20 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="c"></param>
-        public Environment(Environment c)
+        /// <param name="environment">Environment to copy</param>
+        public Environment(Environment environment)
         {
-            this.CellSize = c.CellSize;
-            this.BottomLatitude = c.BottomLatitude;
-            this.TopLatitude = c.TopLatitude;
-            this.LeftmostLongitude = c.LeftmostLongitude;
-            this.RightmostLongitude = c.RightmostLongitude;
-            this.Units = new SortedList<string, string>(c.Units);
-            this.SpecificLocations = c.SpecificLocations;
-            this.FocusCells = c.FocusCells.Select(fc => Tuple.Create(fc.Item1, fc.Item2)).ToArray();
-            this.CellEnvironment = c.CellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
+            this.CellSize = environment.CellSize;
+            this.BottomLatitude = environment.BottomLatitude;
+            this.TopLatitude = environment.TopLatitude;
+            this.LeftmostLongitude = environment.LeftmostLongitude;
+            this.RightmostLongitude = environment.RightmostLongitude;
+            this.Units = new SortedList<string, string>(environment.Units);
+            this.SpecificLocations = environment.SpecificLocations;
+            this.FocusCells = environment.FocusCells.Select(fc => Tuple.Create(fc.Item1, fc.Item2)).ToArray();
+            this.CellEnvironment = environment.CellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
         }
 
         /// <summary>
@@ -115,21 +115,21 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as Environment;
-            if ((Object)y == null) return false;
+            var environmentObj = obj as Environment;
+            if ((Object)environmentObj == null) return false;
 
-            var comparer = new StringMapEqualityComparer<double[]>(new KeyValuePairEqualityComparer<double[]>(new ArrayEqualityComparer<double>(EqualityComparer<double>.Default)));
+            var cellEnvironmentComparer = new StringMapEqualityComparer<double[]>(new KeyValuePairEqualityComparer<double[]>(new ArrayEqualityComparer<double>(EqualityComparer<double>.Default)));
 
             return
-                this.CellSize.Equals(y.CellSize) &&
-                this.BottomLatitude.Equals(y.BottomLatitude) &&
-                this.TopLatitude.Equals(y.TopLatitude) &&
-                this.LeftmostLongitude.Equals(y.LeftmostLongitude) &&
-                this.RightmostLongitude.Equals(y.RightmostLongitude) &&
-                this.Units.SequenceEqual(y.Units) &&
-                this.SpecificLocations.Equals(y.SpecificLocations) &&
-                this.FocusCells.SequenceEqual(y.FocusCells) &&
-                this.CellEnvironment.SequenceEqual(y.CellEnvironment, comparer);
+                this.CellSize.Equals(environmentObj.CellSize) &&
+                this.BottomLatitude.Equals(environmentObj.BottomLatitude) &&
+                this.TopLatitude.Equals(environmentObj.TopLatitude) &&
+                this.LeftmostLongitude.Equals(environmentObj.LeftmostLongitude) &&
+                this.RightmostLongitude.Equals(environmentObj.RightmostLongitude) &&
+                this.Units.SequenceEqual(environmentObj.Units) &&
+                this.SpecificLocations.Equals(environmentObj.SpecificLocations) &&
+                this.FocusCells.SequenceEqual(environmentObj.FocusCells) &&
+                this.CellEnvironment.SequenceEqual(environmentObj.CellEnvironment, cellEnvironmentComparer);
         }
 
         /// <summary>

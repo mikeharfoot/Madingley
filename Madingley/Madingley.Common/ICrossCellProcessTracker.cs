@@ -3,47 +3,117 @@ using System.Linq;
 
 namespace Madingley.Common
 {
+    /// <summary>
+    /// For dispersal, which direction did cohort exit grid cell?
+    /// </summary>
     public enum CohortsExitDirection
     {
+        /// <summary>
+        /// To the North
+        /// </summary>
         North, // 0
+        /// <summary>
+        /// To the North East
+        /// </summary>
         NorthEast, // 1
+        /// <summary>
+        /// To the East
+        /// </summary>
         East, // 2
+        /// <summary>
+        /// To the South East
+        /// </summary>
         SouthEast, // 3
+        /// <summary>
+        /// To the South
+        /// </summary>
         South, // 4
+        /// <summary>
+        /// To the South West
+        /// </summary>
         SouthWest, // 5
+        /// <summary>
+        /// To the West
+        /// </summary>
         West, // 6
-        NorthWest, // 7
-    }
-
-    public enum CohortsEnterDirection
-    {
-        North, // 0
-        NorthEast, // 1
-        East, // 2
-        SouthEast, // 3
-        South, // 4
-        SouthWest, // 5
-        West, // 6
+        /// <summary>
+        /// To the North West
+        /// </summary>
         NorthWest, // 7
     }
 
     /// <summary>
-    /// Record dispersal events in the dispersal tracker
+    /// For dispersal, from which direction did the cohort enter the grid cell?
     /// </summary>
-    /// <param name="inboundCohorts">The cohorts arriving in a cell in the current time step</param>
-    /// <param name="outboundCohorts">The cohorts leaving a cell in the current time step</param>
-    /// <param name="outboundCohortWeights">The body masses of cohorts leaving the cell in the current time step</param>
-    public class RecordDispersalForACellData
+    public enum CohortsEnterDirection
     {
-        public IDictionary<CohortsEnterDirection, int> InboundCohorts { get; set; }
+        /// <summary>
+        /// From the North
+        /// </summary>
+        North, // 0
+        /// <summary>
+        /// From the North East
+        /// </summary>
+        NorthEast, // 1
+        /// <summary>
+        /// From the East
+        /// </summary>
+        East, // 2
+        /// <summary>
+        /// From the South East
+        /// </summary>
+        SouthEast, // 3
+        /// <summary>
+        /// From the South
+        /// </summary>
+        South, // 4
+        /// <summary>
+        /// From the South West
+        /// </summary>
+        SouthWest, // 5
+        /// <summary>
+        /// From the West
+        /// </summary>
+        West, // 6
+        /// <summary>
+        /// From the North West
+        /// </summary>
+        NorthWest, // 7
+    }
 
-        public IDictionary<CohortsExitDirection, int> OutboundCohorts { get; set; }
+    /// <summary>
+    /// Dispersal data for a grid cell.
+    /// </summary>
+    public class GridCellDispersal
+    {
+        /// <summary>
+        /// Number of cohorts to enter from each direction.
+        /// </summary>
+        public IDictionary<CohortsEnterDirection, int> InboundCohorts { get; private set; }
 
-        public IEnumerable<double> OutboundCohortWeights { get; set; }
+        /// <summary>
+        /// Number of cohorts to exit to each direction.
+        /// </summary>
+        public IDictionary<CohortsExitDirection, int> OutboundCohorts { get; private set; }
 
-        public GridCell GridCell { get; set; }
+        /// <summary>
+        /// List of cohort weights, list by cohort functional group.
+        /// </summary>
+        public IEnumerable<double> OutboundCohortWeights { get; private set; }
 
-        public RecordDispersalForACellData(
+        /// <summary>
+        /// Grid cell.
+        /// </summary>
+        public GridCell GridCell { get; private set; }
+
+        /// <summary>
+        /// GridCellDispersal constructor.
+        /// </summary>
+        /// <param name="inboundCohorts">Inbound cohort counts, by direction.</param>
+        /// <param name="outboundCohorts">Outbound cohort counts, by direction.</param>
+        /// <param name="outboundCohortWeights">Outbound cohort weights, by functional group.</param>
+        /// <param name="gridCell">Grid cell.</param>
+        public GridCellDispersal(
             IDictionary<CohortsEnterDirection, int> inboundCohorts,
             IDictionary<CohortsExitDirection, int> outboundCohorts,
             IEnumerable<double> outboundCohortWeights,
@@ -56,11 +126,20 @@ namespace Madingley.Common
         }
     }
 
+    /// <summary>
+    /// Interface for tracking cross cell processes.
+    /// </summary>
     public interface ICrossCellProcessTracker
     {
+        /// <summary>
+        /// Record dispersals for all active grid cells at a time step.
+        /// </summary>
+        /// <param name="timeStep">Time step.</param>
+        /// <param name="gridCellDispersals">List of grid cell dispersal, one for each active grid cell.</param>
+        /// <param name="numberOfDispersals">Number of dispersals.</param>
         void RecordDispersals(
-            uint timeStep,
-            IList<RecordDispersalForACellData> dispersalData,
-            uint numberOfDispersals);
+            int timeStep,
+            IList<GridCellDispersal> gridCellDispersals,
+            int numberOfDispersals);
     }
 }

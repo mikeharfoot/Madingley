@@ -76,21 +76,6 @@ namespace Madingley
         private uint NumTimeSteps;
 
         /// <summary>
-        /// The number of time steps to run before any human impacts are simulated
-        /// </summary>
-        private uint NumBurninSteps;
-
-        /// <summary>
-        /// For temporary impacts, the number of time steps to apply the impact for
-        /// </summary>
-        private uint NumImpactSteps;
-
-        /// <summary>
-        /// For temporary impacts, the number of time steps to apply the impact for
-        /// </summary>
-        private uint NumRecoverySteps;
-
-        /// <summary>
         /// The timesteps for which model state should be output 
         /// </summary>
         private List<uint> OutputModelStateTimestep;
@@ -111,23 +96,7 @@ namespace Madingley
         /// Default is true
         /// </summary>
         public Boolean DrawRandomly = true;
-        
-        /// <summary>
-        /// The threshold abundance below which cohorts will automatically become extinct
-        /// </summary>
-        private double _ExtinctionThreshold;
-        /// <summary>
-        /// Get the extinction threshold for this model
-        /// </summary>
-        public double ExtinctionThreshold
-        {  get { return _ExtinctionThreshold; } }
 
-        //Values to define when cohorts can be merged
-        /// <summary>
-        /// The proportional difference in adult, juvenile and current body masses that cohorts must fall within in order to be considered for merging
-        /// </summary>
-        private double MergeDifference;
-        
         /// <summary>
         /// The time step units for this model
         /// </summary>
@@ -226,13 +195,9 @@ namespace Madingley
         /// Initializes the ecosystem model
         /// </summary>
         /// <param name="initialisation">An instance of the model initialisation class</param> 
-        /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
-        /// <param name="scenarioIndex">The index of the scenario being run</param>
         /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
-        /// <param name="globalModelTimeStepUnit">The time step unit used in the model</param>
         /// <param name="simulation">The index of the simulation being run</param>
-        /// <param name="gridCells">Array of specific locations</param>
-        /// <param name="globalDiagnosticVariables">Global diagnostic variables</param>
+        /// <param name="modelState">Existing model state or null</param>
         public MadingleyModel(
             MadingleyModelInitialisation initialisation,
             string outputFilesSuffix,
@@ -358,7 +323,7 @@ namespace Madingley
         }
 
         public void RecordDispersals(
-            IList<Madingley.Common.RecordDispersalForACellData> dispersalData,
+            IList<Madingley.Common.GridCellDispersal> dispersalData,
             uint numberOfDispersals)
         {
             if (dispersalData.Count() > 0)
@@ -575,6 +540,15 @@ namespace Madingley
             
         }
 
+#if true
+        /// <summary>
+        /// Assigns the properties of the current model run
+        /// </summary>
+        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
+        public void AssignModelRunProperties(MadingleyModelInitialisation initialisation,
+            string outputFilesSuffix)
+#else
         /// <summary>
         /// Assigns the properties of the current model run
         /// </summary>
@@ -582,10 +556,6 @@ namespace Madingley
         /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
         /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
-#if true
-        public void AssignModelRunProperties(MadingleyModelInitialisation initialisation,
-            string outputFilesSuffix)
-#else
         public void AssignModelRunProperties(MadingleyModelInitialisation initialisation, 
             ScenarioParameterInitialisation scenarioParameters, int scenarioIndex,
             string outputFilesSuffix)
@@ -661,15 +631,19 @@ namespace Madingley
             
         }
 
+#if true
+        /// <summary>
+        /// Sets up the model grid within a Madingley model run
+        /// </summary>
+        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        public void SetUpModelGrid(MadingleyModelInitialisation initialisation)
+#else
         /// <summary>
         /// Sets up the model grid within a Madingley model run
         /// </summary>
         /// <param name="initialisation">An instance of the model initialisation class</param> 
         /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
-#if true
-        public void SetUpModelGrid(MadingleyModelInitialisation initialisation)
-#else
         public void SetUpModelGrid(MadingleyModelInitialisation initialisation,
             ScenarioParameterInitialisation scenarioParameters, int scenarioIndex, int simulation)
 #endif

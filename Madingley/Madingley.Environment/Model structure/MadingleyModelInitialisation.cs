@@ -128,7 +128,10 @@ namespace Madingley
         /// <summary>
         /// Reads the initalization file to get information for the set of simulations to be run
         /// </summary>
-        /// <param name="initialisationFile">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="simulationInitialisationFilename">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="definitionsFilename">Definitions file name</param>
+        /// <param name="outputsFilename">Outputs file name</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="environmentDataRoot">The path to folder which contains the data inputs</param>
         /// <param name="inputPath">The path to folder which contains the model inputs</param>
         public MadingleyModelInitialisation(string simulationInitialisationFilename, string definitionsFilename, string outputsFilename, string outputPath, string environmentDataRoot, string inputPath)
@@ -169,7 +172,10 @@ namespace Madingley
         /// <summary>
         /// Reads in all initialisation files and copies them to the output directory for future reference
         /// </summary>
-        /// <param name="initialisationFile">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="simulationInitialisationFilename">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="definitionsFilename">Definitions file name</param>
+        /// <param name="outputsFilename">Outputs file name</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="environmentDataRoot">The path to folder which contains the data inputs</param>
         /// <param name="inputPath">The path to folder which contains the model inputs</param>
         /// <todo>Need to adjust this file to deal with incorrect inputs, extra columns etc by throwing an error</todo>
@@ -284,6 +290,7 @@ namespace Madingley
         /// </summary>
         /// <param name="specificLocationsFile">The name of the file with specific locations information</param>
         /// <param name="outputPath">The path to the output folder in which to copy the specific locations file</param>
+        /// <param name="inputPath">Path to the input files</param>
         public void ReadSpecificLocations(string specificLocationsFile, string outputPath, string inputPath)
 #else
         /// <summary>
@@ -356,6 +363,7 @@ namespace Madingley
         /// Reads the environmental layers listed in the specified file containing a list of environmental layers
         /// </summary>
         /// <param name="environmentalLayerFile">The name of the file containing the list of environmental layers</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="environmentDataRoot">The path to folder which contains the data inputs</param>
         /// <param name="inputPath">The path to folder which contains the model inputs</param>
         public void ReadEnvironmentalLayers(string environmentalLayerFile, string outputPath, string environmentDataRoot, string inputPath)

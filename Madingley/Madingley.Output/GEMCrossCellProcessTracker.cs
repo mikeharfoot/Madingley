@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Madingley.Output
 {
@@ -15,12 +11,9 @@ namespace Madingley.Output
             this.output = m;
         }
 
-        public void RecordDispersals(
-            uint timeStep,
-            IList<Madingley.Common.RecordDispersalForACellData> dispersalData,
-            uint numberOfDispersals)
+        public void RecordDispersals(int timeStep, IList<Madingley.Common.GridCellDispersal> dispersalData, int numberOfDispersals)
         {
-            this.output.model.RecordDispersals(dispersalData, numberOfDispersals);
+            this.output.model.RecordDispersals(dispersalData, (uint)numberOfDispersals);
         }
     }
 }

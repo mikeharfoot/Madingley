@@ -125,13 +125,6 @@ namespace Madingley
             FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics,Boolean tracking,
             bool specificLocations)
         {
-
-            // Boolean to track when environmental data are missing
-            Boolean EnviroMissingValue;
-
-            // Temporary vector for holding initial values of grid cell properties
-            double[] tempVector;
-
             // Initialise deltas sorted list
             _Deltas = new Dictionary<string, Dictionary<string, double>>();
 

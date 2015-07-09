@@ -18,10 +18,10 @@ namespace Madingley.Common
         public double TotalBiomass { get; set; }
 
         /// <summary>
-        /// Stock constructor
+        /// Stock constructor.
         /// </summary>
-        /// <param name="individualBodyMass">Mean body mass of an individual</param>
-        /// <param name="totalBiomass">Total biomass</param>
+        /// <param name="individualBodyMass">Mean body mass of an individual.</param>
+        /// <param name="totalBiomass">Total biomass.</param>
         public Stock(
             double individualBodyMass,
             double totalBiomass)
@@ -31,9 +31,9 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="stock"></param>
+        /// <param name="stock">Stock to copy.</param>
         public Stock(Stock stock)
         {
             this.IndividualBodyMass = stock.IndividualBodyMass;
@@ -49,12 +49,12 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as Stock;
-            if ((Object)y == null) return false;
+            var stockObj = obj as Stock;
+            if ((Object)stockObj == null) return false;
 
             return
-                this.IndividualBodyMass.Equals(y.IndividualBodyMass) &&
-                this.TotalBiomass.Equals(y.TotalBiomass);
+                this.IndividualBodyMass.Equals(stockObj.IndividualBodyMass) &&
+                this.TotalBiomass.Equals(stockObj.TotalBiomass);
         }
 
         /// <summary>

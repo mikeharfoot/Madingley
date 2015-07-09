@@ -5,25 +5,25 @@ using System.Linq;
 namespace Madingley.Common
 {
     /// <summary>
-    /// Defines a functional group, either a cohort or a stock
+    /// Defines a functional group, either a cohort or a stock.
     /// </summary>
     public class FunctionalGroupDefinition
     {
         /// <summary>
-        /// Set of definitions
+        /// Set of definitions (string values).
         /// </summary>
         public IDictionary<string, string> Definitions { get; set; }
 
         /// <summary>
-        /// Set of properties
+        /// Set of properties (numeric values).
         /// </summary>
         public IDictionary<string, double> Properties { get; set; }
 
         /// <summary>
-        /// FunctionalGroupDefinition constructor
+        /// FunctionalGroupDefinition constructor.
         /// </summary>
-        /// <param name="definitions">Set of definitions</param>
-        /// <param name="properties">Set of properties</param>
+        /// <param name="definitions">Set of definitions.</param>
+        /// <param name="properties">Set of properties.</param>
         public FunctionalGroupDefinition(
             IDictionary<string, string> definitions,
             IDictionary<string, double> properties)
@@ -33,13 +33,13 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="c"></param>
-        public FunctionalGroupDefinition(FunctionalGroupDefinition c)
+        /// <param name="functionalGroupDefinition">FunctionalGroupDefinition to copy</param>
+        public FunctionalGroupDefinition(FunctionalGroupDefinition functionalGroupDefinition)
         {
-            this.Definitions = new SortedList<string, string>(c.Definitions);
-            this.Properties = new SortedList<string, double>(c.Properties);
+            this.Definitions = new SortedList<string, string>(functionalGroupDefinition.Definitions);
+            this.Properties = new SortedList<string, double>(functionalGroupDefinition.Properties);
         }
 
         /// <summary>
@@ -51,11 +51,11 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as FunctionalGroupDefinition;
-            if ((Object)y == null) return false;
+            var functionalGroupDefinitionObj = obj as FunctionalGroupDefinition;
+            if ((Object)functionalGroupDefinitionObj == null) return false;
 
-            var ds = this.Definitions.SequenceEqual(y.Definitions, new KeyValuePairEqualityComparer<string>(EqualityComparer<String>.Default));
-            var ps = this.Properties.SequenceEqual(y.Properties, new KeyValuePairEqualityComparer<double>(EqualityComparer<Double>.Default));
+            var ds = this.Definitions.SequenceEqual(functionalGroupDefinitionObj.Definitions, new KeyValuePairEqualityComparer<string>(EqualityComparer<String>.Default));
+            var ps = this.Properties.SequenceEqual(functionalGroupDefinitionObj.Properties, new KeyValuePairEqualityComparer<double>(EqualityComparer<Double>.Default));
 
             return ds && ps;
         }

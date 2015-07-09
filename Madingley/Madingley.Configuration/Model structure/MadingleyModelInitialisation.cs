@@ -249,7 +249,10 @@ namespace Madingley
         /// <summary>
         /// Reads the initalization file to get information for the set of simulations to be run
         /// </summary>
-        /// <param name="initialisationFile">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="simulationInitialisationFilename">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="definitionsFilename">Definitions file name</param>
+        /// <param name="outputsFilename">Outputs file name</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
         public MadingleyModelInitialisation(string simulationInitialisationFilename, string definitionsFilename, string outputsFilename, string outputPath, string inputPath)
 #else
@@ -273,7 +276,10 @@ namespace Madingley
         /// <summary>
         /// Reads in all initialisation files and copies them to the output directory for future reference
         /// </summary>
-        /// <param name="initialisationFile">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="simulationInitialisationFilename">The name of the initialization file with information on the simulations to be run</param>
+        /// <param name="definitionsFilename">Definitions file name</param>
+        /// <param name="outputsFilename">Outputs file name</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
         public void ReadAndCopyInitialisationFiles(string simulationInitialisationFilename, string definitionsFilename, string outputsFilename, string outputPath, string inputPath)
         {

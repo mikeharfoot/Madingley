@@ -74,8 +74,8 @@ namespace Madingley.Common
         /// <summary>
         /// Determines whether the specified objects are equal.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
+        /// <param name="x">The first object of type double to compare.</param>
+        /// <param name="y">The second object of type double to compare.</param>
         /// <returns>true if objects are both ScenarioParameters and equivalent; otherwise, false.</returns>
         public bool Equals(Tuple<string, double, double> x, Tuple<string, double, double> y)
         {

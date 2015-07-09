@@ -16,9 +16,9 @@ namespace Madingley.Common
         Int64 Units { get; set; }
 
         /// <summary>
-        /// TolerantDoubleComparer constructor
+        /// TolerantDoubleComparer constructor.
         /// </summary>
-        /// <param name="units">Maximum distance</param>
+        /// <param name="units">Maximum distance.</param>
         public TolerantDoubleComparer(Int64 units)
         {
             this.Units = units;
@@ -52,12 +52,12 @@ namespace Madingley.Common
     }
 
     /// <summary>
-    /// IEqualityComparer&lt;double&gt; implementation to compare two doubles by casting them to floats
+    /// IEqualityComparer&lt;double&gt; implementation to compare two doubles by casting them to floats.
     /// </summary>
     public class FixedDoubleComparer : IEqualityComparer<double>
     {
         /// <summary>
-        /// FixedDoubleComparer constructor
+        /// FixedDoubleComparer constructor.
         /// </summary>
         public FixedDoubleComparer()
         {
@@ -100,9 +100,9 @@ namespace Madingley.Common
         IEqualityComparer<T> CS { get; set; }
 
         /// <summary>
-        /// ArrayEqualityComparer constructor
+        /// ArrayEqualityComparer constructor.
         /// </summary>
-        /// <param name="cs">Method for comparing each T object</param>
+        /// <param name="cs">Method for comparing each T object.</param>
         public ArrayEqualityComparer(IEqualityComparer<T> cs)
         {
             this.CS = cs; 
@@ -141,7 +141,7 @@ namespace Madingley.Common
     }
 
     /// <summary>
-    /// IEqualityComparer&lt;IEnumerable&lt;KeyValuePair&lt;string, T&gt;&gt;&gt; implementation
+    /// IEqualityComparer&lt;IEnumerable&lt;KeyValuePair&lt;string, T&gt;&gt;&gt; implementation.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class StringMapEqualityComparer<T> : IEqualityComparer<IEnumerable<KeyValuePair<string, T>>>
@@ -152,7 +152,7 @@ namespace Madingley.Common
         IEqualityComparer<KeyValuePair<string, T>> CS { get; set; }
 
         /// <summary>
-        /// StringMapEqualityComparer constructor
+        /// StringMapEqualityComparer constructor.
         /// </summary>
         /// <param name="cs">Method for comparing each sequence element.</param>
         public StringMapEqualityComparer(IEqualityComparer<KeyValuePair<string, T>> cs)
@@ -194,20 +194,20 @@ namespace Madingley.Common
     }
 
     /// <summary>
-    /// IEqualityComparer&lt;KeyValuePair&lt;string, T&gt;&gt; implementation
+    /// IEqualityComparer&lt;KeyValuePair&lt;string, T&gt;&gt; implementation.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class KeyValuePairEqualityComparer<T> : IEqualityComparer<KeyValuePair<string, T>>
     {
         /// <summary>
-        /// Method for comparing T objects
+        /// Method for comparing T objects.
         /// </summary>
         IEqualityComparer<T> CS { get; set; }
 
         /// <summary>
-        /// KeyValuePairEqualityComparer constructor
+        /// KeyValuePairEqualityComparer constructor.
         /// </summary>
-        /// <param name="cs">Method for comparing T objects</param>
+        /// <param name="cs">Method for comparing T objects.</param>
         public KeyValuePairEqualityComparer(IEqualityComparer<T> cs)
         {
             this.CS = cs;

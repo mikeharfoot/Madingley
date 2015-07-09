@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Madingley.Output
 {
@@ -18,123 +15,123 @@ namespace Madingley.Output
             this.output = output;
         }
 
-        public void RecordNewCohort(uint latIndex, uint lonIndex, uint timeStep, double offspringCohortAbundance, double parentCohortAdultMass, int functionalGroup, uint[] parentCohortIDs, uint offspringCohortID)
+        public void RecordNewCohort(int latitudeIndex, int longitudeIndex, int timeStep, double offspringCohortAbundance, double parentCohortAdultMass, int functionalGroup, IEnumerable<int> parentCohortIDs, int offspringCohortID)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.RecordNewCohort(latIndex, lonIndex, timeStep, offspringCohortAbundance, parentCohortAdultMass, functionalGroup, parentCohortIDs.ToList(), offspringCohortID);
+                p.RecordNewCohort((uint)latitudeIndex, (uint)longitudeIndex, (uint)timeStep, offspringCohortAbundance, parentCohortAdultMass, functionalGroup, parentCohortIDs.Select(id => (uint)id).ToList(), (uint)offspringCohortID);
             }
         }
 
-        public void TrackMaturity(uint latIndex, uint lonIndex, uint timeStep, uint birthTimestep, double juvenileMass, double adultMass, int functionalGroup)
+        public void TrackMaturity(int latitudeIndex, int longitudeIndex, int timeStep, int birthTimestep, double juvenileMass, double adultMass, int functionalGroup)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackMaturity(latIndex, lonIndex, timeStep, birthTimestep, juvenileMass, adultMass, functionalGroup);
+                p.TrackMaturity((uint)latitudeIndex, (uint)longitudeIndex, (uint)timeStep, (uint)birthTimestep, juvenileMass, adultMass, functionalGroup);
             }
         }
 
-        public void TrackPredationTrophicFlow(uint latIndex, uint lonIndex, int fromFunctionalGroup, int toFunctionalGroup, double massEaten, double predatorBodyMass, double preyBodyMass, bool marineCell)
+        public void TrackPredationTrophicFlow(int latitudeIndex, int longitudeIndex, int fromFunctionalGroup, int toFunctionalGroup, double massEaten, double predatorBodyMass, double preyBodyMass, bool marineCell)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackPredationTrophicFlow(latIndex, lonIndex, fromFunctionalGroup, toFunctionalGroup, this.output.model.ModelInitialisation.CohortFunctionalGroupDefinitions, massEaten, predatorBodyMass, preyBodyMass, this.output.model.ModelInitialisation, marineCell);
+                p.TrackPredationTrophicFlow((uint)latitudeIndex, (uint)longitudeIndex, fromFunctionalGroup, toFunctionalGroup, this.output.model.ModelInitialisation.CohortFunctionalGroupDefinitions, massEaten, predatorBodyMass, preyBodyMass, this.output.model.ModelInitialisation, marineCell);
             }
         }
 
-        public void TrackHerbivoryTrophicFlow(uint latIndex, uint lonIndex, int toFunctionalGroup, double massEaten, double predatorBodyMass, bool marineCell)
+        public void TrackHerbivoryTrophicFlow(int latitudeIndex, int longitudeIndex, int toFunctionalGroup, double massEaten, double predatorBodyMass, bool marineCell)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackHerbivoryTrophicFlow(latIndex, lonIndex, toFunctionalGroup, this.output.model.ModelInitialisation.CohortFunctionalGroupDefinitions, massEaten, predatorBodyMass, this.output.model.ModelInitialisation, marineCell);
+                p.TrackHerbivoryTrophicFlow((uint)latitudeIndex, (uint)longitudeIndex, toFunctionalGroup, this.output.model.ModelInitialisation.CohortFunctionalGroupDefinitions, massEaten, predatorBodyMass, this.output.model.ModelInitialisation, marineCell);
             }
         }
 
-        public void TrackPrimaryProductionTrophicFlow(uint latIndex, uint lonIndex, double massEaten)
+        public void TrackPrimaryProductionTrophicFlow(int latitudeIndex, int longitudeIndex, double massEaten)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackPrimaryProductionTrophicFlow(latIndex, lonIndex, massEaten);
+                p.TrackPrimaryProductionTrophicFlow((uint)latitudeIndex, (uint)longitudeIndex, massEaten);
             }
         }
 
-        public void TrackTimestepGrowth(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, int functionalGroup, double netGrowth, double metabolism, double predation, double herbivory)
+        public void TrackTimestepGrowth(int latitudeIndex, int longitudeIndex, int timeStep, double currentBodyMass, int functionalGroup, double netGrowth, double metabolism, double predation, double herbivory)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackTimestepGrowth(latIndex, lonIndex, timeStep, currentBodyMass, functionalGroup, netGrowth, metabolism, predation, herbivory);
+                p.TrackTimestepGrowth((uint)latitudeIndex, (uint)longitudeIndex, (uint)timeStep, currentBodyMass, functionalGroup, netGrowth, metabolism, predation, herbivory);
             }
         }
 
-        public void RecordPredationMassFlow(uint currentTimeStep, double preyBodyMass, double predatorBodyMass, double massFlow)
+        public void RecordPredationMassFlow(int currentTimeStep, double preyBodyMass, double predatorBodyMass, double massFlow)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.RecordPredationMassFlow(currentTimeStep, preyBodyMass, predatorBodyMass, massFlow);
+                p.RecordPredationMassFlow((uint)currentTimeStep, preyBodyMass, predatorBodyMass, massFlow);
             }
         }
 
-        public void RecordHerbivoryMassFlow(uint currentTimeStep, double herbivoreBodyMass, double massFlow)
+        public void RecordHerbivoryMassFlow(int currentTimeStep, double herbivoreBodyMass, double massFlow)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.RecordHerbivoryMassFlow(currentTimeStep, herbivoreBodyMass, massFlow);
+                p.RecordHerbivoryMassFlow((uint)currentTimeStep, herbivoreBodyMass, massFlow);
             }
         }
 
-        public void RecordMortality(uint latIndex, uint lonIndex, uint birthTimeStep, uint timeStep, double currentMass, double adultMass, uint functionalGroup, uint cohortID, double numberDied, string mortalitySource)
+        public void RecordMortality(int latitudeIndex, int longitudeIndex, int birthTimeStep, int timeStep, double currentMass, double adultMass, int functionalGroup, int cohortID, double numberDied, string mortalitySource)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.RecordMortality(latIndex, lonIndex, birthTimeStep, timeStep, currentMass, adultMass, functionalGroup, cohortID, numberDied, mortalitySource);
+                p.RecordMortality((uint)latitudeIndex, (uint)longitudeIndex, (uint)birthTimeStep, (uint)timeStep, currentMass, adultMass, (uint)functionalGroup, (uint)cohortID, numberDied, mortalitySource);
             }
         }
 
-        public void OutputMortalityProfile(uint cohortID)
+        public void OutputMortalityProfile(int cohortID)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.OutputMortalityProfile(cohortID);
+                p.OutputMortalityProfile((uint)cohortID);
             }
         }
 
-        public void RecordExtinction(uint latIndex, uint lonIndex, uint currentTimeStep, bool merged, uint[] cohortIDs)
+        public void RecordExtinction(int latitudeIndex, int longitudeIndex, int currentTimeStep, bool merged, IEnumerable<int> cohortIDs)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.RecordExtinction(latIndex, lonIndex, currentTimeStep, merged, cohortIDs.ToList());
+                p.RecordExtinction((uint)latitudeIndex, (uint)longitudeIndex, (uint)currentTimeStep, merged, cohortIDs.Select(id => (uint)id).ToList());
             }
         }
 
-        public void TrackTimestepMetabolism(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, int functionalGroup, double temperature, double metabolicLoss)
+        public void TrackTimestepMetabolism(int latitudeIndex, int longitudeIndex, int timeStep, double currentBodyMass, int functionalGroup, double temperature, double metabolicLoss)
         {
             var p = this.GetProcessTracker();
 
             if (p != null && p.TrackProcesses)
             {
-                p.TrackTimestepMetabolism(latIndex, lonIndex, timeStep, currentBodyMass, functionalGroup, temperature, metabolicLoss);
+                p.TrackTimestepMetabolism((uint)latitudeIndex, (uint)longitudeIndex, (uint)timeStep, currentBodyMass, functionalGroup, temperature, metabolicLoss);
             }
         }
 

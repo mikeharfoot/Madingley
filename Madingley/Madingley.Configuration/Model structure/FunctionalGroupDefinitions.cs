@@ -45,6 +45,7 @@ namespace Madingley
         /// constructs lookup tables, mass ranges and initial cohort numbers in each functional group
         /// </summary>
         /// <param name="fileName">The name of the functional group definition file to be read in</param>
+        /// <param name="outputPath">The path to the output folder, in which to copy the functional group definitions file</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
         public FunctionalGroupDefinitions(string fileName, string outputPath, string inputPath)
         {

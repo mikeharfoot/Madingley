@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace Madingley.Output
 {
     internal class GEMGlobalProcessTracker : Madingley.Common.IGlobalProcessTracker
@@ -15,41 +10,23 @@ namespace Madingley.Output
             this.output = m;
         }
 
-        public void RecordNPP(
-            uint latIndex,
-            uint lonIndex,
-            uint timeStep,
-            uint stock,
-            double npp)
+        public void RecordNPP(int latitudeIndex, int longitudeIndex, int timeStep, int stockFunctionalGroupIndex, double npp)
         {
             var p = this.GetGlobalProcessTracker();
 
             if (p.TrackProcesses)
             {
-                p.RecordNPP(
-                    latIndex,
-                    lonIndex,
-                    stock,
-                    npp);
+                p.RecordNPP((uint)latitudeIndex, (uint)longitudeIndex, (uint)stockFunctionalGroupIndex, npp);
             }
         }
 
-        public void RecordHANPP(
-            uint latIndex,
-            uint lonIndex,
-            uint timeStep,
-            uint stock,
-            double npp)
+        public void RecordHANPP(int latitudeIndex, int longitudeIndex, int timeStep, int stockFunctionalGroupIndex, double hanpp)
         {
             var p = this.GetGlobalProcessTracker();
 
             if (p.TrackProcesses)
             {
-                p.RecordHANPP(
-                    latIndex,
-                    lonIndex,
-                    stock,
-                    npp);
+                p.RecordHANPP((uint)latitudeIndex, (uint)longitudeIndex, (uint)stockFunctionalGroupIndex, hanpp);
             }
         }
 

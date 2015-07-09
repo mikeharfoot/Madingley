@@ -5,91 +5,91 @@ using System.Linq;
 namespace Madingley.Common
 {
     /// <summary>
-    /// Class to hold properties of a single cohort
+    /// Class to hold properties of a single cohort.
     /// </summary>
     public class Cohort
     {
         /// <summary>
-        /// Time step when the cohort was generated
+        /// Time step when this cohort was generated.
         /// </summary>
         public int BirthTimeStep { get; set; }
 
         /// <summary>
-        /// Time step at which this cohort reached maturity
+        /// Time step at which this cohort reached maturity.
         /// </summary>
         public int MaturityTimeStep { get; set; }
 
         /// <summary>
-        /// List of all cohort IDs ever associated with individuals in this current cohort
+        /// List of all cohort IDs ever associated with individuals in this cohort.
         /// </summary>
-        public IEnumerable<int> CohortID { get; set; }
+        public IEnumerable<int> IDs { get; set; }
 
         /// <summary>
-        /// Mean juvenile mass of individuals in this cohort
+        /// Mean juvenile mass of individuals in this cohort.
         /// </summary>
         public double JuvenileMass { get; set; }
 
         /// <summary>
-        /// Mean mature adult mass of individuals in this cohort
+        /// Mean mature adult mass of individuals in this cohort.
         /// </summary>
         public double AdultMass { get; set; }
 
         /// <summary>
-        /// Mean body mass of an individual in this cohort
+        /// Mean body mass of an individual in this cohort.
         /// </summary>
         public double IndividualBodyMass { get; set; }
 
         /// <summary>
-        /// Individual biomass assigned to reproductive potential
+        /// Individual biomass assigned to reproductive potential.
         /// </summary>
         public double IndividualReproductivePotentialMass { get; set; }
 
         /// <summary>
-        /// Maximum mean body mass ever achieved by individuals in this cohort
+        /// Maximum mean body mass ever achieved by individuals in this cohort.
         /// </summary>
         public double MaximumAchievedBodyMass { get; set; }
 
         /// <summary>
-        /// Number of individuals in the cohort
+        /// Number of individuals in the cohort.
         /// </summary>
         public double Abundance { get; set; }
 
         /// <summary>
-        /// Whether this cohort has ever been merged with another cohort
+        /// Whether this cohort has ever been merged with another cohort.
         /// </summary>
         public bool Merged { get; set; }
 
         /// <summary>
-        /// Proportion of the timestep for which this cohort is active
+        /// Proportion of the timestep for which this cohort is active.
         /// </summary>
         public double ProportionTimeActive { get; set; }
 
         /// <summary>
-        /// Trophic index for this cohort at this time
+        /// Trophic index for this cohort at this time.
         /// </summary>
         public double TrophicIndex { get; set; }
 
         /// <summary>
-        /// Optimal prey body size for individuals in this cohort
+        /// Optimal prey body size for individuals in this cohort.
         /// </summary>
         public double LogOptimalPreyBodySizeRatio { get; set; }
 
         /// <summary>
-        /// Constructor for the Cohort class: assigns cohort starting properties
+        /// Cohort constructor.
         /// </summary>
-        /// <param name="birthTimeStep">Birth time step</param>
-        /// <param name="maturityTimeStep">Maturity time step</param>
-        /// <param name="cohortID">List of cohort IDs</param>
-        /// <param name="juvenileMass">Mean juvenile body mass of individuals</param>
-        /// <param name="adultMass">Mean mature adult body mass of individuals</param>
-        /// <param name="individualBodyMass">Initial mean body mass of individuals</param>
-        /// <param name="individualReproductivePotentialMass">Individual biomass assigned to reproductive potential</param>
-        /// <param name="maximumAchievedBodyMass">Maximum mean body mass ever achieved by individuals</param>
-        /// <param name="abundance">Number of individuals</param>
-        /// <param name="merged">Whether this cohort has ever been merged with another cohort</param>
-        /// <param name="proportionTimeActive">Proportion of the timestep for which this cohort is active</param>
-        /// <param name="trophicIndex">Trophic level index</param>
-        /// <param name="logOptimalPreyBodySizeRatio">Log optimal prey body mass (as a percentage of this cohorts mass) for individuals</param>
+        /// <param name="birthTimeStep">Birth time step.</param>
+        /// <param name="maturityTimeStep">Maturity time step.</param>
+        /// <param name="cohortID">List of cohort IDs.</param>
+        /// <param name="juvenileMass">Mean juvenile body mass of individuals.</param>
+        /// <param name="adultMass">Mean mature adult body mass of individuals.</param>
+        /// <param name="individualBodyMass">Initial mean body mass of individuals.</param>
+        /// <param name="individualReproductivePotentialMass">Individual biomass assigned to reproductive potential.</param>
+        /// <param name="maximumAchievedBodyMass">Maximum mean body mass ever achieved by individuals.</param>
+        /// <param name="abundance">Number of individuals.</param>
+        /// <param name="merged">Whether this cohort has ever been merged with another cohort.</param>
+        /// <param name="proportionTimeActive">Proportion of the timestep for which this cohort is active.</param>
+        /// <param name="trophicIndex">Trophic level index.</param>
+        /// <param name="logOptimalPreyBodySizeRatio">Log optimal prey body mass (as a percentage of this cohorts mass) for individuals.</param>
         public Cohort(
             int birthTimeStep,
             int maturityTimeStep,
@@ -107,7 +107,7 @@ namespace Madingley.Common
         {
             this.BirthTimeStep = birthTimeStep;
             this.MaturityTimeStep = maturityTimeStep;
-            this.CohortID = cohortID.ToArray();
+            this.IDs = cohortID.ToArray();
             this.JuvenileMass = juvenileMass;
             this.AdultMass = adultMass;
             this.IndividualBodyMass = individualBodyMass;
@@ -121,14 +121,14 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="cohort">Existing Cohort to copy</param>
+        /// <param name="cohort">Existing Cohort to copy.</param>
         public Cohort(Cohort cohort)
         {
             this.BirthTimeStep = cohort.BirthTimeStep;
             this.MaturityTimeStep = cohort.MaturityTimeStep;
-            this.CohortID = cohort.CohortID.ToArray();
+            this.IDs = cohort.IDs.ToArray();
             this.JuvenileMass = cohort.JuvenileMass;
             this.AdultMass = cohort.AdultMass;
             this.IndividualBodyMass = cohort.IndividualBodyMass;
@@ -156,7 +156,7 @@ namespace Madingley.Common
             return
                 this.BirthTimeStep.Equals(cohortObj.BirthTimeStep) &&
                 this.MaturityTimeStep.Equals(cohortObj.MaturityTimeStep) &&
-                this.CohortID.SequenceEqual(cohortObj.CohortID) &&
+                this.IDs.SequenceEqual(cohortObj.IDs) &&
                 this.JuvenileMass.Equals(cohortObj.JuvenileMass) &&
                 this.AdultMass.Equals(cohortObj.AdultMass) &&
                 this.IndividualBodyMass.Equals(cohortObj.IndividualBodyMass) &&
@@ -178,7 +178,7 @@ namespace Madingley.Common
             return
                 this.BirthTimeStep.GetHashCode() ^
                 this.MaturityTimeStep.GetHashCode() ^
-                this.CohortID.GetHashCode() ^
+                this.IDs.GetHashCode() ^
                 this.JuvenileMass.GetHashCode() ^
                 this.AdultMass.GetHashCode() ^
                 this.IndividualBodyMass.GetHashCode() ^

@@ -39,6 +39,7 @@ namespace Madingley
         /// Constructor for ScenarioParameterInitialisation: reads in scenario parameters from a specified file
         /// </summary>
         /// <param name="scenarioParameterFile">The name of the scenario parameters file, which must be in the 'Model setup' directory</param>
+        /// <param name="outputPath">The directory to write output files to</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
         public ScenarioParameterInitialisation(string scenarioParameterFile, string outputPath, string inputPath)
         {

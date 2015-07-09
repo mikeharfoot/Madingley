@@ -218,19 +218,6 @@ namespace Madingley
         private NonStaticSimpleRNG RandomNumberGenerator = new NonStaticSimpleRNG();
 
         /// <summary>
-        /// Thread-local variables for tracking extinction and production of cohorts
-        /// </summary>
-        /// <todo>Needs a little tidying and checking of access levels</todo>
-        private class ThreadLockedParallelVariablesModelGrid
-        {
-            /// <summary>
-            /// Thread-locked variable to track the cohort ID to assign to newly produced cohorts
-            /// </summary>
-            public Int64 NextCohortIDThreadLocked;
-
-        }
-
-        /// <summary>
         /// Constructor for model grid: assigns grid properties and initialises the grid cells
         /// </summary>
         /// <param name="minLat">Minimum grid latitude (degrees)</param>
@@ -239,7 +226,6 @@ namespace Madingley
         /// <param name="maxLon">Maximum grid longitude (degrees, currently -180 to 180)</param>
         /// <param name="latCellSize">Latitudinal resolution of grid cell</param>
         /// <param name="lonCellSize">Longitudinal resolution of grid cell</param>
-        /// <param name="cellRarefaction">The rarefaction to be applied to active grid cells in the model</param>
         /// <param name="enviroStack">Environmental data layers</param>
         /// <param name="cohortFunctionalGroups">The functional group definitions for cohorts in the model</param>
         /// <param name="stockFunctionalGroups">The functional group definitions for stocks in the model</param>
@@ -675,14 +661,9 @@ namespace Madingley
         /// Seed the stocks and cohorts from output from a previous simulation
         /// </summary>
         /// <param name="cellIndices">A list of the active cells in the model grid</param>
+        /// <param name="inputModelState">Input model state</param>
         /// <param name="cohortFunctionalGroupDefinitions">The functional group definitions for cohorts in the model</param>
         /// <param name="stockFunctionalGroupDefinitions">The functional group definitions for stocks in the model</param>
-        /// <param name="globalDiagnostics">A list of global diagnostic variables</param>
-        /// <param name="nextCohortID">The ID number to be assigned to the next produced cohort</param>
-        /// <param name="tracking">Whether process-tracking is enabled</param>
-        /// <param name="DrawRandomly">Whether the model is set to use a random draw</param>
-        /// <param name="dispersalOnly">Whether to run dispersal only (i.e. to turn off all other ecological processes</param>
-        /// <param name="processTrackers">An instance of the ecological process tracker</param>
         public void SeedGridCellStocksAndCohorts(List<uint[]> cellIndices,
             InputModelState inputModelState,
             FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
@@ -780,6 +761,7 @@ namespace Madingley
         /// <param name="DrawRandomly">Whether the model is set to use a random draw</param>
         /// <param name="dispersalOnly">Whether to run dispersal only (i.e. to turn off all other ecological processes</param>
         /// <param name="dispersalOnlyType">For dispersal only runs, the type of dispersal to apply</param>
+        /// <param name="runCellsInParallel">True to run cells in parallel</param>
         public void SeedGridCellStocksAndCohorts(List<uint[]> cellIndices, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             FunctionalGroupDefinitions stockFunctionalGroupDefinitions, SortedList<string, double> globalDiagnostics, ref Int64 nextCohortID,
             Boolean tracking, Boolean DrawRandomly, Boolean dispersalOnly, string dispersalOnlyType, Boolean runCellsInParallel)

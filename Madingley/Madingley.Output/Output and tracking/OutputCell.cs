@@ -241,13 +241,6 @@ namespace Madingley
         /// </summary>
         private CreateSDSObject SDSCreator;
 
-#if false
-        /// <summary>
-        /// An instance of the class to view grid results
-        /// </summary>
-        private ViewGrid GridViewer;
-#endif
-
         /// <summary>
         /// Whether to display live outputs during the model run
         /// </summary>

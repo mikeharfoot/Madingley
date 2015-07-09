@@ -129,6 +129,28 @@ namespace Madingley
         /// </summary>
         GridCell[,] InternalGrid;
 
+#if true
+        /// <summary>
+        /// Overloaded constructor for model grid to construct the grid for specific locations
+        /// </summary>
+        /// <param name="minLat">Minimum grid latitude (degrees)</param>
+        /// <param name="minLon">Minimum grid longitude (degrees, currently -180 to 180)</param>
+        /// <param name="maxLat">Maximum grid latitude (degrees)</param>
+        /// <param name="maxLon">Maximum grid longitude (degrees, currently -180 to 180)</param>
+        /// <param name="latCellSize">Latitudinal size of grid cells</param>
+        /// <param name="lonCellSize">Longitudinal size of grid cells</param>
+        /// <param name="cellList">List of indices of active cells in the model grid</param>
+        /// <param name="cohortFunctionalGroups">The functional group definitions for cohorts in the model</param>
+        /// <param name="stockFunctionalGroups">The functional group definitions for stocks in the model</param>
+        /// <param name="globalDiagnostics">Global diagnostic variables</param>
+        /// <param name="tracking">Whether process tracking is enabled</param>
+        /// <param name="specificLocations">Whether the model is to be run for specific locations</param>
+        /// <param name="runInParallel">Whether model grid cells will be run in parallel</param>
+        public ModelGrid(float minLat, float minLon, float maxLat, float maxLon, float latCellSize, float lonCellSize, List<uint[]> cellList,
+            FunctionalGroupDefinitions cohortFunctionalGroups,
+            FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics, Boolean tracking,
+            Boolean specificLocations, Boolean runInParallel)
+#else
         /// <summary>
         /// Overloaded constructor for model grid to construct the grid for specific locations
         /// </summary>
@@ -146,13 +168,6 @@ namespace Madingley
         /// <param name="tracking">Whether process tracking is enabled</param>
         /// <param name="specificLocations">Whether the model is to be run for specific locations</param>
         /// <param name="runInParallel">Whether model grid cells will be run in parallel</param>
-#if true
-        public ModelGrid(float minLat, float minLon, float maxLat, float maxLon, float latCellSize, float lonCellSize, List<uint[]> cellList,
-            FunctionalGroupDefinitions cohortFunctionalGroups,
-            FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics, Boolean tracking,
-            Boolean specificLocations, Boolean runInParallel)
-
-#else
         public ModelGrid(float minLat, float minLon, float maxLat, float maxLon, float latCellSize, float lonCellSize, List<uint[]> cellList, 
             SortedList<string, EnviroData> enviroStack, FunctionalGroupDefinitions cohortFunctionalGroups,
             FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics, Boolean tracking, 

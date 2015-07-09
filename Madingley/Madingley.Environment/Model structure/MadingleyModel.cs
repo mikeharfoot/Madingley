@@ -73,16 +73,11 @@ namespace Madingley
         /// </summary>
         SortedList<string, string> EnvironmentalDataUnits = new SortedList<string, string>();
 
+#if true
         /// <summary>
         /// Initializes the ecosystem model
         /// </summary>
         /// <param name="initialisation">An instance of the model initialisation class</param> 
-        /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
-        /// <param name="scenarioIndex">The index of the scenario being run</param>
-        /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
-        /// <param name="globalModelTimeStepUnit">The time step unit used in the model</param>
-        /// <param name="simulation">The index of the simulation being run</param>
-#if true
         public MadingleyModel(MadingleyModelInitialisation initialisation)
         {
             // Assign the properties for this model run
@@ -92,6 +87,15 @@ namespace Madingley
             SetUpModelGrid(initialisation);
         }
 #else
+        /// <summary>
+        /// Initializes the ecosystem model
+        /// </summary>
+        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
+        /// <param name="scenarioIndex">The index of the scenario being run</param>
+        /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
+        /// <param name="globalModelTimeStepUnit">The time step unit used in the model</param>
+        /// <param name="simulation">The index of the simulation being run</param>
         public MadingleyModel(MadingleyModelInitialisation initialisation, ScenarioParameterInitialisation scenarioParameters, int scenarioIndex,
             string outputFilesSuffix, string globalModelTimeStepUnit, int simulation)
         {         
@@ -106,6 +110,13 @@ namespace Madingley
         }
 #endif
 
+#if true
+        /// <summary>
+        /// Assigns the properties of the current model run
+        /// </summary>
+        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        public void AssignModelRunProperties(MadingleyModelInitialisation initialisation)
+#else
         /// <summary>
         /// Assigns the properties of the current model run
         /// </summary>
@@ -113,10 +124,6 @@ namespace Madingley
         /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
         /// <param name="outputFilesSuffix">The suffix to be applied to all outputs from this model run</param>
-#if true
-        public void AssignModelRunProperties(MadingleyModelInitialisation initialisation)
-
-#else
         public void AssignModelRunProperties(MadingleyModelInitialisation initialisation, 
             ScenarioParameterInitialisation scenarioParameters, int scenarioIndex,
             string outputFilesSuffix)
@@ -133,16 +140,19 @@ namespace Madingley
             SpecificLocations = initialisation.SpecificLocations;
         }
 
+#if true
+        /// <summary>
+        /// Sets up the model grid within a Madingley model run
+        /// </summary>
+        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        public void SetUpModelGrid(MadingleyModelInitialisation initialisation)
+#else
         /// <summary>
         /// Sets up the model grid within a Madingley model run
         /// </summary>
         /// <param name="initialisation">An instance of the model initialisation class</param> 
         /// <param name="scenarioParameters">The parameters for the scenarios to run</param>
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
-#if true
-        public void SetUpModelGrid(MadingleyModelInitialisation initialisation)
-
-#else
         public void SetUpModelGrid(MadingleyModelInitialisation initialisation,
             ScenarioParameterInitialisation scenarioParameters, int scenarioIndex, int simulation)
 #endif

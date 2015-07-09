@@ -69,14 +69,14 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as ModelState;
-            if ((Object)y == null) return false;
+            var modelStateObj = obj as ModelState;
+            if ((Object)modelStateObj == null) return false;
 
             return
-                this.TimestepsComplete.Equals(y.TimestepsComplete) &&
-                this.GlobalDiagnosticVariables.SequenceEqual(y.GlobalDiagnosticVariables, new KeyValuePairEqualityComparer<double>(EqualityComparer<double>.Default)) &&
-                this.GridCells.SequenceEqual(y.GridCells, EqualityComparer<GridCell>.Default) &&
-                this.NextCohortID.Equals(y.NextCohortID);
+                this.TimestepsComplete.Equals(modelStateObj.TimestepsComplete) &&
+                this.GlobalDiagnosticVariables.SequenceEqual(modelStateObj.GlobalDiagnosticVariables, new KeyValuePairEqualityComparer<double>(EqualityComparer<double>.Default)) &&
+                this.GridCells.SequenceEqual(modelStateObj.GridCells, EqualityComparer<GridCell>.Default) &&
+                this.NextCohortID.Equals(modelStateObj.NextCohortID);
         }
 
         /// <summary>

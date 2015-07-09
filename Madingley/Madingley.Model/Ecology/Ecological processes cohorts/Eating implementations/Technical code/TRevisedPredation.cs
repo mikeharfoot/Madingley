@@ -433,7 +433,7 @@ namespace Madingley
         /// <param name="gridCellCohorts">Cohorts in this grid cell</param>
         /// <param name="actingCohort">The predator cohort</param>
         /// <param name="functionalGroupIndicesToEat">The functional groups which this predator eats</param>
-        /// <param name="logOptimalPreyBodySizeRatio">The (log-transformed) optimal ratio of prey to predator body mass</param>
+        /// <param name="logPredatorMassPlusLogPredatorOptimalBodySizeRatio">The (log-transformed) optimal ratio of prey to predator body mass</param>
         private void PopulateBinnedPreyAbundance(GridCellCohortHandler gridCellCohorts, int[] actingCohort, int[] functionalGroupIndicesToEat,
             double logPredatorMassPlusLogPredatorOptimalBodySizeRatio)
         {

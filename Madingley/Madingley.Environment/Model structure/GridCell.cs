@@ -56,6 +56,24 @@ namespace Madingley
             get { return _Longitude; }
         }
 
+
+#if true
+        /// <summary>
+        /// Constructor for a grid cell; creates cell and reads in environmental data
+        /// </summary>
+        /// <param name="latitude">The latitude of the grid cell</param>
+        /// <param name="latIndex">The latitudinal index of the grid cell</param>
+        /// <param name="longitude">The longitude of the grid cell</param>
+        /// <param name="lonIndex">The longitudinal index of the grid cell</param>
+        /// <param name="latCellSize">The latitudinal dimension of the grid cell</param>
+        /// <param name="lonCellSize">The longitudinal dimension of the grid cell</param>
+        /// <param name="dataLayers">A list of environmental data variables in the model</param>
+        /// <param name="missingValue">The missing value to be applied to all data in the grid cell</param>
+        /// <param name="specificLocations">Whether the model is being run for specific locations</param>
+        public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize,
+            SortedList<string, EnviroData> dataLayers, double missingValue, 
+            bool specificLocations)
+#else
         /// <summary>
         /// Constructor for a grid cell; creates cell and reads in environmental data
         /// </summary>
@@ -72,11 +90,6 @@ namespace Madingley
         /// <param name="globalDiagnostics">A list of global diagnostic variables for the model grid</param>
         /// <param name="tracking">Whether process-tracking is enabled</param>
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
-#if true
-        public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize,
-            SortedList<string, EnviroData> dataLayers, double missingValue, 
-            bool specificLocations)
-#else
         public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize, 
             SortedList<string, EnviroData> dataLayers, double missingValue, FunctionalGroupDefinitions cohortFunctionalGroups, 
             FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics,Boolean tracking,

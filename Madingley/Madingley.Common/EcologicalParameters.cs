@@ -10,20 +10,20 @@ namespace Madingley.Common
     public class EcologicalParameters
     {
         /// <summary>
-        /// Set of parameters
+        /// Set of parameters.
         /// </summary>
         public IDictionary<string, double> Parameters { get; set; }
 
         /// <summary>
-        /// List of valid time step units
+        /// List of valid time step units.
         /// </summary>
         public IEnumerable<string> TimeUnits { get; set; }
 
         /// <summary>
-        /// EcologicalParameters constructor
+        /// EcologicalParameters constructor.
         /// </summary>
-        /// <param name="parameters">Set of parameters</param>
-        /// <param name="timeUnits">List of valid time step units</param>
+        /// <param name="parameters">Set of parameters.</param>
+        /// <param name="timeUnits">List of valid time step units.</param>
         public EcologicalParameters(
             IDictionary<string, double> parameters,
             IEnumerable<string> timeUnits)
@@ -33,13 +33,13 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="e">EcologicalParameters to copy</param>
-        public EcologicalParameters(EcologicalParameters e)
+        /// <param name="ecologicalParameters">EcologicalParameters to copy.</param>
+        public EcologicalParameters(EcologicalParameters ecologicalParameters)
         {
-            this.Parameters = new SortedList<string, double>(e.Parameters);
-            this.TimeUnits = e.TimeUnits.ToArray();
+            this.Parameters = new SortedList<string, double>(ecologicalParameters.Parameters);
+            this.TimeUnits = ecologicalParameters.TimeUnits.ToArray();
         }
 
         /// <summary>
@@ -51,12 +51,12 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as EcologicalParameters;
-            if ((Object)y == null) return false;
+            var ecologicalParametersObj = obj as EcologicalParameters;
+            if ((Object)ecologicalParametersObj == null) return false;
 
             return
-                this.Parameters.SequenceEqual(y.Parameters, new KeyValuePairEqualityComparer<double>(new FixedDoubleComparer())) &
-                this.TimeUnits.SequenceEqual(y.TimeUnits);
+                this.Parameters.SequenceEqual(ecologicalParametersObj.Parameters, new KeyValuePairEqualityComparer<double>(new FixedDoubleComparer())) &
+                this.TimeUnits.SequenceEqual(ecologicalParametersObj.TimeUnits);
         }
 
         /// <summary>

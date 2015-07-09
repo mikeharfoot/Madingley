@@ -5,7 +5,7 @@ using System.Linq;
 namespace Madingley.Common
 {
     /// <summary>
-    /// Stores properties of grid cells
+    /// Full properties of grid cells for model state and output.
     /// </summary>
     public class GridCell
     {
@@ -35,7 +35,7 @@ namespace Madingley.Common
         public IDictionary<string, double[]> Environment { get; set; }
 
         /// <summary>
-        /// GridCell constructor
+        /// GridCell constructor.
         /// </summary>
         /// <param name="latitude">Latitude of this grid cell.</param>
         /// <param name="longitude">Longitude of this grid cell.</param>
@@ -57,9 +57,9 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="gridCell">GridCell to copy</param>
+        /// <param name="gridCell">GridCell to copy.</param>
         public GridCell(GridCell gridCell)
         {
             this.Latitude = gridCell.Latitude;
@@ -78,15 +78,15 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as GridCell;
-            if ((Object)y == null) return false;
+            var gridCellObj = obj as GridCell;
+            if ((Object)gridCellObj == null) return false;
 
             return
-                this.Latitude.Equals(y.Latitude) &&
-                this.Longitude.Equals(y.Longitude) &&
-                this.Cohorts.SequenceEqual(y.Cohorts, new ArrayEqualityComparer<Cohort>(EqualityComparer<Cohort>.Default)) &&
-                this.Stocks.SequenceEqual(y.Stocks, new ArrayEqualityComparer<Stock>(EqualityComparer<Stock>.Default)) &&
-                this.Environment.SequenceEqual(y.Environment, new KeyValuePairEqualityComparer<double[]>(new ArrayEqualityComparer<double>(EqualityComparer<double>.Default)));
+                this.Latitude.Equals(gridCellObj.Latitude) &&
+                this.Longitude.Equals(gridCellObj.Longitude) &&
+                this.Cohorts.SequenceEqual(gridCellObj.Cohorts, new ArrayEqualityComparer<Cohort>(EqualityComparer<Cohort>.Default)) &&
+                this.Stocks.SequenceEqual(gridCellObj.Stocks, new ArrayEqualityComparer<Stock>(EqualityComparer<Stock>.Default)) &&
+                this.Environment.SequenceEqual(gridCellObj.Environment, new KeyValuePairEqualityComparer<double[]>(new ArrayEqualityComparer<double>(EqualityComparer<double>.Default)));
         }
 
         /// <summary>

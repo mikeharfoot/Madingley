@@ -5,68 +5,68 @@ using System.Linq;
 namespace Madingley.Common
 {
     /// <summary>
-    /// Initialization information for Madingley model simulations
+    /// Initialization information for Madingley model simulations.
     /// </summary>
     public class Configuration
     {
         /// <summary>
-        /// String identifying time step units to be used by the simulations
+        /// String identifying time step units to be used by the simulations.
         /// </summary>
         public string GlobalModelTimeStepUnit { get; set; }
 
         /// <summary>
-        /// The number of time steps to be run in the simulations
+        /// Number of time steps to be run in the simulations.
         /// </summary>
         public int NumTimeSteps { get; set; }
 
         /// <summary>
-        /// The number of time steps to run the model for before any impacts are applied
+        /// Number of time steps to run the model for before any impacts are applied.
         /// </summary>
         public int BurninTimeSteps { get; set; }
 
         /// <summary>
-        /// For scenarios with temporary impacts, the number of time steps to apply the impact for
+        /// For scenarios with temporary impacts, the number of time steps to apply the impact for.
         /// </summary>
         public int ImpactTimeSteps { get; set; }
 
         /// <summary>
-        /// For scenarios with temporary impacts, the number of time steps to apply the impact for
+        /// For scenarios with temporary impacts, the number of time steps to apply the impact for.
         /// </summary>
         public int RecoveryTimeSteps { get; set; }
 
         /// <summary>
-        /// Whether to run the model for different grid cells in parallel
+        /// Whether to run the model for different grid cells in parallel?
         /// </summary>
         public bool RunCellsInParallel { get; set; }
 
         /// <summary>
-        /// Whether to run the model for different simulations in parallel
+        /// Whether to run the model for different simulations in parallel?
         /// </summary>
         public bool RunSimulationsInParallel { get; set; }
 
         /// <summary>
-        /// Which realm to run the model for
+        /// Which realm to run the model for.
         /// </summary>
         public string RunRealm { get; set; }
 
         /// <summary>
-        /// Whether to draw cohort properties randomly when seeding them, and whether cohorts will undergo ecological processes in a random order
+        /// Whether to draw cohort properties randomly when seeding them, and whether cohorts will undergo ecological processes in a random order?
         /// </summary>
         /// <remarks>Value should be set in initialization file, but default value is true</remarks>
         public bool DrawRandomly { get; set; }
 
         /// <summary>
-        /// The threshold abundance below which cohorts will be made extinct
+        /// The threshold abundance below which cohorts will be made extinct.
         /// </summary>
         public double ExtinctionThreshold { get; set; }
 
         /// <summary>
-        /// The maximum number of cohorts to be in the model, per grid cell, when it is running
+        /// The maximum number of cohorts to be in the model, per grid cell, when it is running.
         /// </summary>
         public int MaxNumberOfCohorts { get; set; }
 
         /// <summary>
-        /// Whether to run only dispersal (i.e. turn all other ecological processes off, and set dispersal probability to one temporarily)
+        /// Whether to run only dispersal (i.e. turn all other ecological processes off, and set dispersal probability to one temporarily).
         /// </summary>
         public bool DispersalOnly { get; set; }
 
@@ -76,22 +76,22 @@ namespace Madingley.Common
         public string DispersalOnlyType { get; set; }
 
         /// <summary>
-        /// The weight threshold (grams) below which marine organisms that are not obligate zooplankton will be dispersed planktonically
+        /// The weight threshold (grams) below which marine organisms that are not obligate zooplankton will be dispersed planktonically.
         /// </summary>
         public double PlanktonDispersalThreshold { get; set; }
 
         /// <summary>
-        /// The functional group definitions of cohorts in the model
+        /// The functional group definitions of cohorts in the model.
         /// </summary>
         public FunctionalGroupDefinitions CohortFunctionalGroupDefinitions { get; set; }
 
         /// <summary>
-        /// The functional group definitions of stocks in the model
+        /// The functional group definitions of stocks in the model.
         /// </summary>
         public FunctionalGroupDefinitions StockFunctionalGroupDefinitions { get; set; }
 
         /// <summary>
-        /// For scenarios with temporary impacts, the cells to apply impacts to (unless ImpactAll)
+        /// For scenarios with temporary impacts, the cells to apply impacts to (unless ImpactAll).
         /// </summary>
         public IEnumerable<int> ImpactCellIndices { get; set; }
 
@@ -101,9 +101,9 @@ namespace Madingley.Common
         public bool ImpactAll { get; set; }
 
         /// <summary>
-        /// All available ScenarioParameters
+        /// All available ScenarioParameters.
         /// </summary>
-        public ScenarioParameters[] ScenarioParameters { get; set; }
+        public IList<ScenarioParameters> ScenarioParameters { get; set; }
 
         /// <summary>
         /// Which ScenarioParameter to use?
@@ -111,40 +111,40 @@ namespace Madingley.Common
         public int ScenarioIndex { get; set; }
 
         /// <summary>
-        /// Simulation number, only used for formatting output
+        /// Simulation number, only used for formatting output.
         /// </summary>
         public int Simulation { get; set; }
 
         /// <summary>
-        /// EcologicalParameters to use
+        /// EcologicalParameters to use.
         /// </summary>
         public EcologicalParameters EcologicalParameters { get; set; }
 
         /// <summary>
-        /// Configuration constructor
+        /// Configuration constructor.
         /// </summary>
-        /// <param name="globalModelTimeStepUnit">Time step units to be used by the simulations</param>
-        /// <param name="numTimeSteps">Number of time steps to be run in the simulations</param>
-        /// <param name="burninTimeSteps">Number of time steps to run the model for before any impacts are applied</param>
-        /// <param name="impactTimeSteps">Number of time steps to apply the impact for</param>
-        /// <param name="recoveryTimeSteps">Number of time steps to apply the impact for</param>
-        /// <param name="runCellsInParallel">Whether to run the model for different grid cells in parallel</param>
-        /// <param name="runSimulationsInParallel">Whether to run the model for different simulations in parallel</param>
-        /// <param name="runRealm">Which realm to run the model for</param>
-        /// <param name="drawRandomly">Whether to draw cohort properties randomly when seeding them, and whether cohorts will undergo ecological processes in a random order</param>
-        /// <param name="extinctionThreshold">Threshold abundance below which cohorts will be made extinct</param>
-        /// <param name="maxNumberOfCohorts">Maximum number of cohorts to be in the model, per grid cell, when it is running</param>
-        /// <param name="dispersalOnly">Whether to run only dispersal (i.e. turn all other ecological processes off, and set dispersal probability to one temporarily)</param>
+        /// <param name="globalModelTimeStepUnit">Time step units to be used.</param>
+        /// <param name="numTimeSteps">Number of time steps to be run.</param>
+        /// <param name="burninTimeSteps">Number of time steps before any impacts are applied.</param>
+        /// <param name="impactTimeSteps">Number of time steps to apply the impact for.</param>
+        /// <param name="recoveryTimeSteps">Number of time steps to apply the impact for.</param>
+        /// <param name="runCellsInParallel">Whether to run the model for different grid cells in parallel?</param>
+        /// <param name="runSimulationsInParallel">Whether to run the model for different simulations in parallel?</param>
+        /// <param name="runRealm">Which realm to run the model for.</param>
+        /// <param name="drawRandomly">Whether to draw cohort properties randomly when seeding them, and whether cohorts will undergo ecological processes in a random order.</param>
+        /// <param name="extinctionThreshold">Threshold abundance below which cohorts will be made extinct.</param>
+        /// <param name="maxNumberOfCohorts">Maximum number of cohorts to be in the model, per grid cell, when it is running.</param>
+        /// <param name="dispersalOnly">Whether to run only dispersal (i.e. turn all other ecological processes off, and set dispersal probability to one temporarily).</param>
         /// <param name="dispersalOnlyType">If DispersalOnly, which dispersal type?</param>
-        /// <param name="planktonDispersalThreshold">Weight threshold (grams) below which marine organisms that are not obligate zooplankton will be dispersed planktonically</param>
-        /// <param name="cohortFunctionalGroupDefinitions">Functional group definitions of cohorts in the model</param>
-        /// <param name="stockFunctionalGroupDefinitions">Functional group definitions of stocks in the model</param>
-        /// <param name="impactCellIndices">Cells to apply impacts to (unless ImpactAll)</param>
+        /// <param name="planktonDispersalThreshold">Weight threshold (grams) below which marine organisms that are not obligate zooplankton will be dispersed planktonically.</param>
+        /// <param name="cohortFunctionalGroupDefinitions">Functional group definitions of cohorts in the model.</param>
+        /// <param name="stockFunctionalGroupDefinitions">Functional group definitions of stocks in the model.</param>
+        /// <param name="impactCellIndices">Cells to apply impacts to (unless ImpactAll).</param>
         /// <param name="impactAll">Apply impacts to all cells?</param>
-        /// <param name="scenarioParameters">All available ScenarioParameters</param>
+        /// <param name="scenarioParameters">All available ScenarioParameters.</param>
         /// <param name="scenarioIndex">Which ScenarioParameter to use?</param>
-        /// <param name="simulation">Simulation number, only used for formatting output</param>
-        /// <param name="ecologicalParameters">EcologicalParameters to use</param>
+        /// <param name="simulation">Simulation number, only used for formatting output.</param>
+        /// <param name="ecologicalParameters">EcologicalParameters to use.</param>
         public Configuration(
             string globalModelTimeStepUnit,
             int numTimeSteps,
@@ -194,34 +194,34 @@ namespace Madingley.Common
         }
 
         /// <summary>
-        /// Copy constructor
+        /// Copy constructor.
         /// </summary>
-        /// <param name="c">Configuration to copy</param>
-        public Configuration(Configuration c)
+        /// <param name="configuration">Configuration to copy.</param>
+        public Configuration(Configuration configuration)
         {
-            this.GlobalModelTimeStepUnit = c.GlobalModelTimeStepUnit;
-            this.NumTimeSteps = c.NumTimeSteps;
-            this.BurninTimeSteps = c.BurninTimeSteps;
-            this.ImpactTimeSteps = c.ImpactTimeSteps;
-            this.RecoveryTimeSteps = c.RecoveryTimeSteps;
-            this.RunCellsInParallel = c.RunCellsInParallel;
-            this.RunSimulationsInParallel = c.RunSimulationsInParallel;
-            this.RunRealm = c.RunRealm;
-            this.DrawRandomly = c.DrawRandomly;
-            this.ExtinctionThreshold = c.ExtinctionThreshold;
-            this.MaxNumberOfCohorts = c.MaxNumberOfCohorts;
-            this.DispersalOnly = c.DispersalOnly;
-            this.DispersalOnlyType = c.DispersalOnlyType;
-            this.PlanktonDispersalThreshold = c.PlanktonDispersalThreshold;
-            this.MaxNumberOfCohorts = c.MaxNumberOfCohorts;
-            this.CohortFunctionalGroupDefinitions = new FunctionalGroupDefinitions(c.CohortFunctionalGroupDefinitions);
-            this.StockFunctionalGroupDefinitions = new FunctionalGroupDefinitions(c.StockFunctionalGroupDefinitions);
-            this.ImpactCellIndices = c.ImpactCellIndices.ToArray();
-            this.ImpactAll = c.ImpactAll;
-            this.ScenarioParameters = c.ScenarioParameters.Select(s => new ScenarioParameters(s)).ToArray();
-            this.ScenarioIndex = c.ScenarioIndex;
-            this.Simulation = c.Simulation;
-            this.EcologicalParameters = new EcologicalParameters(c.EcologicalParameters);
+            this.GlobalModelTimeStepUnit = configuration.GlobalModelTimeStepUnit;
+            this.NumTimeSteps = configuration.NumTimeSteps;
+            this.BurninTimeSteps = configuration.BurninTimeSteps;
+            this.ImpactTimeSteps = configuration.ImpactTimeSteps;
+            this.RecoveryTimeSteps = configuration.RecoveryTimeSteps;
+            this.RunCellsInParallel = configuration.RunCellsInParallel;
+            this.RunSimulationsInParallel = configuration.RunSimulationsInParallel;
+            this.RunRealm = configuration.RunRealm;
+            this.DrawRandomly = configuration.DrawRandomly;
+            this.ExtinctionThreshold = configuration.ExtinctionThreshold;
+            this.MaxNumberOfCohorts = configuration.MaxNumberOfCohorts;
+            this.DispersalOnly = configuration.DispersalOnly;
+            this.DispersalOnlyType = configuration.DispersalOnlyType;
+            this.PlanktonDispersalThreshold = configuration.PlanktonDispersalThreshold;
+            this.MaxNumberOfCohorts = configuration.MaxNumberOfCohorts;
+            this.CohortFunctionalGroupDefinitions = new FunctionalGroupDefinitions(configuration.CohortFunctionalGroupDefinitions);
+            this.StockFunctionalGroupDefinitions = new FunctionalGroupDefinitions(configuration.StockFunctionalGroupDefinitions);
+            this.ImpactCellIndices = configuration.ImpactCellIndices.ToArray();
+            this.ImpactAll = configuration.ImpactAll;
+            this.ScenarioParameters = configuration.ScenarioParameters.Select(s => new ScenarioParameters(s)).ToArray();
+            this.ScenarioIndex = configuration.ScenarioIndex;
+            this.Simulation = configuration.Simulation;
+            this.EcologicalParameters = new EcologicalParameters(configuration.EcologicalParameters);
         }
 
         /// <summary>
@@ -233,34 +233,34 @@ namespace Madingley.Common
         {
             if (obj == null) return false;
 
-            var y = obj as Configuration;
-            if ((Object)y == null) return false;
+            var configurationObj = obj as Configuration;
+            if ((Object)configurationObj == null) return false;
 
             IEqualityComparer<double> compareFloats = new FixedDoubleComparer();
 
             return
-                this.GlobalModelTimeStepUnit.Equals(y.GlobalModelTimeStepUnit) &&
-                this.NumTimeSteps.Equals(y.NumTimeSteps) &&
-                this.BurninTimeSteps.Equals(y.BurninTimeSteps) &&
-                this.ImpactTimeSteps.Equals(y.ImpactTimeSteps) &&
-                this.RecoveryTimeSteps.Equals(y.RecoveryTimeSteps) &&
-                this.RunCellsInParallel.Equals(y.RunCellsInParallel) &&
-                this.RunSimulationsInParallel.Equals(y.RunSimulationsInParallel) &&
-                this.RunRealm.Equals(y.RunRealm) &&
-                this.DrawRandomly.Equals(y.DrawRandomly) &&
-                compareFloats.Equals(this.ExtinctionThreshold, y.ExtinctionThreshold) &&
-                this.MaxNumberOfCohorts.Equals(y.MaxNumberOfCohorts) &&
-                this.DispersalOnly.Equals(y.DispersalOnly) &&
-                this.DispersalOnlyType.Equals(y.DispersalOnlyType) &&
-                compareFloats.Equals(this.PlanktonDispersalThreshold, y.PlanktonDispersalThreshold) &&
-                this.CohortFunctionalGroupDefinitions.Equals(y.CohortFunctionalGroupDefinitions) &&
-                this.StockFunctionalGroupDefinitions.Equals(y.StockFunctionalGroupDefinitions) &&
-                this.ImpactCellIndices.SequenceEqual(y.ImpactCellIndices) &&
-                this.ImpactAll.Equals(y.ImpactAll) &&
-                this.ScenarioParameters.SequenceEqual(y.ScenarioParameters, new ScenarioParametersComparer(compareFloats)) &&
-                this.ScenarioIndex.Equals(y.ScenarioIndex) &&
-                this.Simulation.Equals(y.Simulation) &&
-                this.EcologicalParameters.Equals(y.EcologicalParameters);
+                this.GlobalModelTimeStepUnit.Equals(configurationObj.GlobalModelTimeStepUnit) &&
+                this.NumTimeSteps.Equals(configurationObj.NumTimeSteps) &&
+                this.BurninTimeSteps.Equals(configurationObj.BurninTimeSteps) &&
+                this.ImpactTimeSteps.Equals(configurationObj.ImpactTimeSteps) &&
+                this.RecoveryTimeSteps.Equals(configurationObj.RecoveryTimeSteps) &&
+                this.RunCellsInParallel.Equals(configurationObj.RunCellsInParallel) &&
+                this.RunSimulationsInParallel.Equals(configurationObj.RunSimulationsInParallel) &&
+                this.RunRealm.Equals(configurationObj.RunRealm) &&
+                this.DrawRandomly.Equals(configurationObj.DrawRandomly) &&
+                compareFloats.Equals(this.ExtinctionThreshold, configurationObj.ExtinctionThreshold) &&
+                this.MaxNumberOfCohorts.Equals(configurationObj.MaxNumberOfCohorts) &&
+                this.DispersalOnly.Equals(configurationObj.DispersalOnly) &&
+                this.DispersalOnlyType.Equals(configurationObj.DispersalOnlyType) &&
+                compareFloats.Equals(this.PlanktonDispersalThreshold, configurationObj.PlanktonDispersalThreshold) &&
+                this.CohortFunctionalGroupDefinitions.Equals(configurationObj.CohortFunctionalGroupDefinitions) &&
+                this.StockFunctionalGroupDefinitions.Equals(configurationObj.StockFunctionalGroupDefinitions) &&
+                this.ImpactCellIndices.SequenceEqual(configurationObj.ImpactCellIndices) &&
+                this.ImpactAll.Equals(configurationObj.ImpactAll) &&
+                this.ScenarioParameters.SequenceEqual(configurationObj.ScenarioParameters, new ScenarioParametersComparer(compareFloats)) &&
+                this.ScenarioIndex.Equals(configurationObj.ScenarioIndex) &&
+                this.Simulation.Equals(configurationObj.Simulation) &&
+                this.EcologicalParameters.Equals(configurationObj.EcologicalParameters);
         }
 
         /// <summary>

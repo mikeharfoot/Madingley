@@ -30,6 +30,7 @@ namespace Madingley
         /// Sets up mass bins based on an input file
         /// </summary>
         /// <param name="massBinsFile">The filename containing the mass bin information</param>
+        /// <param name="outputPath">Path to output files</param>
         /// <param name="inputPath">The path to the folder which contains the mass bins definition file</param>
         public void SetUpMassBins(string massBinsFile, string outputPath, string inputPath)
         {
