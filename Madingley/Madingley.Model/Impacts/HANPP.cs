@@ -36,7 +36,7 @@ namespace Madingley
         /// <remarks>Scenario types are: 'no' = no removal; 'hanpp' = appropriated NPP estimate from input map; constant = constant appropriation after burn-in; 
         /// temporary = constant after burn-in until specified time; value = proportion of plant biomass appropriated</remarks>
         public double RemoveHumanAppropriatedMatter(double wetMatterNPP, SortedList<string, double[]> cellEnvironment,
-            Tuple<string, double, double> humanNPPScenario, GridCellStockHandler
+            Madingley.Common.ScenarioParameter humanNPPScenario, GridCellStockHandler
             gridCellStocks, int[] actingStock, uint currentTimestep, uint burninSteps,
             uint impactSteps, uint recoverySteps, uint instantStep, uint numInstantStep, Boolean impactCell,
             string globalModelTimestepUnits)
@@ -50,7 +50,7 @@ namespace Madingley
                 double m2Tokm2Conversion = 1000000.0;
 
 
-                if (humanNPPScenario.Item1 == "hanpp")
+                if (humanNPPScenario.ParamString == "hanpp")
                 {
 
                     if (currentTimestep > burninSteps)
@@ -104,11 +104,11 @@ namespace Madingley
                         //if (gridCellStocks[actingStock].TotalBiomass < 0.0) gridCellStocks[actingStock].TotalBiomass = 0.0;
                     }
                 }
-                else if (humanNPPScenario.Item1 == "no")
+                else if (humanNPPScenario.ParamString == "no")
                 {
                     // Do not remove any autotroph biomass
                 }
-                else if (humanNPPScenario.Item1 == "constant")
+                else if (humanNPPScenario.ParamString == "constant")
                 {
                     // If the burn-in period has been completed, then remove the specified constant
                     // fraction from the acting autotroph stock
@@ -116,16 +116,16 @@ namespace Madingley
                     {
                         //gridCellStocks[actingStock].TotalBiomass -= (gridCellStocks[actingStock].TotalBiomass *
                         //    humanNPPScenario.Item2);
-                        RemovalRate = humanNPPScenario.Item2;
+                        RemovalRate = humanNPPScenario.ParamDouble1;
                     }
                 }
 #if true
-                else if (humanNPPScenario.Item1 == "reallyconstant")
+                else if (humanNPPScenario.ParamString == "reallyconstant")
                 {
-                    RemovalRate = humanNPPScenario.Item2;
+                    RemovalRate = humanNPPScenario.ParamDouble1;
                 }
 #endif
-                else if (humanNPPScenario.Item1 == "temporary")
+                else if (humanNPPScenario.ParamString == "temporary")
                 {
                     // If the spin-up period has been completed and the period of impact has not elapsed,
                     // then remove the specified constant fraction from the acting autotroph stock
@@ -133,11 +133,11 @@ namespace Madingley
                     {
                         //gridCellStocks[actingStock].TotalBiomass -= (gridCellStocks[actingStock].TotalBiomass *
                         //    humanNPPScenario.Item2);
-                        RemovalRate = humanNPPScenario.Item2;
+                        RemovalRate = humanNPPScenario.ParamDouble1;
                     }
 
                 }
-                else if (humanNPPScenario.Item1 == "escalating")
+                else if (humanNPPScenario.ParamString == "escalating")
                 {
                     // If the spin-up period has been completed, then remove a proportion of plant matter
                     // according to the number of time-steps that have elapsed since the spin-up ended
@@ -146,11 +146,11 @@ namespace Madingley
                         //gridCellStocks[actingStock].TotalBiomass -= gridCellStocks[actingStock].TotalBiomass *
                         //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
-                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
+                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.ParamDouble1)));
 
                     }
                 }
-                else if (humanNPPScenario.Item1 == "temp-escalating")
+                else if (humanNPPScenario.ParamString == "temp-escalating")
                 {
                     // If the spin-up period has been completed and the period of impact has not elapsed, 
                     // then remove a proportion of plant matter
@@ -160,35 +160,35 @@ namespace Madingley
                         //gridCellStocks[actingStock].TotalBiomass -= gridCellStocks[actingStock].TotalBiomass *
                         //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
-                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
+                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.ParamDouble1)));
                     }
 
                 }
-                else if (humanNPPScenario.Item1 == "temp-escalating-const-rate")
+                else if (humanNPPScenario.ParamString == "temp-escalating-const-rate")
                 {
                     // If the spin-up period has been completed and the period of impact (specified by the third scenario element
                     // has not elapsed, 
                     // then remove a proportion of plant matter
                     // according to the number of time-steps that have elapsed since the spin-up ended
 
-                    int ConstImpactSteps = Convert.ToInt32(humanNPPScenario.Item3 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
+                    int ConstImpactSteps = Convert.ToInt32(humanNPPScenario.ParamDouble2 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
 
                     if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + ConstImpactSteps)))
                     {
                         //gridCellStocks[actingStock].TotalBiomass -= gridCellStocks[actingStock].TotalBiomass *
                         //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
-                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
+                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.ParamDouble1)));
                     }
                 }
-                else if (humanNPPScenario.Item1 == "temp-escalating-const-rate-duration")
+                else if (humanNPPScenario.ParamString == "temp-escalating-const-rate-duration")
                 {
                     // If the spin-up period has been completed and the period of impact (specified by the third scenario element
                     // has not elapsed, 
                     // then remove a proportion of plant matter
                     // according to the number of time-steps that have elapsed since the spin-up ended
 
-                    int ConstImpactSteps = Convert.ToInt32(humanNPPScenario.Item3 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
+                    int ConstImpactSteps = Convert.ToInt32(humanNPPScenario.ParamDouble2 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
 
                     if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                     {
@@ -196,11 +196,11 @@ namespace Madingley
                         //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
                         RemovalRate = (Math.Min(1.0,
-                                        Math.Min(((ConstImpactSteps / 12.0) * humanNPPScenario.Item2),
-                                        (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2))));
+                                        Math.Min(((ConstImpactSteps / 12.0) * humanNPPScenario.ParamDouble1),
+                                        (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.ParamDouble1))));
                     }
                 }
-                else if (humanNPPScenario.Item1 == "temp-escalating-declining")
+                else if (humanNPPScenario.ParamString == "temp-escalating-declining")
                 {
                     // If the spin-up period has been completed, then apply a level of harvesting
                     // according to the number of time-steps that have elapsed since the spin-up ended
@@ -209,14 +209,14 @@ namespace Madingley
                         //gridCellStocks[actingStock].TotalBiomass -= gridCellStocks[actingStock].TotalBiomass *
                         //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
-                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
+                        RemovalRate = (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.ParamDouble1)));
                     }
                     else if ((currentTimestep > (burninSteps + impactSteps)) & (currentTimestep <= (burninSteps + impactSteps + recoverySteps)))
                     {
                         //gridCellStocks[actingStock].TotalBiomass -= gridCellStocks[actingStock].TotalBiomass *
                         //    (Math.Min(1.0, (((burninSteps + impactSteps + recoverySteps - currentTimestep) / 12.0) * humanNPPScenario.Item2)));
 
-                        RemovalRate = (Math.Min(1.0, (((burninSteps + impactSteps + recoverySteps - currentTimestep) / 12.0) * humanNPPScenario.Item2)));
+                        RemovalRate = (Math.Min(1.0, (((burninSteps + impactSteps + recoverySteps - currentTimestep) / 12.0) * humanNPPScenario.ParamDouble1)));
                     }
 
                 }

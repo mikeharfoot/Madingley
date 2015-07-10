@@ -65,7 +65,7 @@ namespace Madingley
         ///<param name="specificLocations">Whether to run the model for specific locations</param>
         ///<param name="impactCell">Whether this cell should have human impacts applied</param>
         public void RunWithinCellEcology(GridCellStockHandler gridCellStocks, int[] actingStock, SortedList<string, double[]> cellEnvironment,
-            SortedList<string, string> environmentalDataUnits, Tuple<string, double, double> humanNPPScenario, 
+            SortedList<string, string> environmentalDataUnits, Madingley.Common.ScenarioParameter humanNPPScenario, 
             FunctionalGroupDefinitions madingleyStockDefinitions, 
             uint currentTimeStep, uint burninSteps, uint impactSteps,uint recoverySteps, uint instantStep, uint numInstantSteps, string globalModelTimeStepUnit, Boolean trackProcesses, 
             ProcessTracker tracker, 

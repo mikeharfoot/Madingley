@@ -121,6 +121,35 @@ namespace Madingley.Common
         public EcologicalParameters EcologicalParameters { get; set; }
 
         /// <summary>
+        /// Configuration default constructor.
+        /// </summary>
+        public Configuration()
+        {
+            this.GlobalModelTimeStepUnit = string.Empty;
+            this.NumTimeSteps = 0;
+            this.BurninTimeSteps = 0;
+            this.ImpactTimeSteps = 0;
+            this.RecoveryTimeSteps = 0;
+            this.RunCellsInParallel = false;
+            this.RunSimulationsInParallel = false;
+            this.RunRealm = string.Empty;
+            this.DrawRandomly = true;
+            this.ExtinctionThreshold = 0.0;
+            this.MaxNumberOfCohorts = 0;
+            this.DispersalOnly = false;
+            this.DispersalOnlyType = string.Empty;
+            this.PlanktonDispersalThreshold = 0.0;
+            this.CohortFunctionalGroupDefinitions = null;
+            this.StockFunctionalGroupDefinitions = null;
+            this.ImpactCellIndices = new List<int>();
+            this.ImpactAll = false;
+            this.ScenarioParameters = new List<ScenarioParameters>();
+            this.ScenarioIndex = 0;
+            this.Simulation = 0;
+            this.EcologicalParameters = null;
+        }
+
+        /// <summary>
         /// Configuration constructor.
         /// </summary>
         /// <param name="globalModelTimeStepUnit">Time step units to be used.</param>

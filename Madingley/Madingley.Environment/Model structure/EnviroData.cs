@@ -279,7 +279,7 @@ namespace Madingley
         /// <param name = "cellList">List of cells to be fetched</param>
         /// <param name="FetchClimateDataSource">Data source from which to fetch environmental data</param>
         public EnviroData(string dataName, string dataResolution, double latMin, double lonMin, double latMax, double lonMax, double cellSize,
-            List<uint[]> cellList,
+            IList<Tuple<int, int>> cellList,
             EnvironmentalDataSource FetchClimateDataSource)
         {
             Console.WriteLine("Fetching environmental data for: " + dataName + " with resolution " + dataResolution);
@@ -329,8 +329,8 @@ namespace Madingley
             //Add lat and lon information to the dataset
             for (int ii = 0; ii < cellList.Count; ii++)
             {
-                ds.AddAxisCells("longitude", "degrees_east", _Lons[cellList[ii][1]], Lons[cellList[ii][1]] + cellSize, cellSize);
-                ds.AddAxisCells("latitude", "degrees_north", _Lats[cellList[ii][0]], _Lats[cellList[ii][0]] + cellSize, cellSize);
+                ds.AddAxisCells("longitude", "degrees_east", _Lons[cellList[ii].Item2], Lons[cellList[ii].Item2] + cellSize, cellSize);
+                ds.AddAxisCells("latitude", "degrees_north", _Lats[cellList[ii].Item1], _Lats[cellList[ii].Item1] + cellSize, cellSize);
 
                 double[, ,] temp = null;
 
@@ -389,7 +389,7 @@ namespace Madingley
                     }
 
                     // Currently FetchClimate returns longitudes as the last array dimension
-                    TempArray[cellList[ii][0], cellList[ii][1]] = temp[tt, 0, 0];
+                    TempArray[cellList[ii].Item1, cellList[ii].Item2] = temp[tt, 0, 0];
 
                     if (_DataArray.Count > tt)
                     {

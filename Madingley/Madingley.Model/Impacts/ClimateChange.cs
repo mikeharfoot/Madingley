@@ -20,45 +20,45 @@ namespace Madingley
         }
 
         public void ApplyTemperatureScenario(SortedList<string, double[]> cellEnvironment,
-            Tuple<string, double, double> temperatureScenario, uint currentTimestep, uint currentMonth, uint burninSteps,
+            Madingley.Common.ScenarioParameter temperatureScenario, uint currentTimestep, uint currentMonth, uint burninSteps,
             uint impactSteps, Boolean impactCell)
         {
             if (impactCell)
             {
-                if (temperatureScenario.Item1 == "no")
+                if (temperatureScenario.ParamString == "no")
                 {
                 }
-                else if (temperatureScenario.Item1 == "constant")
+                else if (temperatureScenario.ParamString == "constant")
                 {
                     // Check to see whether this time step is at the transition between burn-in and impact
                     if ((currentTimestep >= (burninSteps + 1)) && (currentTimestep <= (burninSteps + 12)))
                     {
                         // Increment temperature
-                        cellEnvironment["Temperature"][currentMonth] += temperatureScenario.Item2;
+                        cellEnvironment["Temperature"][currentMonth] += temperatureScenario.ParamDouble1;
                     }
                     else
                     {
                     }
                 }
-                else if (temperatureScenario.Item1 == "temporary")
+                else if (temperatureScenario.ParamString == "temporary")
                 {
                     // Check to see whether this time step is at the transition between burn-in and impact
                     // or at the transition between impact and post-impat
                     if ((currentTimestep >= (burninSteps + 1)) && (currentTimestep <= (burninSteps + 12)))
                     {
                         // Increment temperature
-                        cellEnvironment["Temperature"][currentMonth] += temperatureScenario.Item2;
+                        cellEnvironment["Temperature"][currentMonth] += temperatureScenario.ParamDouble1;
                     }
                     else if ((currentTimestep >= (burninSteps + impactSteps + 1)) && (currentTimestep <= (burninSteps + impactSteps + 12)))
                     {
                         // Revert temperature to original value
-                        cellEnvironment["Temperature"][currentMonth] -= temperatureScenario.Item2;
+                        cellEnvironment["Temperature"][currentMonth] -= temperatureScenario.ParamDouble1;
                     }
                     else
                     {
                     }
                 }
-                else if (temperatureScenario.Item1 == "escalating")
+                else if (temperatureScenario.ParamString == "escalating")
                 {
 
                     // If this is the first time step, add items to the cell environment to store the original cell temperature
@@ -76,7 +76,7 @@ namespace Madingley
                     {
                         cellEnvironment["Temperature"][currentMonth] = Math.Min((cellEnvironment["Original Temperature"][currentMonth] + 5.0),
                             cellEnvironment["Temperature"][currentMonth] + ((((currentTimestep - burninSteps) / 12) + 1) *
-                            temperatureScenario.Item2));
+                            temperatureScenario.ParamDouble1));
                         // cellEnvironment["Temperature"][currentMonth] += gridCellStocks[actingStock].TotalBiomass *
                         //     (Math.Min(5.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
                     }

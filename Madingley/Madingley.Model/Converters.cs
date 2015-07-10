@@ -200,19 +200,6 @@ namespace Madingley
             return gridCells.Select(cd => new SortedList<string, double[]>(cd.Environment.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
         }
 
-        public static ScenarioParameterInitialisation ConvertScenarioParameters(IEnumerable<Madingley.Common.ScenarioParameters> scenarioParameters)
-        {
-            Func<Madingley.Common.ScenarioParameter, Tuple<string, double, double>> scenarioParameterConverter =
-                aa => Tuple.Create(aa.ParamString, aa.ParamDouble1, aa.ParamDouble2);
-
-            Func<Madingley.Common.ScenarioParameters, Tuple<string, int, SortedList<string, Tuple<string, double, double>>>> scenarioParametersConverter =
-                a => Tuple.Create(a.Label, a.SimulationNumber, new SortedList<string, Tuple<string, double, double>>(a.Parameters.ToDictionary(kv => kv.Key, kv => scenarioParameterConverter.Invoke(kv.Value))));
-
-            var sp = scenarioParameters.Select(scenarioParametersConverter).ToList();
-
-            return new ScenarioParameterInitialisation(sp);
-        }
-
         public static Madingley.Common.GridCell[] ConvertGrid(Func<uint, uint, GridCell> gridCells, List<uint[]> cellList)
         {
             var gridCellData = new Madingley.Common.GridCell[cellList.Count];

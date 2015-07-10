@@ -56,6 +56,22 @@ namespace Madingley.Common
         public IList<IDictionary<string, double[]>> CellEnvironment { get; set; }
 
         /// <summary>
+        /// Environment default constructor
+        /// </summary>
+        public Environment()
+        {
+            this.CellSize = 0.0;
+            this.BottomLatitude = 0.0;
+            this.TopLatitude = 0.0;
+            this.LeftmostLongitude = 0.0;
+            this.RightmostLongitude = 0.0;
+            this.Units = new SortedList<string, string>();
+            this.SpecificLocations = false;
+            this.FocusCells = null;
+            this.CellEnvironment = new SortedList<string, double[]>[] { };
+        }
+
+        /// <summary>
         /// Environment constructor.
         /// </summary>
         /// <param name="cellSize">Size of cells to be used in the model grid.</param>
@@ -83,7 +99,7 @@ namespace Madingley.Common
             this.TopLatitude = topLatitude;
             this.LeftmostLongitude = leftmostLongitude;
             this.RightmostLongitude = rightmostLongitude;
-            this.Units = new SortedList<string,string>(units);
+            this.Units = new SortedList<string, string>(units);
             this.SpecificLocations = specificLocations;
             this.FocusCells = focusCells.Select(fc => Tuple.Create(fc.Item1, fc.Item2)).ToArray();
             this.CellEnvironment = cellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();

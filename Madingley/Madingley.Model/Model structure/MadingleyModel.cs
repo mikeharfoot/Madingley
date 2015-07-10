@@ -262,32 +262,17 @@ namespace Madingley
         /// </summary>
         /// <value>The first item is the scenario type
         /// The second item is an associated magnitude</value>
-        private Tuple<string,double, double> _HumanNPPScenario;
-        /// <summary>
-        /// Get the human NPP scenario
-        /// </summary>
-        public Tuple<string, double, double> HumanNPPScenario
-        { get { return _HumanNPPScenario; } }
+        public Madingley.Common.ScenarioParameter HumanNPPScenario { get; private set; }
 
         /// <summary>
         /// The scenario of temperature change to use
         /// </summary>
-        private Tuple<string, double, double> _TemperatureScenario;
-        /// <summary>
-        /// Get the scenario of temperature change to use
-        /// </summary>
-        public Tuple<string, double, double> TemperatureScenario
-        { get { return _TemperatureScenario; } }
+        public Madingley.Common.ScenarioParameter TemperatureScenario { get; private set; }
 
         /// <summary>
         /// The scenario of direct animal harvesting to use
         /// </summary>
-        private Tuple<string, double, double> _HarvestingScenario;
-        /// <summary>
-        /// Get the scenario of direct animal harvesting to use
-        /// </summary>
-        public Tuple<string, double, double> HarvestingScenario
-        { get { return _HarvestingScenario; } }
+        public Madingley.Common.ScenarioParameter HarvestingScenario { get; private set; }
         
 
         // A variable to increment for the purposes of giving each cohort a unique ID
@@ -331,7 +316,7 @@ namespace Madingley
             Madingley.Common.Environment environment)
         {
             var initialisation = Converters.ConvertInitialisation(modelState, configuration, environment);
-            var scenarioParameters = Converters.ConvertScenarioParameters(configuration.ScenarioParameters);
+            var scenarioParameters = configuration.ScenarioParameters;
             Converters.ConvertEcologicalParameters(configuration.EcologicalParameters);
             var scenarioIndex = configuration.ScenarioIndex;
             var outputFilesSuffix = "";
@@ -773,7 +758,7 @@ namespace Madingley
             // Apply any climate change impacts
             ClimateChangeSimulator.ApplyTemperatureScenario(
                 EcosystemModelGrid.GetCellEnvironment(_CellList[cellIndex][0], _CellList[cellIndex][1]),
-                _TemperatureScenario,CurrentTimeStep,CurrentMonth,NumBurninSteps,NumImpactSteps,
+                TemperatureScenario,CurrentTimeStep,CurrentMonth,NumBurninSteps,NumImpactSteps,
                 ((initialisation.ImpactCellIndices.Contains((uint)cellIndex) || initialisation.ImpactAll)));
 
             // Create a temporary internal copy of the grid cell cohorts
@@ -800,7 +785,7 @@ namespace Madingley
             }
 
             // Apply any direct harvesting impacts
-            HarvestingSimulator.RemoveHarvestedIndividuals(WorkingGridCellCohorts, _HarvestingScenario, CurrentTimeStep, NumBurninSteps,
+            HarvestingSimulator.RemoveHarvestedIndividuals(WorkingGridCellCohorts, HarvestingScenario, CurrentTimeStep, NumBurninSteps,
                 NumImpactSteps,NumTimeSteps, EcosystemModelGrid.GetCellEnvironment(_CellList[cellIndex][0], _CellList[cellIndex][1]),
                 (initialisation.ImpactCellIndices.Contains((uint)cellIndex) || initialisation.ImpactAll), _GlobalModelTimeStepUnit, CohortFunctionalGroupDefinitions);
 
@@ -817,7 +802,7 @@ namespace Madingley
 
 #if true
         public void AssignModelRunProperties(MadingleyModelInitialisation initialisation, 
-            ScenarioParameterInitialisation scenarioParameters, int scenarioIndex,
+            IList<Madingley.Common.ScenarioParameters> scenarioParameters, int scenarioIndex,
             string outputFilesSuffix, Madingley.Common.ModelState modelState)
 #else
         /// <summary>
@@ -852,9 +837,9 @@ namespace Madingley
             CohortFunctionalGroupDefinitions = initialisation.CohortFunctionalGroupDefinitions;
             StockFunctionalGroupDefinitions = initialisation.StockFunctionalGroupDefinitions;
             EnviroStack = initialisation.EnviroStack;
-            _HumanNPPScenario = scenarioParameters.scenarioParameters.ElementAt(scenarioIndex).Item3["npp"];
-            _TemperatureScenario = scenarioParameters.scenarioParameters.ElementAt(scenarioIndex).Item3["temperature"];
-            _HarvestingScenario = scenarioParameters.scenarioParameters.ElementAt(scenarioIndex).Item3["harvesting"];
+            HumanNPPScenario = scenarioParameters.ElementAt(scenarioIndex).Parameters["npp"];
+            TemperatureScenario = scenarioParameters.ElementAt(scenarioIndex).Parameters["temperature"];
+            HarvestingScenario = scenarioParameters.ElementAt(scenarioIndex).Parameters["harvesting"];
             OutputFilesSuffix = outputFilesSuffix;
             EnvironmentalDataUnits = initialisation.Units;
             OutputModelStateTimestep = initialisation.OutputStateTimestep;
@@ -945,7 +930,7 @@ namespace Madingley
         /// <param name="scenarioIndex">The index of the scenario that this model is to run</param>
         /// <param name="simulation">Simulation number</param>
         public void SetUpModelGrid(MadingleyModelInitialisation initialisation,
-            ScenarioParameterInitialisation scenarioParameters, int scenarioIndex, int simulation)
+            IList<Madingley.Common.ScenarioParameters> scenarioParameters, int scenarioIndex, int simulation)
         {
             // If the intialisation file contains a column pointing to another file of specific locations, and if this column is not blank then read the 
             // file indicated
@@ -1303,7 +1288,7 @@ namespace Madingley
 
                     // Run stock ecology
                     MadingleyEcologyStock.RunWithinCellEcology(workingGridCellStocks, ActingStock, EcosystemModelGrid.GetCellEnvironment(
-                        latCellIndex, lonCellIndex), EnvironmentalDataUnits, _HumanNPPScenario, StockFunctionalGroupDefinitions,
+                        latCellIndex, lonCellIndex), EnvironmentalDataUnits, HumanNPPScenario, StockFunctionalGroupDefinitions,
                         CurrentTimeStep, NumBurninSteps, NumImpactSteps, initialisation.RecoveryTimeSteps, initialisation.InstantaneousTimeStep, initialisation.NumInstantaneousTimeStep, _GlobalModelTimeStepUnit, ProcessTrackers[cellIndex].TrackProcesses, ProcessTrackers[cellIndex],
                         TrackGlobalProcesses, CurrentMonth,
                         InitialisationFileStrings["OutputDetail"],SpecificLocations,((initialisation.ImpactCellIndices.Contains((uint)cellIndex) || (initialisation.ImpactAll))));

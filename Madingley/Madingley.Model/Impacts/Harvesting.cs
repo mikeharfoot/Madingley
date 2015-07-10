@@ -38,7 +38,7 @@ namespace Madingley
         /// <param name="cellEnvironment">The environment in the current grid cell</param>
         /// <param name="impactCell">The index of the cell, within the list of all cells to run, to apply the scenario for</param>
         public void RemoveHarvestedIndividuals(GridCellCohortHandler gridCellCohorts,
-            Tuple<string, double, double> harvestingScenario, uint currentTimestep, uint burninSteps, uint impactSteps, uint totalSteps,
+            Madingley.Common.ScenarioParameter harvestingScenario, uint currentTimestep, uint burninSteps, uint impactSteps, uint totalSteps,
             SortedList<string, double[]> cellEnvironment, Boolean impactCell, string globalModelTimestepUnits, FunctionalGroupDefinitions cohortFGs)
         {
             if (impactCell)
@@ -49,11 +49,11 @@ namespace Madingley
                 {
 
 
-                    if (harvestingScenario.Item1 == "no")
+                    if (harvestingScenario.ParamString == "no")
                     {
                         // Do not apply any harvesting
                     }
-                    else if (harvestingScenario.Item1 == "constant")
+                    else if (harvestingScenario.ParamString == "constant")
                     {
                         double TargetBiomass;
                         if (FisheriesCatch != null)
@@ -64,7 +64,7 @@ namespace Madingley
                         }
                         else
                         {
-                            TargetBiomass = harvestingScenario.Item2;
+                            TargetBiomass = harvestingScenario.ParamDouble1;
                         }
                         // If the burn-in period has been completed, then apply
                         // the harvesting scenario
@@ -73,7 +73,7 @@ namespace Madingley
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
                         }
                     }
-                    else if (harvestingScenario.Item1 == "fish-catch")
+                    else if (harvestingScenario.ParamString == "fish-catch")
                     {
                         //Initialise an instance of ApplyFishingCatches for this cell
                         if (currentTimestep == burninSteps)
@@ -97,50 +97,50 @@ namespace Madingley
                 else
                 {
 
-                    if (harvestingScenario.Item1 == "no")
+                    if (harvestingScenario.ParamString == "no")
                     {
                         // Do not apply any harvesting
                     }
-                    else if (harvestingScenario.Item1 == "constant")
+                    else if (harvestingScenario.ParamString == "constant")
                     {
                         // If the burn-in period has been completed, then apply
                         // the harvesting scenario
                         if (currentTimestep > burninSteps)
                         {
-                            ApplyHarvesting(gridCellCohorts, harvestingScenario.Item2, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment);
                         }
                     }
-                    else if (harvestingScenario.Item1 == "temporary")
+                    else if (harvestingScenario.ParamString == "temporary")
                     {
                         // If the burn-in period has been completed and the period of impact has not elapsed,
                         // then apply the harvesting scenario
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                         {
-                            ApplyHarvesting(gridCellCohorts, harvestingScenario.Item2, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment);
                         }
                     }
-                    else if (harvestingScenario.Item1 == "escalating")
+                    else if (harvestingScenario.ParamString == "escalating")
                     {
                         // If the spin-up period has been completed, then apply a level of harvesting
                         // according to the number of time-steps that have elapsed since the spin-up ended
                         if (currentTimestep > burninSteps)
                         {
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
-                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.Item2)));
+                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
                         }
 
                     }
-                    else if (harvestingScenario.Item1 == "temp-escalating-declining")
+                    else if (harvestingScenario.ParamString == "temp-escalating-declining")
                     {
                         // If the spin-up period has been completed, then apply a level of harvesting
                         // according to the number of time-steps that have elapsed since the spin-up ended
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                         {
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
-                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.Item2)));
+                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
@@ -150,14 +150,14 @@ namespace Madingley
 
 
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
-                            double TargetBiomass = (Math.Min(50000, ((-(totalSteps - currentTimestep) / 12.0) * harvestingScenario.Item2)));
+                            double TargetBiomass = (Math.Min(50000, ((-(totalSteps - currentTimestep) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
                         }
 
                     }
-                    else if (harvestingScenario.Item1 == "temp-escalating")
+                    else if (harvestingScenario.ParamString == "temp-escalating")
                     {
                         // If the spin-up period has been completed and the period of impact has not elapsed, 
                         // then remove a proportion of plant matter
@@ -165,38 +165,38 @@ namespace Madingley
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                         {
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
-                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.Item2)));
+                            double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenarion using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
                         }
                     }
-                    else if (harvestingScenario.Item1 == "temp-escalating-const-rate")
+                    else if (harvestingScenario.ParamString == "temp-escalating-const-rate")
                     {
                         // If the spin-up period has been completed and the period of impact (specified by the third scenario element
                         // has not elapsed, 
                         // then remove a portion of  plant matter
                         // according to the number of time-steps that have elapsed since the spin-up ended
 
-                        int ConstImpactSteps = Convert.ToInt32(harvestingScenario.Item3 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
+                        int ConstImpactSteps = Convert.ToInt32(harvestingScenario.ParamDouble2 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
 
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + ConstImpactSteps)))
                         {
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
-                            double TargetBiomass = (Math.Min(200000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.Item2)));
+                            double TargetBiomass = (Math.Min(200000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenarion using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
                         }
                     }
-                    else if (harvestingScenario.Item1 == "temp-escalating-const-rate-duration")
+                    else if (harvestingScenario.ParamString == "temp-escalating-const-rate-duration")
                     {
                         // If the spin-up period has been completed and the period of impact (specified by the third scenario element
                         // has not elapsed, 
                         // then remove a proportion of plant matter
                         // according to the number of time-steps that have elapsed since the spin-up ended
 
-                        int ConstImpactSteps = Convert.ToInt32(harvestingScenario.Item3 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
+                        int ConstImpactSteps = Convert.ToInt32(harvestingScenario.ParamDouble2 * Utilities.ConvertTimeUnits("year", globalModelTimestepUnits));
 
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                         {
@@ -204,8 +204,8 @@ namespace Madingley
                             //    (Math.Min(1.0, (((currentTimestep - burninSteps) / 12.0) * humanNPPScenario.Item2)));
 
                             double TargetBiomass = (Math.Min(200000,
-                                            Math.Min(((ConstImpactSteps / 12.0) * harvestingScenario.Item2),
-                                            (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.Item2))));
+                                            Math.Min(((ConstImpactSteps / 12.0) * harvestingScenario.ParamDouble1),
+                                            (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1))));
 
                             // Apply the harvesting scenarion using the calculated target biomass
                             ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);

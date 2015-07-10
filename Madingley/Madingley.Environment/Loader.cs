@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
+﻿
 namespace Madingley.Environment
 {
     public static class Loader
@@ -15,31 +12,11 @@ namespace Madingley.Environment
             string environmentDataRoot,
             string inputPath)
         {
-            var mmi = new MadingleyModelInitialisation(simulationInitialisationFile, definitionsFilename, outputsFilename, outputPath, environmentDataRoot, inputPath);
+            var mmi = MadingleyModelInitialisation.Load(simulationInitialisationFile, definitionsFilename, environmentDataRoot, inputPath);
 
-            var m = new MadingleyModel(mmi);
+            MadingleyModel.Load(mmi);
 
-            Func<uint[], Tuple<int, int>> convertCellIndices = e => Tuple.Create((int)e[0], (int)e[1]);
-
-            Func<uint[], Dictionary<string, double[]>> convertCellEnvironment =
-                cell =>
-                {
-                    var e = m.EcosystemModelGrid.GetCellEnvironment(cell[0], cell[1]);
-
-                    return e.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray());
-                };
-
-            return
-                new Madingley.Common.Environment(
-                    mmi.CellSize,
-                    mmi.BottomLatitude,
-                    mmi.TopLatitude,
-                    mmi.LeftmostLongitude,
-                    mmi.RightmostLongitude,
-                    mmi.Units,
-                    m.SpecificLocations,
-                    m._CellList.Select(convertCellIndices),
-                    m._CellList.Select(convertCellEnvironment));
+            return mmi.Item1;
         }
     }
 }

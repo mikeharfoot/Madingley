@@ -102,7 +102,6 @@
     <Compile Include="Model structure\MadingleyModelInitialisation.cs" />
     <Compile Include="Model structure\ModelGrid.cs" />
     <Compile Include="Ecology\Ecological processes stocks\RevisedTerrestrialPlantModel.cs" />
-    <Compile Include="Model structure\ScenarioParameterInitialisation.cs" />
     <Compile Include="Model structure\Stock.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Output and tracking\Cross cell\CrossCellProcessTracker2.cs" />
