@@ -38,11 +38,7 @@ namespace Madingley.Test.Input
 
         public int RowCount { get; private set; }
 
-        public string ExpectedDataRoot { get; private set; }
-
         public string PathToModelSetup { get; private set; }
-
-        public int SpecificCellCount { get; private set; }
 
         public Madingley.Test.Common.LookupColumnNames ExpectedGlobalVariableNames { get; private set; }
 
@@ -75,9 +71,7 @@ namespace Madingley.Test.Input
         public Data(
             bool terrestrial,
             int rowCount,
-            string expectedDataRoot,
             string pathToModelSetup,
-            int specificCellCount,
             Madingley.Test.Common.LookupColumnNames expectedGlobalVariableNames,
             Madingley.Test.Common.LookupColumnTest expectedGlobalLookupData,
             Madingley.Test.Common.LookupColumnNames expectedCellVariableNames,
@@ -95,9 +89,7 @@ namespace Madingley.Test.Input
         {
             this.Terrestrial = terrestrial;
             this.RowCount = rowCount;
-            this.ExpectedDataRoot = expectedDataRoot;
             this.PathToModelSetup = pathToModelSetup;
-            this.SpecificCellCount = specificCellCount;
             this.ExpectedGlobalVariableNames = expectedGlobalVariableNames;
             this.ExpectedGlobalLookupColumnTest = expectedGlobalLookupData;
             this.ExpectedCellVariableNames = expectedCellVariableNames;
@@ -352,6 +344,11 @@ namespace Madingley.Test.Input
         {
             var shortRunLength = 1;
             var longRunLength = 10; // years
+#if __MonoCS__
+            var expectedFolder = "Expected_Mono";
+#else
+            var expectedFolder = "Expected";
+#endif
 
             Func<int, int> allRowCount = (int yearCount) => 12 * yearCount;
 
@@ -386,16 +383,14 @@ namespace Madingley.Test.Input
             {
                 case CommonTestType.COWS_NO_NPP_1_CELL_1_YEAR:
                     {
-                        var expectedDataRoot = @"Expected/Cows no NPP/1 Cell/1 Year";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Cows no NPP/1 Cell/1 Year");
                         var pathToModelSetup = @"Model setup/Cows no NPP/1 Cell/1 Year";
                         var rowCount = truncateRowCount.Invoke(shortRunLength);
 
                         return new Data(
                             true,
                             allRowCount.Invoke(shortRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            1,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             Common.Common.LookupColumnNamesFromDataSetReverse(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Cell0.nc")),
@@ -414,16 +409,14 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.COWS_1_CELL_1_YEAR:
                     {
-                        var expectedDataRoot = @"Expected/Cows/1 Cell/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Cows/1 Cell/10 Years");
                         var pathToModelSetup = @"Model setup/Cows/1 Cell/1 Year";
                         var rowCount = truncateRowCount.Invoke(shortRunLength);
 
                         return new Data(
                             true,
                             allRowCount.Invoke(shortRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            1,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             Common.Common.LookupColumnNamesFromDataSetReverse(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Cell0.nc")),
@@ -442,16 +435,14 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.COWS_1_CELL_10_YEARS:
                     {
-                        var expectedDataRoot = @"Expected/Cows/1 Cell/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Cows/1 Cell/10 Years");
                         var pathToModelSetup = @"Model setup/Cows/1 Cell/10 Years";
                         var rowCount = truncateRowCount.Invoke(longRunLength);
 
                         return new Data(
                             true,
                             allRowCount.Invoke(longRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            1,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             Common.Common.LookupColumnNamesFromDataSetReverse(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Cell0.nc")),
@@ -470,7 +461,7 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.COWS_4_CELLS_10_YEARS:
                     {
-                        var expectedDataRoot = @"Expected/Cows/4 Cells/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Cows/4 Cells/10 Years");
                         var pathToModelSetup = @"Model setup/Cows/4 Cells/10 Years";
                         var rowCount = truncateRowCount.Invoke(longRunLength);
                         var dispersalRowCount = truncateDispersalCount.Invoke(467);
@@ -478,9 +469,7 @@ namespace Madingley.Test.Input
                         return new Data(
                             true,
                             allRowCount.Invoke(longRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            0,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             null,
@@ -500,16 +489,14 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.TERRESTRIAL_4_CELLS_1_YEAR:
                     {
-                        var expectedDataRoot = @"Expected/Terrestrial/4 Cells/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Terrestrial/4 Cells/10 Years");
                         var pathToModelSetup = @"Model setup/Terrestrial/4 Cells/1 Year";
                         var rowCount = truncateRowCount.Invoke(shortRunLength);
 
                         return new Data(
                             true,
                             allRowCount.Invoke(shortRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            0,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             null,
@@ -529,7 +516,7 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.TERRESTRIAL_4_CELLS_10_YEARS:
                     {
-                        var expectedDataRoot = @"Expected/Terrestrial/4 Cells/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Terrestrial/4 Cells/10 Years");
                         var pathToModelSetup = @"Model setup/Terrestrial/4 Cells/10 Years";
                         var rowCount = truncateRowCount.Invoke(longRunLength);
                         var dispersalRowCount = truncateDispersalCount.Invoke(448);
@@ -537,9 +524,7 @@ namespace Madingley.Test.Input
                         return new Data(
                             true,
                             allRowCount.Invoke(longRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            0,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             null,
@@ -559,16 +544,14 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.MARINE_1_CELL_1_YEAR:
                     {
-                        var expectedDataRoot = @"Expected/Marine/1 Cell/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Marine/1 Cell/10 Years");
                         var pathToModelSetup = @"Model setup/Marine/1 Cell/1 Year";
                         var rowCount = truncateRowCount.Invoke(shortRunLength);
 
                         return new Data(
                             false,
                             allRowCount.Invoke(shortRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            1,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             Common.Common.LookupColumnNamesFromDataSetReverse(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Cell0.nc")),
@@ -587,16 +570,14 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.MARINE_1_CELL_10_YEARS:
                     {
-                        var expectedDataRoot = @"Expected/Marine/1 Cell/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Marine/1 Cell/10 Years");
                         var pathToModelSetup = @"Model setup/Marine/1 Cell/10 Years";
                         var rowCount = truncateRowCount.Invoke(longRunLength);
 
                         return new Data(
                             false,
                             allRowCount.Invoke(longRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            1,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             Common.Common.LookupColumnNamesFromDataSetReverse(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Cell0.nc")),
@@ -615,7 +596,7 @@ namespace Madingley.Test.Input
 
                 case CommonTestType.MARINE_4_CELLS_10_YEARS:
                     {
-                        var expectedDataRoot = @"Expected/Marine/4 Cells/10 Years";
+                        var expectedDataRoot = Path.Combine(expectedFolder, @"Marine/4 Cells/10 Years");
                         var pathToModelSetup = @"Model setup/Marine/4 Cells/10 Years";
                         var rowCount = truncateRowCount.Invoke(longRunLength);
                         var dispersalRowCount = truncateDispersalCount.Invoke(441);
@@ -623,9 +604,7 @@ namespace Madingley.Test.Input
                         return new Data(
                             false,
                             allRowCount.Invoke(longRunLength),
-                            expectedDataRoot,
                             pathToModelSetup,
-                            0,
                             Common.Common.LookupColumnNamesFromDataSet(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc")),
                             Data.LookupDataFromNCGlobal(Path.Combine(expectedDataRoot, "BasicOutputs_NI_0_Global.nc"), (rowCount + 1)),
                             null,

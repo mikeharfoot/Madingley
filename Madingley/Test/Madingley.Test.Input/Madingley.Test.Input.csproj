@@ -79,6 +79,51 @@
     <None Include="Expected\Terrestrial\4 Cells\10 Years\NPPOutput.nc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Expected_Mono\Cows no NPP\1 Cell\1 Year\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows no NPP\1 Cell\1 Year\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows\1 Cell\10 Years\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows\1 Cell\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Cows\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Marine\1 Cell\10 Years\BasicOutputs_NI_0_Cell0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Marine\1 Cell\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Marine\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Marine\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Marine\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Terrestrial\4 Cells\10 Years\BasicOutputs_NI_0_Global.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Terrestrial\4 Cells\10 Years\GridOutputs_NI_0.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="Expected_Mono\Terrestrial\4 Cells\10 Years\NPPOutput.nc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Model setup\Cows no NPP\1 Cell\1 Year\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
