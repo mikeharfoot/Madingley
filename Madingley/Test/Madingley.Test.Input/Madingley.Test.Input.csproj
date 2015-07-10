@@ -339,6 +339,15 @@
     <Content Include="Expected\Terrestrial\4 Cells\10 Years\DispersalData_NI_0.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Expected_Mono\Cows\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expected_Mono\Marine\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Expected_Mono\Terrestrial\4 Cells\10 Years\DispersalData_NI_0.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
