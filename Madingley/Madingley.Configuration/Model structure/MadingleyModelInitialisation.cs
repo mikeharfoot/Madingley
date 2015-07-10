@@ -180,7 +180,7 @@ namespace Madingley
                         i.StockFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(VarValues.GetValue(row).ToString(), inputPath);
                         break;
                     case "ecological parameters file":
-                        i.EcologicalParameters = EcologicalParametersSerialization.Load(VarValues.GetValue(row).ToString(), inputPath);
+                        i.EcologicalParameters = EcologicalParameters.Load(VarValues.GetValue(row).ToString(), inputPath);
                         break;
                 }
             }
