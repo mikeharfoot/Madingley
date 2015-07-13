@@ -145,23 +145,35 @@ Parameters for ecological processes.
 
 Lists the exogenous environmental datasets to be used in the model.
 
-Column | Comment
------- | -------
-Source | Either "Local" for a local file or "FetchClimate" to call the FetchClimate service
-Folder | The  folder in which the dataset is stored (relative to the directory in which the model executable is running)
-Filename | The filename of the dataset
-Extension | The file-extension of the dataset
-Dataset Name | The name of the variable inside the data file that is to be used
-Filetype | The file-type of the dataset file, current values: "nc" (NetCDF) or "csv" (Comma-separated values)
-Internal Layer Name | The name with which the environmental data will be referred to inside the model
-Static | Is the environmental layer to be used as a constant (e.g. an annual average) or does it vary through time
-Resolution | The temporal resolution of the data to be imported
-Units | The units of the environmental variable
+Column | Type | Comment
+------ | ---- | -------
+Source | "Local"/"FetchClimate" | Data set is a local file or a call to the FetchClimate service
+Folder | string or blank | The  folder in which the dataset is stored (relative to the directory in which the model executable is running)
+Filename | string or blank | The filename of the dataset
+Extension | string or blank | The file-extension of the dataset
+Dataset Name | string | The name of the variable inside the data file that is to be used
+Filetype | "nc"/"csv" | The file-type of the data set file "nc" for NetCDF, "csv" for comma-separated values
+Internal Layer Name | string | The name with which the environmental data will be referred to inside the model
+Static | Y | Is the environmental layer to be used as a constant (e.g. an annual average) or does it vary through time? Currently only Y
+Resolution | "year"/"month" | The temporal resolution of the data to be imported
+Units | string | The units of the environmental variable
 
 Examples:
 
-    Local,Land,NPP,.nc,NPP,nc,LandNPP,Y,month,gC/m2/day
-    FetchClimate,,,,temperature,,Temperature,Y,month,degC
+```
+Source,Folder,Filename,Extension,Dataset Name,Filetype,Internal Layer Name,Static,Resolution,Units
+Local,,LandSeaMask,.nc,land_sea_mask,nc,LandSeaMask,Y,year,
+Local,Land,hanpp_2005,.nc,HANPP,nc,HANPP,Y,year,gC/m2/year
+Local,Land,AvailableWaterCapacity,.nc,AWC,nc,AWC,Y,year,mm
+Local,Land,NPP,.nc,NPP,nc,LandNPP,Y,month,gC/m2/day
+Local,Ocean,averaged_u_50y_top100m_monthly,.nc,uVel,nc,uVel,Y,month,cm/s
+Local,Ocean,averaged_v_50y_top100m_monthly,.nc,vVel,nc,vVel,Y,month,cm/s
+FetchClimate,,,,temperature,,Temperature,Y,month,degC
+FetchClimate,,,,land_dtr,,LandDTR,Y,month,degC
+FetchClimate,,,,temperature_ocean,,OceanTemp,Y,month,degC
+FetchClimate,,,,precipitation,,Precipitation,Y,month,degC
+FetchClimate,,,,frost,,FrostDays,Y,month,degC
+```
 
 ### Initial Model State Setup/Scenarios.csv
 
