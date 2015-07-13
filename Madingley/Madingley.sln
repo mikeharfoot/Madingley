@@ -66,7 +66,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Environmental Data Layer Li
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Initial Model State Setup", "Initial Model State Setup", "{7A2916EA-6729-4D10-9892-0F2C62E2816B}"
 	ProjectSection(SolutionItems) = preProject
-		Model setup\Initial Model State Setup\ReadModelState.csv = Model setup\Initial Model State Setup\ReadModelState.csv
 		Model setup\Initial Model State Setup\Scenarios.csv = Model setup\Initial Model State Setup\Scenarios.csv
 		Model setup\Initial Model State Setup\SpecificLocations.csv = Model setup\Initial Model State Setup\SpecificLocations.csv
 	EndProjectSection
