@@ -148,9 +148,9 @@ Lists the exogenous environmental datasets to be used in the model.
 Column | Type | Comment
 ------ | ---- | -------
 Source | "Local"/"FetchClimate" | Data set is a local file or a call to the FetchClimate service
-Folder | string or blank | The  folder in which the dataset is stored (relative to the directory in which the model executable is running)
-Filename | string or blank | The filename of the dataset
-Extension | string or blank | The file-extension of the dataset
+Folder | string or blank | The  folder in which the dataset is stored (relative to the directory in which the model executable is running) ("Local" only)
+Filename | string or blank | The filename of the dataset ("Local" only)
+Extension | string or blank | The file-extension of the dataset ("Local" only)
 Dataset Name | string | The name of the variable inside the data file that is to be used
 Filetype | "nc"/"csv" | The file-type of the data set file "nc" for NetCDF, "csv" for comma-separated values
 Internal Layer Name | string | The name with which the environmental data will be referred to inside the model

@@ -8,18 +8,11 @@ namespace Madingley
     {
         public static string[] TimeUnits = { "day", "month", "year" };
 
-        public static Madingley.Common.EcologicalParameters Load(string parametersFile, string inputPath)
+        public static Madingley.Common.EcologicalParameters Load(string fileName)
         {
             //Now read the parameter values into a dictionary
             var Parameters = new Dictionary<string, double>();
-            StreamReader r_env = new StreamReader(System.IO.Path.Combine(inputPath, "Ecological Definition Files", parametersFile));
-
-#if false
-            //Copy the parameter values to the output directory
-            System.IO.File.Copy("input/Model setup/Ecological definition files/" + parametersFile, outputPath + parametersFile, true);
-
-            StreamReader r_env = new StreamReader("input/Model setup/Ecological definition files/" + parametersFile);
-#endif
+            StreamReader r_env = new StreamReader(fileName);
 
             string l;
             char[] comma = ",".ToCharArray();

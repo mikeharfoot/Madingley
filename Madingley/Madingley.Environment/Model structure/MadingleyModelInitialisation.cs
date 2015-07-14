@@ -24,24 +24,19 @@ namespace Madingley
             // Write to console
             Console.WriteLine("Initializing model...\n");
 
-#if true
             // Construct file names
-            string SimulationFileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, simulationInitialisationFilename) + "&openMode=readOnly";
-            string DefinitionsFileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, definitionsFilename) + "&openMode=readOnly";
+            var simulationInitialisationFileName = System.IO.Path.Combine(inputPath, simulationInitialisationFilename);
+            var definitionsFileName = System.IO.Path.Combine(inputPath, definitionsFilename);
+
+            string SimulationFileString = "msds:csv?file=" + simulationInitialisationFileName + "&openMode=readOnly";
+            string DefinitionsFileString = "msds:csv?file=" + definitionsFileName + "&openMode=readOnly";
 
             var e = new Madingley.Common.Environment();
-            var EnviroStack = new SortedList<string, EnviroData>();
-#else
-            // Construct file names
-            string SimulationFileString = "msds:csv?file=input/Model setup/" + simulationInitialisationFilename + "&openMode=readOnly";
-            string DefinitionsFileString = "msds:csv?file=input/Model setup/" + definitionsFilename + "&openMode=readOnly";
-            string OutputsFileString = "msds:csv?file=input/Model setup/" + outputsFilename + "&openMode=readOnly";
 
-            // Copy the initialisation files to the output directory
-            System.IO.File.Copy("input/Model setup/" + simulationInitialisationFilename, outputPath + simulationInitialisationFilename, true);
-            System.IO.File.Copy("input/Model setup/" + definitionsFilename, outputPath + definitionsFilename, true);
-            System.IO.File.Copy("input/Model setup/" + outputsFilename, outputPath + outputsFilename, true);
-#endif
+            e.FileNames.Add(simulationInitialisationFileName);
+            e.FileNames.Add(definitionsFileName);
+
+            var EnviroStack = new SortedList<string, EnviroData>();
 
             // Read in the simulation data
             DataSet InternalData = DataSet.Open(SimulationFileString);
@@ -77,13 +72,11 @@ namespace Madingley
                         if (VarValues.GetValue(row).ToString() != "")
                         {
                             e.SpecificLocations = true;
-                            // Copy the initialisation file to the output directory
-#if true
-                            ReadSpecificLocations(e, VarValues.GetValue(row).ToString(), inputPath);
-#else
-                            System.IO.File.Copy("input/Model setup/Initial Model State Setup/" + _InitialisationFileStrings["Locations"], outputPath + _InitialisationFileStrings["Locations"], true);
-                            ReadSpecificLocations(_InitialisationFileStrings["Locations"], outputPath);
-#endif
+                            var specificLocationsFile = VarValues.GetValue(row).ToString();
+                            var fileName = System.IO.Path.Combine(inputPath, "Initial Model State Setup", specificLocationsFile);
+                            e.FileNames.Add(fileName);
+
+                            ReadSpecificLocations(e, fileName);
                         }
                         break;
                 }
@@ -108,12 +101,14 @@ namespace Madingley
                 switch (VarParameters.GetValue(row).ToString().ToLower())
                 {
                     case "environmental data file":
-                        // Read environmental data layers
-#if true
-                        EnviroStack = ReadEnvironmentalLayers(e, VarValues.GetValue(row).ToString(), environmentDataRoot, inputPath);
-#else
-                        this.ReadEnvironmentalLayers(VarValues.GetValue(row).ToString(), outputPath);
-#endif
+                        {
+                            // Read environmental data layers
+                            var environmentalLayerFile = VarValues.GetValue(row).ToString();
+                            var fileName = System.IO.Path.Combine(inputPath, "Environmental Data Layer List", environmentalLayerFile);
+                            e.FileNames.Add(fileName);
+
+                            EnviroStack = ReadEnvironmentalLayers(e, fileName, environmentDataRoot);
+                        }
                         break;
                 }
             }
@@ -123,22 +118,13 @@ namespace Madingley
             return Tuple.Create(e, EnviroStack);
         }
 
-#if true
         /// <summary>
         /// Read in the specified locations in which to run the model
         /// </summary>
         /// <param name="specificLocationsFile">The name of the file with specific locations information</param>
         /// <param name="outputPath">The path to the output folder in which to copy the specific locations file</param>
         /// <param name="inputPath">Path to the input files</param>
-        public static void ReadSpecificLocations(Madingley.Common.Environment e, string specificLocationsFile, string inputPath)
-#else
-        /// <summary>
-        /// Read in the specified locations in which to run the model
-        /// </summary>
-        /// <param name="specificLocationsFile">The name of the file with specific locations information</param>
-        /// <param name="outputPath">The path to the output folder in which to copy the specific locations file</param>
-        public void ReadSpecificLocations(string specificLocationsFile, string outputPath)
-#endif
+        public static void ReadSpecificLocations(Madingley.Common.Environment e, string fileName)
         {
             var CellList = new List<Tuple<int, int>>();
 
@@ -149,11 +135,7 @@ namespace Madingley
             Console.WriteLine("");
 
             // construct file name
-#if true
-            string FileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, "Initial Model State Setup", specificLocationsFile) + "&openMode=readOnly";
-#else
-            string FileString = "msds:csv?file=input/Model setup/Initial Model State Setup/" + specificLocationsFile + "&openMode=readOnly";
-#endif
+            string FileString = "msds:csv?file=" + fileName + "&openMode=readOnly";
 
             // Read in the data
             DataSet InternalData = DataSet.Open(FileString);
@@ -194,7 +176,6 @@ namespace Madingley
             e.FocusCells = CellList;
         }
 
-#if true
         /// <summary>
         /// Reads the environmental layers listed in the specified file containing a list of environmental layers
         /// </summary>
@@ -202,15 +183,7 @@ namespace Madingley
         /// <param name="outputPath">Path to output files</param>
         /// <param name="environmentDataRoot">The path to folder which contains the data inputs</param>
         /// <param name="inputPath">The path to folder which contains the model inputs</param>
-        public static SortedList<string, EnviroData> ReadEnvironmentalLayers(Madingley.Common.Environment e, string environmentalLayerFile, string environmentDataRoot, string inputPath)
-#else
-        /// <summary>
-        /// Reads the environmental layers listed in the specified file containing a list of environmental layers
-        /// </summary>
-        /// <param name="environmentalLayerFile">The name of the file containing the list of environmental layers</param>
-        /// <param name="outputPath">The path to folder in which outputs will be stored</param>
-        public void ReadEnvironmentalLayers(string environmentalLayerFile, string outputPath)
-#endif
+        public static SortedList<string, EnviroData> ReadEnvironmentalLayers(Madingley.Common.Environment e, string inputEnvironmentalLayerFileName, string environmentDataRoot)
         {
             Console.WriteLine("Reading in environmental data:");
 
@@ -229,24 +202,13 @@ namespace Madingley
             // Variable to store the file name of the environmental data files
             string TempFilename;
 
-#if true
-            var inputEnvironmentalLayerFileName = System.IO.Path.Combine(inputPath, "Environmental Data Layer List", environmentalLayerFile);
-
             // Construct the full URI for the file  containing the list of environmental layers
             string FileString = "msds:csv?file=" + inputEnvironmentalLayerFileName + "&openMode=readOnly";
 
             StreamReader r_env = new StreamReader(inputEnvironmentalLayerFileName);
 
             var EnviroStack = new SortedList<string, EnviroData>();
-#else
-            // Construct the full URI for the file  containing the list of environmental layers
-            string FileString = "msds:csv?file=input/Model setup/Environmental data layer list/" + environmentalLayerFile + "&openMode=readOnly";
 
-            //Copy the file containing the list of environmental layers to the output directory
-            System.IO.File.Copy("input/Model setup/Environmental data layer list/" + environmentalLayerFile, outputPath + environmentalLayerFile, true);
-
-            StreamReader r_env = new StreamReader("input/Model setup/Environmental data layer list/" + environmentalLayerFile);
-#endif
             string l;
             char[] comma = ",".ToCharArray();
 

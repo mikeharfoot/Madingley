@@ -120,6 +120,8 @@ namespace Madingley.Common
         /// </summary>
         public EcologicalParameters EcologicalParameters { get; set; }
 
+        public List<string> FileNames { get; set; }
+
         /// <summary>
         /// Configuration default constructor.
         /// </summary>
@@ -147,6 +149,7 @@ namespace Madingley.Common
             this.ScenarioIndex = 0;
             this.Simulation = 0;
             this.EcologicalParameters = null;
+            this.FileNames = new List<string>();
         }
 
         /// <summary>
@@ -196,7 +199,8 @@ namespace Madingley.Common
             IEnumerable<ScenarioParameters> scenarioParameters,
             int scenarioIndex,
             int simulation,
-            EcologicalParameters ecologicalParameters)
+            EcologicalParameters ecologicalParameters,
+            IEnumerable<string> fileNames)
         {
             this.GlobalModelTimeStepUnit = globalModelTimeStepUnit;
             this.NumTimeSteps = numTimeSteps;
@@ -220,6 +224,7 @@ namespace Madingley.Common
             this.ScenarioIndex = scenarioIndex;
             this.Simulation = simulation;
             this.EcologicalParameters = new EcologicalParameters(ecologicalParameters);
+            this.FileNames = fileNames.ToList();
         }
 
         /// <summary>
@@ -251,6 +256,7 @@ namespace Madingley.Common
             this.ScenarioIndex = configuration.ScenarioIndex;
             this.Simulation = configuration.Simulation;
             this.EcologicalParameters = new EcologicalParameters(configuration.EcologicalParameters);
+            this.FileNames = configuration.FileNames.ToList();
         }
 
         /// <summary>
@@ -289,7 +295,8 @@ namespace Madingley.Common
                 this.ScenarioParameters.SequenceEqual(configurationObj.ScenarioParameters, new ScenarioParametersComparer(compareFloats)) &&
                 this.ScenarioIndex.Equals(configurationObj.ScenarioIndex) &&
                 this.Simulation.Equals(configurationObj.Simulation) &&
-                this.EcologicalParameters.Equals(configurationObj.EcologicalParameters);
+                this.EcologicalParameters.Equals(configurationObj.EcologicalParameters) &&
+                this.FileNames.SequenceEqual(configurationObj.FileNames);
         }
 
         /// <summary>
@@ -320,7 +327,8 @@ namespace Madingley.Common
                 this.ScenarioParameters.GetHashCode() ^
                 this.ScenarioIndex.GetHashCode() ^
                 this.Simulation.GetHashCode() ^
-                this.EcologicalParameters.GetHashCode();
+                this.EcologicalParameters.GetHashCode() ^
+                this.FileNames.GetHashCode();
         }
     }
 }

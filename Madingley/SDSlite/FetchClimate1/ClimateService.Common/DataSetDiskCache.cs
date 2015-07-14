@@ -28,9 +28,6 @@ namespace Microsoft.Research.Science.Data.Climate
 
         public DataSetDiskCache(string cacheFolder)
         {
-#if DEBUG
-            Factory.DataSetFactory.RegisterAssembly("Microsoft.Research.Science.Data.CSV.dll");
-#endif
             if (cacheFolder == null)
                 throw new ArgumentNullException("cacheFolder");
             this.cacheFolder = Path.GetFullPath(cacheFolder);

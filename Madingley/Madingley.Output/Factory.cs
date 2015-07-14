@@ -21,12 +21,8 @@ namespace Madingley.Output
             Madingley.Common.ModelState modelState)
         {
             // Specify the working directory
-            //string OutputDir = "C:/Users/derekt/Dropbox/Madingley stuff/Model outputs/MadingleyOutputs" +
-            //string OutputDir = "C:/Users/derekt/desktop/MadingleyOutputs" +
-            //string OutputDir = "Ensemble" +
-            string OutputDir = "GlobalStates" +
-                //string OutputDir = "C:/Users/mikeha/Work/Research/Visual Studio 2010/Madingley/madingley outputs" +
-                System.DateTime.Now.Year + "-"
+            string OutputDir = "Parameters";
+            OutputDir += System.DateTime.Now.Year + "-"
                 + System.DateTime.Now.Month + "-"
                 + System.DateTime.Now.Day + "_"
                 + System.DateTime.Now.Hour + "."
@@ -35,6 +31,22 @@ namespace Madingley.Output
 
             // Create the working directory if this does not already exist
             System.IO.Directory.CreateDirectory(OutputDir);
+
+            foreach (var sourceFileName in configuration.FileNames)
+            {
+                var fileName = System.IO.Path.GetFileName(sourceFileName);
+                var destFileName = System.IO.Path.Combine(OutputDir, fileName);
+
+                System.IO.File.Copy(sourceFileName, destFileName, true);
+            }
+
+            foreach (var sourceFileName in environment.FileNames)
+            {
+                var fileName = System.IO.Path.GetFileName(sourceFileName);
+                var destFileName = System.IO.Path.Combine(OutputDir, fileName);
+
+                System.IO.File.Copy(sourceFileName, destFileName, true);
+            }
 
             // Set up the suffix for the output files
             var OutputFilesSuffix = "_";

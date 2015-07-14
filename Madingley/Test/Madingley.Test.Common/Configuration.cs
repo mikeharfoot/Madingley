@@ -39,6 +39,13 @@ namespace Madingley.Test.Common
             var scenarioIndex = 0;
             var simulation = 0;
             var ecologicalParameters = EcologicalParameters.RandomEcologicalParameters(rnd);
+            var fileNames = new string[] {
+                @"Model setup\SimulationControlParameters.csv",
+                @"Model setup\FileLocationParameters.csv",
+                @"Model setup\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv",
+                @"Model setup\Ecological Definition Files\StockFunctionalGroupDefinitions.csv",
+                @"Model setup\Ecological Definition Files\EcologicalParameters.csv"
+            };
 
             return new Madingley.Common.Configuration(
                 globalModelTimeStepUnit,
@@ -62,7 +69,8 @@ namespace Madingley.Test.Common
                 scenarioParameters,
                 scenarioIndex,
                 simulation,
-                ecologicalParameters);
+                ecologicalParameters,
+                fileNames);
         }
 
         public static void CreateDirectories(string directory)

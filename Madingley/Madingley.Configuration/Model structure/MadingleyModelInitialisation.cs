@@ -20,21 +20,16 @@ namespace Madingley
             // Read the intialisation files and copy them to the output directory
 
             // Construct file names
-            var SimulationFileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, simulationInitialisationFilename) + "&openMode=readOnly";
-            var DefinitionsFileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, definitionsFilename) + "&openMode=readOnly";
+            var simulationInitialisationFileName = System.IO.Path.Combine(inputPath, simulationInitialisationFilename);
+            var definitionsFileName = System.IO.Path.Combine(inputPath, definitionsFilename);
+
+            var SimulationFileString = "msds:csv?file=" + simulationInitialisationFileName + "&openMode=readOnly";
+            var DefinitionsFileString = "msds:csv?file=" + definitionsFileName + "&openMode=readOnly";
 
             var i = new Madingley.Common.Configuration();
-#if false
-            // Construct file names
-            string SimulationFileString = "msds:csv?file=input/Model setup/" + simulationInitialisationFilename + "&openMode=readOnly";
-            string DefinitionsFileString = "msds:csv?file=input/Model setup/" + definitionsFilename + "&openMode=readOnly";
-            string OutputsFileString = "msds:csv?file=input/Model setup/" + outputsFilename + "&openMode=readOnly";
 
-            // Copy the initialisation files to the output directory
-            System.IO.File.Copy("input/Model setup/" + simulationInitialisationFilename, outputPath + simulationInitialisationFilename, true);
-            System.IO.File.Copy("input/Model setup/" + definitionsFilename, outputPath + definitionsFilename, true);
-            System.IO.File.Copy("input/Model setup/" + outputsFilename, outputPath + outputsFilename, true);
-#endif
+            i.FileNames.Add(simulationInitialisationFileName);
+            i.FileNames.Add(definitionsFileName);
 
             // Read in the simulation data
             DataSet InternalData = DataSet.Open(SimulationFileString);
@@ -171,16 +166,34 @@ namespace Madingley
                 switch (VarParameters.GetValue(row).ToString().ToLower())
                 {
                     case "cohort functional group definitions file":
-                        Console.WriteLine("Reading functional group definitions...\n");
-                        // Open a the specified csv file and set up the cohort functional group definitions
-                        i.CohortFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(VarValues.GetValue(row).ToString(), inputPath);
+                        {
+                            Console.WriteLine("Reading functional group definitions...\n");
+                            // Open a the specified csv file and set up the cohort functional group definitions
+                            var functionalDefinitionsFileName = VarValues.GetValue(row).ToString();
+                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
+                            i.FileNames.Add(fileName);
+
+                            i.CohortFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
+                        }
                         break;
                     case "stock functional group definitions file":
-                        // Open a the specified csv file and set up the stock functional group definitions
-                        i.StockFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(VarValues.GetValue(row).ToString(), inputPath);
+                        {
+                            // Open a the specified csv file and set up the stock functional group definitions
+                            var functionalDefinitionsFileName = VarValues.GetValue(row).ToString();
+                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
+                            i.FileNames.Add(fileName);
+
+                            i.StockFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
+                        }
                         break;
                     case "ecological parameters file":
-                        i.EcologicalParameters = EcologicalParameters.Load(VarValues.GetValue(row).ToString(), inputPath);
+                        {
+                            var parametersFileName = VarValues.GetValue(row).ToString();
+                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", parametersFileName);
+                            i.FileNames.Add(fileName);
+
+                            i.EcologicalParameters = EcologicalParameters.Load(fileName);
+                        }
                         break;
                 }
             }

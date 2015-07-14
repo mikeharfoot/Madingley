@@ -18,7 +18,10 @@ namespace Madingley.Configuration
         {
             var configuration = MadingleyModelInitialisation.Load(simulationInitialisationFile, definitionsFilename, inputPath);
 
-            configuration.ScenarioParameters = ScenarioParameterInitialisation.Load(scenariosFilename, inputPath);
+            var fileName = System.IO.Path.Combine(inputPath, "Initial Model State Setup", scenariosFilename);
+            configuration.FileNames.Add(fileName);
+
+            configuration.ScenarioParameters = ScenarioParameterInitialisation.Load(fileName);
 
             return configuration;
         }

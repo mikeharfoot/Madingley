@@ -297,6 +297,7 @@ namespace Madingley.Test.Common
             return Enumerable.Range(0, length1).Select(i => RandomCellEnv(rnd, length2)).ToArray();
         }
 
+        /*
         public static Madingley.Common.Environment RandomEnvironment(Random rnd)
         {
             var cellSize = rnd.NextDouble();
@@ -305,9 +306,16 @@ namespace Madingley.Test.Common
             var leftmostLongitude = rnd.NextDouble();
             var rightmostLongitude = rnd.NextDouble();
             var units = RandomUnits(rnd, 5);
-            var specificLocations = Common.RandomBool(rnd);
+            var specificLocations = true;// Common.RandomBool(rnd);
             var focusCells = RandomFocusCells(rnd, 20);
             var cellEnvironment = RandomCellEnvironment(rnd, 5, 7);
+            var fileNames = new string[] {
+                //@"Model setup\SimulationControlParameters.csv",
+                @"Model setup\FileLocationParameters.csv",
+                @"Model setup\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv",
+                @"Model setup\Ecological Definition Files\StockFunctionalGroupDefinitions.csv",
+                @"Model setup\Ecological Definition Files\EcologicalParameters.csv"
+            };
 
             return new Madingley.Common.Environment(
                 cellSize,
@@ -318,8 +326,10 @@ namespace Madingley.Test.Common
                 units,
                 specificLocations,
                 focusCells,
-                cellEnvironment);
+                cellEnvironment,
+                fileNames);
         }
+        */
 
         public static void CreateDirectories(string directory)
         {

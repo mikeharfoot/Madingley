@@ -21,20 +21,12 @@ namespace Madingley
         /// </summary>
         /// <param name="scenarioParameterFile">The name of the scenario parameters file, which must be in the 'Model setup' directory</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
-        public static IList<ScenarioParameters> Load(string scenarioParameterFile, string inputPath)
+        public static IList<ScenarioParameters> Load(string fileName)
         {
             Console.WriteLine("Reading scenario parameters file...\n");
 
             // Construct file name
-            var FileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, "Initial Model State Setup", scenarioParameterFile) + "&openMode=readOnly";
-
-#if false
-            // Construct file name
-            string FileString = "msds:csv?file=input/Model setup/Initial model state setup/" + scenarioParameterFile + "&openMode=readOnly";
-
-            //Copy the scenarioParameterFile to the output directory
-            System.IO.File.Copy("input/Model setup/Initial model state setup/" + scenarioParameterFile, outputPath + scenarioParameterFile, true);
-#endif
+            var FileString = "msds:csv?file=" + fileName + "&openMode=readOnly";
 
             // Read in the data
             DataSet InternalData = DataSet.Open(FileString);

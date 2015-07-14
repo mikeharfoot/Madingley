@@ -55,6 +55,8 @@ namespace Madingley.Common
         /// </summary>
         public IList<IDictionary<string, double[]>> CellEnvironment { get; set; }
 
+        public List<string> FileNames { get; set; }
+
         /// <summary>
         /// Environment default constructor
         /// </summary>
@@ -69,6 +71,7 @@ namespace Madingley.Common
             this.SpecificLocations = false;
             this.FocusCells = null;
             this.CellEnvironment = new SortedList<string, double[]>[] { };
+            this.FileNames = new List<string>();
         }
 
         /// <summary>
@@ -92,7 +95,8 @@ namespace Madingley.Common
             IDictionary<string, string> units,
             bool specificLocations,
             IEnumerable<Tuple<int, int>> focusCells,
-            IEnumerable<IDictionary<string, double[]>> cellEnvironment)
+            IEnumerable<IDictionary<string, double[]>> cellEnvironment,
+            IEnumerable<string> fileNames)
         {
             this.CellSize = cellSize;
             this.BottomLatitude = bottomLatitude;
@@ -103,6 +107,7 @@ namespace Madingley.Common
             this.SpecificLocations = specificLocations;
             this.FocusCells = focusCells.Select(fc => Tuple.Create(fc.Item1, fc.Item2)).ToArray();
             this.CellEnvironment = cellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
+            this.FileNames = fileNames.ToList();
         }
 
         /// <summary>
@@ -120,6 +125,7 @@ namespace Madingley.Common
             this.SpecificLocations = environment.SpecificLocations;
             this.FocusCells = environment.FocusCells.Select(fc => Tuple.Create(fc.Item1, fc.Item2)).ToArray();
             this.CellEnvironment = environment.CellEnvironment.Select(ce => new SortedList<string, double[]>(ce.ToDictionary(kv => kv.Key, kv => kv.Value.ToArray()))).ToArray();
+            this.FileNames = environment.FileNames.ToList();
         }
 
         /// <summary>
@@ -145,7 +151,8 @@ namespace Madingley.Common
                 this.Units.SequenceEqual(environmentObj.Units) &&
                 this.SpecificLocations.Equals(environmentObj.SpecificLocations) &&
                 this.FocusCells.SequenceEqual(environmentObj.FocusCells) &&
-                this.CellEnvironment.SequenceEqual(environmentObj.CellEnvironment, cellEnvironmentComparer);
+                this.CellEnvironment.SequenceEqual(environmentObj.CellEnvironment, cellEnvironmentComparer) &&
+                this.FileNames.SequenceEqual(environmentObj.FileNames);
         }
 
         /// <summary>
@@ -163,7 +170,8 @@ namespace Madingley.Common
                 this.Units.GetHashCode() ^
                 this.SpecificLocations.GetHashCode() ^
                 this.FocusCells.GetHashCode() ^
-                this.CellEnvironment.GetHashCode();
+                this.CellEnvironment.GetHashCode() ^
+                this.FileNames.GetHashCode();
         }
     }
 }

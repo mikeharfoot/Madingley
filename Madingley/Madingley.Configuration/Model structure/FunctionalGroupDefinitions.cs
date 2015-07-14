@@ -21,23 +21,13 @@ namespace Madingley
         /// <param name="fileName">The name of the functional group definition file to be read in</param>
         /// <param name="outputPath">The path to the output folder, in which to copy the functional group definitions file</param>
         /// <param name="inputPath">The path to folder which contains the inputs</param>
-        public static FunctionalGroupDefinitions Load(string fileName, string inputPath)
+        public static FunctionalGroupDefinitions Load(string fileName)
         {
             // Construct the URI for the functional group definition file
-            string FileString = "msds:csv?file=" + System.IO.Path.Combine(inputPath, "Ecological Definition Files", fileName) + "&openMode=readOnly";
-
-            var InternalData = (DataSet)null;
-
-#if false
-            // Construct the URI for the functional group definition file
-            string FileString = "msds:csv?file=input/Model setup/ecological definition files/" + fileName + "&openMode=readOnly";
-
-            // Copy the Function group definitions file to the output directory
-            System.IO.File.Copy("input/Model setup/ecological definition files/" + fileName, outputPath + fileName, true);
-#endif
+            string FileString = "msds:csv?file=" + fileName + "&openMode=readOnly";
 
             // Read in the data
-            InternalData = DataSet.Open(FileString);
+            var InternalData = DataSet.Open(FileString);
 
             // Initialise the lists
             var TraitLookupFromIndex = new SortedDictionary<string, string[]>();
