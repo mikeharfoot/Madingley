@@ -288,6 +288,11 @@ namespace Madingley
         }
 
 #if true
+        public bool HasTrait(string searchTraits)
+        {
+            return IndexLookupFromTrait.ContainsKey(searchTraits.ToLower());
+        }
+
         public FunctionalGroupDefinitions(
             SortedDictionary<string, SortedDictionary<string, int[]>> IndexLookupFromTrait,
             SortedList<string, double[]> FunctionalGroupProperties,

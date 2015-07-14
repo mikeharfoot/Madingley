@@ -799,7 +799,7 @@ namespace Madingley
             }
 
 #if true
-            var noPlantModels = functionalGroups.GetFunctionalGroupIndex("InitPlantModel", "None", false);
+            var noPlantModels = functionalGroups.HasTrait("InitPlantModel") ? functionalGroups.GetFunctionalGroupIndex("InitPlantModel", "None", false) : null;
 #endif
 
             // Loop over all functional groups in the model
