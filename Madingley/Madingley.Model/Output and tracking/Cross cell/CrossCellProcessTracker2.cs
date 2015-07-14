@@ -41,8 +41,8 @@ namespace Madingley
 
             for (var kk = 0; kk < count; kk++)
             {
-                var ii = (int)kk / inboundCohorts.GetLength(0);
-                var jj = kk % inboundCohorts.GetLength(0);
+                var ii = (int)kk / inboundCohorts.GetLength(1);
+                var jj = kk % inboundCohorts.GetLength(1);
 
                 var denter =
                     new Tuple<Madingley.Common.CohortsEnterDirection, int>[]

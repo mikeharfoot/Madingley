@@ -442,32 +442,10 @@ namespace Madingley
              }
 
 #if true
-        public DataSet CloneDataSet(string fileName, int year)
-        {
-            var extension = string.Format("year_{0}.nc", year);
-            var copyFileName = System.IO.Path.ChangeExtension(fileName, extension);
-            System.IO.File.Copy(fileName, copyFileName, true);
-
-            var fileString = "msds:nc?file=" + copyFileName + "&openMode=readOnly";
-
-            return DataSet.Open(fileString);
-        }
-
-        public DataSet CloneTabSeparated(string fileName, int year)
-        {
-            var extension = string.Format("year_{0}.tsv", year);
-            var copyFileName = System.IO.Path.ChangeExtension(fileName, extension);
-            System.IO.File.Copy(fileName, copyFileName, true);
-
-            var fileString = "msds:csv?file=" + copyFileName + "&openMode=readOnly&separator=tab";
-
-            return DataSet.Open(fileString);
-        }
-
         public Object EndYear(int year)
         {
-            var globalDataSet = CloneDataSet(this.GlobalOutputs.FileName, year);
-            DataSet[] cellDataSets;
+            var globalDataSet = this.GlobalOutputs.Clone();
+            var cellDataSets = (DataSet[])null;
             var gridDataSet = (DataSet)null;
             var nppDataSet = (DataSet)null;
 
@@ -477,18 +455,18 @@ namespace Madingley
                     this.CellOutputs.Select(
                         cell =>
                         {
-                            return cell.Clone(year);
+                            return cell.Clone();
                         }).ToArray();
             }
             else
             {
                 cellDataSets = new DataSet[] { };
-                gridDataSet = CloneDataSet(this.GridOutputs.FileName, year);
-                nppDataSet = CloneDataSet(this.TrackGlobalProcesses.TrackNPP.FileName, year);
+                gridDataSet = this.GridOutputs.Clone();
+                nppDataSet = this.TrackGlobalProcesses.TrackNPP.Clone();
             }
 
             var crossCellProcessOutputs =
-                this.TrackCrossCellProcesses != null && this.TrackCrossCellProcesses.TrackCrossCellProcesses ? CloneTabSeparated(this.TrackCrossCellProcesses.TrackDispersal.FileName, year) : null;
+                this.TrackCrossCellProcesses != null && this.TrackCrossCellProcesses.TrackCrossCellProcesses ? this.TrackCrossCellProcesses.TrackDispersal.Clone(year) : null;
 
             var o = new MadingleyModelOutputDataSets
                     {

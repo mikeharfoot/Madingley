@@ -1992,7 +1992,7 @@ namespace Madingley
 #if true
         // Clone the dataSet. For some reason .Clone reverses the order of the
         // variables so it is done twice
-        public DataSet Clone(int year)
+        public DataSet Clone()
         {
             var dataSet = this.BasicOutputMemory.Clone("msds:memory");
             var dataSet2 = dataSet.Clone("msds:memory");

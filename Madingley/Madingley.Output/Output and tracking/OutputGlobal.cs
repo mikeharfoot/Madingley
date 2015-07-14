@@ -427,6 +427,19 @@ namespace Madingley
         }
 
 #if true
+        // Clone the dataSet. For some reason .Clone reverses the order of the
+        // variables so it is done twice
+        public DataSet Clone()
+        {
+            var dataSet = this.BasicOutput.Clone("msds:memory");
+            var dataSet2 = dataSet.Clone("msds:memory");
+
+            dataSet.Dispose();
+            dataSet = null;
+
+            return dataSet2;
+        }
+
         public void Copy(OutputGlobal existing)
         {
             this.BasicOutput.Dispose();
