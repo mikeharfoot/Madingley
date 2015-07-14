@@ -44,7 +44,8 @@ namespace Madingley.Test.Common
                 @"Model setup\FileLocationParameters.csv",
                 @"Model setup\Ecological Definition Files\CohortFunctionalGroupDefinitions.csv",
                 @"Model setup\Ecological Definition Files\StockFunctionalGroupDefinitions.csv",
-                @"Model setup\Ecological Definition Files\EcologicalParameters.csv"
+                @"Model setup\Ecological Definition Files\EcologicalParameters.csv",
+                @"Model setup\Initial Model State Setup\Scenarios.csv"
             };
 
             return new Madingley.Common.Configuration(

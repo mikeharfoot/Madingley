@@ -63,41 +63,79 @@ This is done via the CSV files in "Model setup".
 
 This file identifies other file names to use for different aspects of the configuration.
 
-Parameter | Value | Comment
---------- | ----- | -------
-Mass Bin Filename | MassBinDefinitions.csv | Only used for output
-Environmental Data File | EnvironmentalDataLayers.csv | File containing environment layers (in "Environmental Data Layer List" folder)
-Cohort Functional Group Definitions File | CohortFunctionalGroupDefinitions.csv | File containing cohort functional group definitions (in "Ecological Definition Files" folder)
-Stock Functional Group Definitions File | StockFunctionalGroupDefinitions.csv | File containing stock functional group definitions (in "Ecological Definition Files" folder)
-Ecological parameters file | EcologicalParameters.csv | File containing Ecological parameters (in "Ecological Definition Files" folder)
+Parameter | Type | Comment
+--------- | ---- | -------
+Mass Bin Filename | string | Only used for output
+Environmental Data File | string | File containing environment layers (in "Environmental Data Layer List" folder)
+Cohort Functional Group Definitions File | string | File containing cohort functional group definitions (in "Ecological Definition Files" folder)
+Stock Functional Group Definitions File | string | File containing stock functional group definitions (in "Ecological Definition Files" folder)
+Ecological parameters file | string | File containing Ecological parameters (in "Ecological Definition Files" folder)
+
+Example:
+
+```
+Parameter,Value
+Mass Bin Filename,MassBinDefinitions.csv
+Environmental Data File,EnvironmentalDataLayers.csv
+Cohort Functional Group Definitions File,CohortFunctionalGroupDefinitions.csv
+Stock Functional Group Definitions File,StockFunctionalGroupDefinitions.csv
+Ecological parameters file,EcologicalParameters.csv
+```
 
 ### SimulationControlParameters.csv
 
 The file specifies most of the changeable information needed by the model to run. It should be modified depending on the experimental purpose of the simulation, along with its counterpart the ‘Scenarios’ file.
 
-Parameter | Value | Comment
-------------- | ------------- | -------------
-Timestep Units | Month | The temporal resolution at which the model runs; the length of time one round of calculations represents.  Valid timestep options are "day", "month" or "year" - however, the model has been calibrated primary for a timestep of "month".
-Length of simulation (years) | 10 | The length of time the simulation represents; the timescale of the model outputs.
-Burn-in (years) | 0 | 
-Impact duration (years) | 0 | 
-Recovery duration (years) | 0 | 
-Bottom Latitude | -65 | The southernmost boundary of the grid to be modelled. Input unit is decimal degrees.
-Top Latitude | 65 | The northernmost boundary of the grid to be modelled. Input unit is decimal degrees.
-Leftmost Longitude | -180 | The westernmost boundary of the grid to be modelled. Input unit is decimal degrees.
-Rightmost Longitude | 180 | The easternmost boundary of the grid to be modelled. Input unit is decimal degrees.
-Grid Cell Size | 1 | The length of one side of the square cells which will make up the model grid. A smaller value means a higher spatial resolution, and more cells within the grid. For example, a 1x1 degree grid with cell size 0.1 will be a 100 cell grid; with cell size 0.05 it will be a 400 cell grid. Decreasing cell size makes the model considerably more computationally expensive.
-Specific Location File | SpecificLocations.csv | File name to use to run model at specific grid cells, leave blank to run for whole grid.
-Plankton size threshold | 0.01 | 
-Draw Randomly | no | Distributes the initial stock and cohort seeding randomly across the grid, and randomises the order in which cohorts act within a timestep introducing a degree of stochasticity to the simulation. Input as ‘yes’ or ‘no’. Generally left as yes.
-Extinction Threshold | 1 | The number of individuals remaining in a cohort for it to be considered extant.
-Maximum Number Of Cohorts | 1000 | The maximum number of cohorts allowed within a single cell, after which the model merges the most similar cohorts into single larger approximations. Necessary for computational reasons: increasing the maximum number of cohorts reduces uncertainty and increases the power of the model at the cost of increased computational expense.
-Run Cells In Parallel | no | Assigns different cells to different processor cores when running a simulation. Input as ‘yes’ or ’no’.
-Run Simulations In Parallel | no | Assigns different simulations to different processor cores when running multiple simulations (either different scenarios or repeats of the same). Input as ‘yes’ or ‘no’. 
-Run Single Realm |  | Prevents the model from running both marine and terrestrial biomes in the same simulation. Input as ‘marine’ or ‘terrestrial’ for only marine or terrestrial realm respectively, leave blank to run both realms.
-Impact Cell Index |  | 
-Dispersal only | no | Runs only the dispersal aspects of the model, ignoring ecological processes. Rarely used for experimentation.
-Dispersal only type | advection | Specifies the method of dispersal allowed when ‘Dispersal Only’ is set to ‘yes’. Rarely used.
+Parameter | Type | Comment
+--------- | ---- | -------
+Timestep Units | "Day"/"Month"/"Year" | The temporal resolution at which the model runs; the length of time one round of calculations represents. (The model has been calibrated primary for a timestep of "month").
+Length of simulation (years) | number | The length of time the simulation represents; the timescale of the model outputs.
+Burn-in (years) | number | Apply impacts after this many years
+Impact duration (years) | number | Apply impacts for this many years
+Recovery duration (years) | number | Not used
+Bottom Latitude | number | The southernmost boundary of the grid to be modelled. Input unit is decimal degrees.
+Top Latitude | number | The northernmost boundary of the grid to be modelled. Input unit is decimal degrees.
+Leftmost Longitude | number | The westernmost boundary of the grid to be modelled. Input unit is decimal degrees.
+Rightmost Longitude | number | The easternmost boundary of the grid to be modelled. Input unit is decimal degrees.
+Grid Cell Size | number | The length of one side of the square cells which will make up the model grid. A smaller value means a higher spatial resolution, and more cells within the grid. For example, a 1x1 degree grid with cell size 0.1 will be a 100 cell grid; with cell size 0.05 it will be a 400 cell grid. Decreasing cell size makes the model considerably more computationally expensive.
+Specific Location File | string/blank | File name to use to run model at specific grid cells, leave blank to run for whole grid.
+Plankton size threshold | number | Specifies the maximum size a single plankton individual can reach before it becomes motile. Smaller than this threshold, plankton move purely by advection. Larger than this threshold and they are assumed to move through diffusive dispersion (swimming).
+Draw Randomly | "yes"/"no" | Distributes the initial stock and cohort seeding randomly across the grid, and randomises the order in which cohorts act within a timestep introducing a degree of stochasticity to the simulation (generally left as yes).
+Extinction Threshold | number | The number of individuals remaining in a cohort for it to be considered extant.
+Maximum Number Of Cohorts | number | The maximum number of cohorts allowed within a single cell, after which the model merges the most similar cohorts into single larger approximations. Necessary for computational reasons: increasing the maximum number of cohorts reduces uncertainty and increases the power of the model at the cost of increased computational expense.
+Run Cells In Parallel | "yes"/"no" | Assigns different cells to different processor cores when running a simulation.
+Run Simulations In Parallel | "yes"/"no" | Assigns different simulations to different processor cores when running multiple simulations (either different scenarios or repeats of the same).
+Run Single Realm | "marine"/"terrestrial"/blank | Prevents the model from running both marine and terrestrial biomes in the same simulation. Input as ‘marine’ or ‘terrestrial’ for only marine or terrestrial realm respectively, leave blank to run both realms.
+Impact Cell Index | ranges/blank | This accepts a list of ranges separated with ";". Each range may be either a single number or a pair NN-MM, for example: ```2;3;5-7;13```
+Dispersal only | "yes"/"no" | Runs only the dispersal aspects of the model, ignoring ecological processes (rarely used for experimentation).
+Dispersal only type | "diffusion"/"advection"/"responsive"/blank | Specifies the method of dispersal allowed when ‘Dispersal Only’ is set to ‘yes’ (rarely used).
+
+Example:
+
+```
+Parameter,Value
+Timestep Units,Month
+Length of simulation (years),10
+Burn-in (years),0
+Impact duration (years),0
+Recovery duration (years),0
+Bottom Latitude,46
+Top Latitude,49
+Leftmost Longitude,2
+Rightmost Longitude,5
+Grid Cell Size,1
+Specific Location File,
+Plankton size threshold,0.01
+Draw Randomly,no
+Extinction Threshold,1
+Maximum Number Of Cohorts,1000
+Run Cells In Parallel,no
+Run Simulations In Parallel,no
+Run Single Realm,
+Impact Cell Index,
+Dispersal only,no
+Dispersal only type,
+```
 
 ### Ecological Definition Files/CohortFuctionalGroupDefinitions.csv
 
@@ -120,6 +158,31 @@ PROPERTY_Maximum mass | The maximum mass for any organism in each functional gro
 PROPERTY_Initial number of GridCellCohorts | The number of cohorts initialised into the model at the start of each simulation
 NOTES_group description | A description of what each functional group represents
 
+Example:
+
+```
+DEFINITION_Heterotroph/Autotroph,DEFINITION_Nutrition source,DEFINITION_Diet,DEFINITION_Realm,DEFINITION_Mobility,DEFINITION_Reproductive strategy,DEFINITION_Endo/Ectotherm,PROPERTY_Herbivory assimilation,PROPERTY_Carnivory assimilation,PROPERTY_Proportion suitable time active,PROPERTY_Minimum mass,PROPERTY_Maximum mass,PROPERTY_Initial number of GridCellCohorts,NOTES_group description
+Heterotroph,Omnivore,AllSpecial,Marine,Mobile,iteroparity,Endotherm,0,0.8,0.5,10000,150000000,100,Baleen whales
+Heterotroph,Carnivore,All,Marine,Mobile,iteroparity,Endotherm,0,0.8,0.5,100,50000000,100,Carnivorous endotherms
+Heterotroph,Carnivore,All,Marine,Mobile,iteroparity,Ectotherm,0,0.8,0.5,0.0001,2000000,100,Carnivorous ectotherms (inc eating zooplankton)
+Heterotroph,Carnivore,All,Marine,Mobile,semelparity,Ectotherm,0,0.8,0.5,0.0001,2000000,100,Carnivorous ectotherms (inc eating zooplankton)
+Heterotroph,Herbivore,Planktivore,Marine,Mobile,iteroparity,Ectotherm,0.7,0,0.5,0.0001,10000,100,"Herbivorous ectos (inc e.g. krill, assumed larger fishes)"
+Heterotroph,Herbivore,Planktivore,Marine,Mobile,semelparity,Ectotherm,0.7,0,0.5,0.0001,10000,100,"Herbivorous ectos (inc e.g. krill, assumed larger fishes)"
+Heterotroph,Omnivore,All,Marine,Mobile,iteroparity,Ectotherm,0.6,0.64,0.5,0.00001,100000,100,Omnivorous ectos
+Heterotroph,Omnivore,All,Marine,Mobile,semelparity,Ectotherm,0.6,0.64,0.5,0.00001,100000,100,Omnivorous ectos
+Heterotroph,Herbivore,Planktivore,Marine,Planktonic,iteroparity,Ectotherm,0.7,0,0.5,0.00001,0.1,100,Obligate zooplankton
+Heterotroph,Herbivore,Planktivore,Marine,Planktonic,semelparity,Ectotherm,0.7,0,0.5,0.00001,0.1,100,Obligate zooplankton
+Heterotroph,Herbivore,All,Terrestrial,Mobile,iteroparity,Endotherm,0.5,0,0.5,1.5,5000000,112,None
+Heterotroph,Carnivore,All,Terrestrial,Mobile,iteroparity,Endotherm,0,0.8,0.5,3,700000,112,None
+Heterotroph,Omnivore,All,Terrestrial,Mobile,iteroparity,Endotherm,0.4,0.64,0.5,3,1500000,112,None
+Heterotroph,Herbivore,All,Terrestrial,Mobile,semelparity,Ectotherm,0.5,0,0.5,0.0004,1000,112,None
+Heterotroph,Carnivore,All,Terrestrial,Mobile,semelparity,Ectotherm,0,0.8,0.5,0.0008,2000,112,None
+Heterotroph,Omnivore,All,Terrestrial,Mobile,semelparity,Ectotherm,0.4,0.64,0.5,0.0004,2000,112,None
+Heterotroph,Herbivore,All,Terrestrial,Mobile,iteroparity,Ectotherm,0.5,0,0.5,1,300000,112,None
+Heterotroph,Carnivore,All,Terrestrial,Mobile,iteroparity,Ectotherm,0,0.8,0.5,1.5,2000000,112,None
+Heterotroph,Omnivore,All,Terrestrial,Mobile,iteroparity,Ectotherm,0.4,0.64,0.5,1.5,55000,112,None
+```
+
 ### Ecological Definition Files/StockFuctionalGroupDefinitions.csv
 
 Defines stock specific functional groups to be initialised in the model.
@@ -137,6 +200,15 @@ PROPERTY_Carnivory assimilation | Not used
 PROPERTY_Proportion herbivory | Not used
 PROPERTY_Individual mass | The mass of an individual organism in each functional group (currently only applied to phytoplantkton)
 
+Example:
+
+```
+DEFINITION_Heterotroph/Autotroph,DEFINITION_Nutrition source,DEFINITION_Diet,DEFINITION_Realm,DEFINITION_Mobility,DEFINITION_Leaf strategy,PROPERTY_Herbivory assimilation,PROPERTY_Carnivory assimilation,PROPERTY_Proportion herbivory,PROPERTY_Individual mass
+Autotroph,Photosynthesis,,Marine,Planktonic,na,,,,0.0001
+Autotroph,Photosynthesis,,Terrestrial,Sessile,Deciduous,,,,0
+Autotroph,Photosynthesis,,Terrestrial,Sessile,Evergreen,,,,0
+```
+
 ### Ecological Definition Files/EcologicalParameters.csv
 
 Parameters for ecological processes.
@@ -148,17 +220,17 @@ Lists the exogenous environmental datasets to be used in the model.
 Column | Type | Comment
 ------ | ---- | -------
 Source | "Local"/"FetchClimate" | Data set is a local file or a call to the FetchClimate service
-Folder | string or blank | The  folder in which the dataset is stored (relative to the directory in which the model executable is running) ("Local" only)
-Filename | string or blank | The filename of the dataset ("Local" only)
-Extension | string or blank | The file-extension of the dataset ("Local" only)
+Folder | string/blank | The  folder in which the dataset is stored (relative to the directory in which the model executable is running) ("Local" only)
+Filename | string/blank | The filename of the dataset ("Local" only)
+Extension | string/blank | The file-extension of the dataset ("Local" only)
 Dataset Name | string | The name of the variable inside the data file that is to be used
 Filetype | "nc"/"csv" | The file-type of the data set file "nc" for NetCDF, "csv" for comma-separated values
 Internal Layer Name | string | The name with which the environmental data will be referred to inside the model
-Static | Y | Is the environmental layer to be used as a constant (e.g. an annual average) or does it vary through time? Currently only Y
+Static | "Y" | Is the environmental layer to be used as a constant (e.g. an annual average) or does it vary through time? (Currently only "Y")
 Resolution | "year"/"month" | The temporal resolution of the data to be imported
 Units | string | The units of the environmental variable
 
-Examples:
+Example:
 
 ```
 Source,Folder,Filename,Extension,Dataset Name,Filetype,Internal Layer Name,Static,Resolution,Units
@@ -189,7 +261,10 @@ simulation number | Number of simulations to run. ‘0’ will mean that scenario is
 
 Example:
 
-    NI,no 0.0 0,no 0.0,no 0.0,1
+```
+label,npp,temperature,harvesting,simulation number
+NI,no 0.0 0,no 0.0,no 0.0,1
+```
 
 ### Initial Model State Setup/SpecificLocations.csv
 
@@ -199,3 +274,10 @@ Column | Comment
 ------ | -------
 Latitude | The latitude of the cell centre (Decimal degrees)
 Longitude | The longitude of the cell centre (Decimal degrees)
+
+Example:
+
+```
+Latitude,Longitude
+48,3
+```
