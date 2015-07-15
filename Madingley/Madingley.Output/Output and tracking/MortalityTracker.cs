@@ -16,23 +16,12 @@ namespace Madingley
         /// <summary>
         /// Name of the file to write data on mortality to
         /// </summary>
-        string MortalityFilename;
-
-        /// <summary>
-        /// A streamwriter instance to output data on mortality
-        /// </summary>
-        private StreamWriter MortalityWriter;
-
-        /// <summary>
-        /// Synchronized version of the streamwriter to output mortality data
-        /// </summary>
-        private TextWriter SyncMortalityWriter;
+        private string FileName { get; set; }
 
         /// <summary>
         /// List of mortality events for each cohort (keyed by cohort ID)
         /// </summary>
         private SortedList<string,List<string>> MortalityList;
-
 
         /// <summary>
         /// An instance of the simple random number generator
@@ -57,17 +46,15 @@ namespace Madingley
             string outputFileSuffix,
             string outputPath, int cellIndex)
         {
-            MortalityFilename = mortalityFilename;
-
             // Initialise streamwriter to output mortality of cohorts
-            MortalityWriter = new StreamWriter(outputPath + MortalityFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt");
-            // Create a threadsafe textwriter to write outputs to the NewCohortWriter stream
-            SyncMortalityWriter = TextWriter.Synchronized(MortalityWriter);
-            SyncMortalityWriter.WriteLine("Latitude\tLongitude\tbirth_step\ttime_step\tcurrent mass\tadult mass\tfunctional group\tcohort id\tnumber died\tmortality source");
+            this.FileName = outputPath + mortalityFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt";
+
+            using (var MortalityWriter = new StreamWriter(this.FileName))
+            {
+                MortalityWriter.WriteLine("Latitude\tLongitude\tbirth_step\ttime_step\tcurrent mass\tadult mass\tfunctional group\tcohort id\tnumber died\tmortality source");
+            }
 
             MortalityList = new SortedList<string,List<string>>();
-
-        
         }
 
         /// <summary>
@@ -149,10 +136,13 @@ namespace Madingley
             {
                 if (RandomNumberGenerator.GetUniform() > 0.95)
                 {
-                    var Lines = ((IEnumerable)MortalityList[CohortIDString]).Cast<object>().ToList();
-                    foreach (var Line in Lines)
+                    using (var MortalityWriter = File.AppendText(this.FileName))
                     {
-                        SyncMortalityWriter.WriteLine(Line);
+                        var Lines = ((IEnumerable)MortalityList[CohortIDString]).Cast<object>().ToList();
+                        foreach (var Line in Lines)
+                        {
+                            MortalityWriter.WriteLine(Line);
+                        }
                     }
                 }
                 MortalityList.Remove(CohortIDString);
@@ -176,7 +166,5 @@ namespace Madingley
             }
             */
         }
-
-
     }
 }

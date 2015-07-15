@@ -113,6 +113,8 @@ namespace Madingley
         /// </summary>
         private CreateSDSObject SDSCreator;
 
+        private string FileName { get; set; }
+
         /// <summary>
         /// Constructor for the global output class
         /// </summary>
@@ -180,9 +182,7 @@ namespace Madingley
             DataConverter.AddVariable(BasicOutput, "Number of cohorts in model", "", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
             DataConverter.AddVariable(BasicOutput, "Number of stocks in model", "", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
 
-#if true
             this.FileName = _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc";
-#endif
         }
 
         /// <summary>
@@ -426,7 +426,6 @@ namespace Madingley
 
         }
 
-#if true
         // Clone the dataSet. For some reason .Clone reverses the order of the
         // variables so it is done twice
         public DataSet Clone()
@@ -450,8 +449,5 @@ namespace Madingley
             var fileString = "msds:nc?file=" + this.FileName;
             this.BasicOutput = DataSet.Open(fileString);
         }
-
-        public string FileName { get; set; }
-#endif
     }
 }

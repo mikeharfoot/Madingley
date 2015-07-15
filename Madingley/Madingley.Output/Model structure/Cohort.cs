@@ -171,43 +171,7 @@ namespace Madingley
             get { return _LogOptimalPreyBodySizeRatio ; }
             set { _LogOptimalPreyBodySizeRatio = value; }
         }
-        
 
-        /// <summary>
-        /// Constructor for the Cohort class: assigns cohort starting properties
-        /// </summary>
-        /// <param name="functionalGroupIndex">The functional group index of the cohort being generated</param>
-        /// <param name="juvenileBodyMass">The mean juvenile body mass of individuals in the cohort</param>
-        /// <param name="adultBodyMass">The mean mature adult body mass of individuals in the cohort</param>
-        /// <param name="initialBodyMass">The intial mean body mass of individuals in this cohort</param>
-        /// <param name="initialAbundance">The intial number of individuals in this cohort</param>
-        /// <param name="optimalPreyBodySizeRatio">The optimal prey body mass (as a percentage of this cohorts mass) for individuals in this cohort</param>
-        /// <param name="birthTimeStep">The birth time step for this cohort</param>
-        /// <param name="proportionTimeActive">The proportion of time that the cohort will be active for</param>
-        /// <param name="nextCohortID">The unique ID to assign to the next cohort created</param>
-        /// <param name="trophicIndex">The trophic level index of the cohort</param>
-        /// <param name="tracking">Whether the process tracker is enabled</param>
-        public Cohort(byte functionalGroupIndex, double juvenileBodyMass, double adultBodyMass, double initialBodyMass, 
-            double initialAbundance, double optimalPreyBodySizeRatio, ushort birthTimeStep, double proportionTimeActive, ref Int64 nextCohortID,
-            double trophicIndex, Boolean tracking)
-        {
-            _FunctionalGroupIndex = functionalGroupIndex;
-            _JuvenileMass = juvenileBodyMass;
-            _AdultMass = adultBodyMass;
-            _IndividualBodyMass = initialBodyMass;
-            _CohortAbundance = initialAbundance;
-            _BirthTimeStep = birthTimeStep;
-            _MaturityTimeStep = uint.MaxValue;
-            _LogOptimalPreyBodySizeRatio = Math.Log(optimalPreyBodySizeRatio);
-            _MaximumAchievedBodyMass = juvenileBodyMass;
-            _Merged = false;
-            _TrophicIndex = trophicIndex;
-            _ProportionTimeActive = proportionTimeActive;
-            if(tracking)_CohortID.Add(Convert.ToUInt32(nextCohortID));
-            nextCohortID++;
-        }
-
-#if true
         public Cohort(
             uint birthTimeStep,
             uint maturityTimeStep,
@@ -239,6 +203,5 @@ namespace Madingley
             this._TrophicIndex = trophicIndex;
             this._LogOptimalPreyBodySizeRatio = logOptimalPreyBodySizeRatio;
         }
-#endif
     }
 }

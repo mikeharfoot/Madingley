@@ -68,16 +68,5 @@ namespace Madingley
         {
             _TrackDispersal.RecordDispersal(inboundCohorts, outboundCohorts, outboundCohortWeights, timestep, madingleyModelGrid);
         }
-
-       
-
-
-        /// <summary>
-        /// Close all tracker streams
-        /// </summary>
-		public void CloseStreams()
-        {
-            _TrackDispersal.CloseStreams();
-        }
     }
 }

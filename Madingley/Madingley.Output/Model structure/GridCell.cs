@@ -108,7 +108,6 @@ namespace Madingley
             }
         }
 
-#if true
         public GridCell(
             GridCellCohortHandler GridCellCohorts,
             GridCellStockHandler GridCellStocks,
@@ -122,9 +121,5 @@ namespace Madingley
             this._Latitude = Latitude;
             this._Longitude = Longitude;
         }
-#endif
     }
-
-
 }
-

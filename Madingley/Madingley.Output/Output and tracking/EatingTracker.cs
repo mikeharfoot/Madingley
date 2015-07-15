@@ -13,12 +13,7 @@ namespace Madingley
     /// </summary>
     public class EatingTracker
     {
-        
-        string TrophicFlowsFilename;
-
-        private StreamWriter TrophicFlowsWriter;
-
-        private TextWriter SyncedTrophicFlowsWriter;
+        private string FileName { get; set; }
 
         /// <summary>
         /// Array to hold flows of mass among trophic levels. Order is:
@@ -40,12 +35,12 @@ namespace Madingley
         public EatingTracker(uint numLats, uint numLons, string trophicFlowsFilename, string outputFilesSuffix, string outputPath, 
             int cellIndex, MadingleyModelInitialisation initialisation, Boolean MarineCell)
         {
-            TrophicFlowsFilename = trophicFlowsFilename;
+            this.FileName = outputPath + trophicFlowsFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt";
 
-            TrophicFlowsWriter = new StreamWriter(outputPath + TrophicFlowsFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt");
-            SyncedTrophicFlowsWriter = TextWriter.Synchronized(TrophicFlowsWriter);
-            SyncedTrophicFlowsWriter.WriteLine("Latitude\tLongitude\ttime_step\tfromIndex\ttoIndex\tmass_eaten_g");
-
+            using (var TrophicFlowsWriter = new StreamWriter(this.FileName))
+            {
+                TrophicFlowsWriter.WriteLine("Latitude\tLongitude\ttime_step\tfromIndex\ttoIndex\tmass_eaten_g");
+            }
 
             // Initialise array to hold mass flows among trophic levels
             if (initialisation.TrackMarineSpecifics && MarineCell)
@@ -421,18 +416,21 @@ namespace Madingley
         public void WriteTrophicFlows(uint currentTimeStep,uint numLats,uint numLons, MadingleyModelInitialisation initialisation, 
             Boolean MarineCell)
         {
-            for (int lat = 0; lat < numLats; lat++)
+            using (var TrophicFlowsWriter = File.AppendText(this.FileName))
             {
-                for (int lon = 0; lon < numLons; lon++)
+                for (int lat = 0; lat < numLats; lat++)
                 {
-                    for (int i = 0; i < TrophicMassFlows.GetLength(2); i++)
+                    for (int lon = 0; lon < numLons; lon++)
                     {
-                        for (int j = 0; j < TrophicMassFlows.GetLength(3); j++)
+                        for (int i = 0; i < TrophicMassFlows.GetLength(2); i++)
                         {
-                            if (TrophicMassFlows[lat, lon, i, j] > 0)
+                            for (int j = 0; j < TrophicMassFlows.GetLength(3); j++)
                             {
-                                SyncedTrophicFlowsWriter.WriteLine(Convert.ToString(lat) + '\t' + Convert.ToString(lon) + '\t' + Convert.ToString(currentTimeStep) +
-                                    '\t' + Convert.ToString(i) + '\t' + Convert.ToString(j) + '\t' + Convert.ToString(TrophicMassFlows[lat, lon, i, j]));
+                                if (TrophicMassFlows[lat, lon, i, j] > 0)
+                                {
+                                    TrophicFlowsWriter.WriteLine(Convert.ToString(lat) + '\t' + Convert.ToString(lon) + '\t' + Convert.ToString(currentTimeStep) +
+                                        '\t' + Convert.ToString(i) + '\t' + Convert.ToString(j) + '\t' + Convert.ToString(TrophicMassFlows[lat, lon, i, j]));
+                                }
                             }
                         }
                     }
@@ -447,14 +445,6 @@ namespace Madingley
 
 
             
-        }
-
-        /// <summary>
-        /// Close the streams for writing eating data
-        /// </summary>
-        public void CloseStreams()
-        {
-            TrophicFlowsWriter.Dispose();
         }
     }
 }

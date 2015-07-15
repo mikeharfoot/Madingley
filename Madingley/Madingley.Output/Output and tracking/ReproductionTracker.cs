@@ -16,29 +16,12 @@ namespace Madingley
         /// <summary>
         /// File to write data on newly produced cohorts to
         /// </summary>
-        string NewCohortsFilename;
+        private string NewCohortFileName;
 
         /// <summary>
         /// File to write data on maturity of cohorts to
         /// </summary>
-        string MaturityFilename;
-
-        /// <summary>
-        /// A streamwriter instance for outputting data on newly produced cohorts
-        /// </summary>
-        private StreamWriter NewCohortWriter;
-        /// <summary>
-        /// Synchronized version of the streamwriter for outputting data on newly produced cohorts
-        /// </summary>
-        private TextWriter SyncNewCohortWriter;
-        /// <summary>
-        /// A streamwriter instance for outputting data on maturity of cohorts
-        /// </summary>
-        private StreamWriter MaturityWriter;
-        /// <summary>
-        /// A synchronized version of the streamwriter for outuputting data on the maturity of cohorts
-        /// </summary>
-        private TextWriter SyncMaturityWriter;
+        private string MaturityFileName;
 
         /// <summary>
         /// Sets up properties of the reproduction tracker
@@ -60,22 +43,20 @@ namespace Madingley
             string outputFileSuffix,
             string outputPath, int cellIndex)
         {
-
-            NewCohortsFilename = newCohortsFilename;
-            MaturityFilename = maturityFilename;
-            
-
             // Initialise streamwriter to output abundance of newly produced cohorts to a text file
-            NewCohortWriter = new StreamWriter(outputPath + newCohortsFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt");
-            // Create a threadsafe textwriter to write outputs to the NewCohortWriter stream
-            SyncNewCohortWriter = TextWriter.Synchronized(NewCohortWriter);
-            SyncNewCohortWriter.WriteLine("Latitude\tLongitude\ttime_step\tabundance\tfunctional group\tadult mass\tparent cohort IDs\toffspring cohort ID");
+            this.NewCohortFileName = outputPath + newCohortsFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt";
 
-            MaturityWriter = new StreamWriter(outputPath + maturityFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt");
-            // Create a threadsafe textwriter to write outputs to the Maturity stream
-            SyncMaturityWriter = TextWriter.Synchronized(MaturityWriter);
-            SyncMaturityWriter.WriteLine("Latitude\tLongitude\ttime_step\tbirth_step\tjuvenile Mass\tadult mass\tfunctional group");
-            
+            using (var NewCohortWriter = new StreamWriter(this.NewCohortFileName))
+            {
+                NewCohortWriter.WriteLine("Latitude\tLongitude\ttime_step\tabundance\tfunctional group\tadult mass\tparent cohort IDs\toffspring cohort ID");
+            }
+
+            this.MaturityFileName = outputPath + maturityFilename + outputFileSuffix + "_Cell" + cellIndex + ".txt";
+
+            using (var MaturityWriter = new StreamWriter(this.MaturityFileName))
+            {
+                MaturityWriter.WriteLine("Latitude\tLongitude\ttime_step\tbirth_step\tjuvenile Mass\tadult mass\tfunctional group");
+            }
         }
 
         /// <summary>
@@ -111,7 +92,11 @@ namespace Madingley
                 Convert.ToString(timestep) + '\t' + Convert.ToString(offspringCohortAbundance) + '\t' +
                 Convert.ToString(functionalGroup) + '\t' + Convert.ToString(parentCohortAdultMass) + '\t' + AllCohortIDs +
                 '\t' + Convert.ToString(offspringCohortID);
-            SyncNewCohortWriter.WriteLine(newline);
+
+            using (var NewCohortWriter = File.AppendText(this.NewCohortFileName))
+            {
+                NewCohortWriter.WriteLine(newline);
+            }
         }
 
         /// <summary>
@@ -140,19 +125,11 @@ namespace Madingley
             string newline = Convert.ToString(latIndex) +'\t'+ Convert.ToString(lonIndex)+'\t'+
                 Convert.ToString(timestep) + '\t' + Convert.ToString(birthTimestep) + '\t' + Convert.ToString(juvenileMass) + '\t'+
                 Convert.ToString(adultMass) + '\t' + Convert.ToString(functionalGroup);
-            SyncMaturityWriter.WriteLine(newline);
-        }
 
-        /// <summary>
-        /// Close the output streams for the reproduction tracker
-        /// </summary>
-        public void CloseStreams()
-        {
-            SyncMaturityWriter.Close();
-            MaturityWriter.Close();
-            SyncNewCohortWriter.Close();
-            NewCohortWriter.Close();
+            using (var MaturityWriter = File.AppendText(this.MaturityFileName))
+            {
+                MaturityWriter.WriteLine(newline);
+            }
         }
-
     }
 }

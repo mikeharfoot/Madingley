@@ -394,10 +394,6 @@ namespace Madingley
         /// </summary>
 		public void CloseStreams(Boolean SpecificLocations)
         {
-            _TrackReproduction.CloseStreams();
-            _TrackEating.CloseStreams();
-            _TrackGrowth.CloseStreams();
-            _TrackMetabolism.CloseStreams();
             //_TrackNPP.CloseStreams();
             if (SpecificLocations == true)
             {

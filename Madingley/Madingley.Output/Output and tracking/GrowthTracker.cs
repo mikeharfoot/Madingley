@@ -14,13 +14,7 @@ namespace Madingley
         /// <summary>
         /// File to write data on growth to
         /// </summary>
-        string GrowthFilename;
-
-        /// <summary>
-        /// A streamwriter for writing out data on growth
-        /// </summary>
-        private StreamWriter GrowthWriter;
-        private TextWriter SyncGrowthWriter;
+        private string FileName { get; set; }
 
         /// <summary>
         /// Set up the tracker for outputing the growth of cohorts each time step
@@ -36,13 +30,13 @@ namespace Madingley
         public GrowthTracker(uint numTimeSteps, uint numLats, uint numLons, List<uint[]> cellIndices, string growthFilename,
             string outputFilesSuffix, string outputPath, int cellIndex)
         {
-            GrowthFilename = growthFilename;
-
             // Initialise streamwriter to output growth data
-            GrowthWriter = new StreamWriter(outputPath + GrowthFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt");
-            SyncGrowthWriter = TextWriter.Synchronized(GrowthWriter);
-            SyncGrowthWriter.WriteLine("Latitude\tLongitude\ttime_step\tCurrent_body_mass_g\tfunctional_group\tgrowth_g\tmetabolism_g\tpredation_g\therbivory_g");
+            this.FileName = outputPath + growthFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt";
 
+            using (var GrowthWriter = new StreamWriter(this.FileName))
+            {
+                GrowthWriter.WriteLine("Latitude\tLongitude\ttime_step\tCurrent_body_mass_g\tfunctional_group\tgrowth_g\tmetabolism_g\tpredation_g\therbivory_g");
+            }
         }
 
         /// <summary>
@@ -57,22 +51,14 @@ namespace Madingley
         /// <param name="metabolism">The biomass lost by individuals in this cohort through metabolism</param>
         /// <param name="predation">The biomass gained by individuals in this cohort through predation</param>
         /// <param name="herbivory">The biomass gained by individuals in this cohort through herbivory</param>
-        public void RecordGrowth(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, int functionalGroup, 
+        public void RecordGrowth(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, int functionalGroup,
             double netGrowth, double metabolism, double predation, double herbivory)
         {
-            SyncGrowthWriter.WriteLine(Convert.ToString(latIndex) + '\t' + Convert.ToString(lonIndex) + '\t' + Convert.ToString(timeStep) +
-                '\t' + Convert.ToString(currentBodyMass) + '\t' + Convert.ToString(functionalGroup) + '\t' + Convert.ToString(netGrowth)+ '\t' + Convert.ToString(metabolism)+ '\t' + Convert.ToString(predation)+ '\t' + Convert.ToString(herbivory));
+            using (var GrowthWriter = File.AppendText(this.FileName))
+            {
+                GrowthWriter.WriteLine(Convert.ToString(latIndex) + '\t' + Convert.ToString(lonIndex) + '\t' + Convert.ToString(timeStep) +
+                    '\t' + Convert.ToString(currentBodyMass) + '\t' + Convert.ToString(functionalGroup) + '\t' + Convert.ToString(netGrowth) + '\t' + Convert.ToString(metabolism) + '\t' + Convert.ToString(predation) + '\t' + Convert.ToString(herbivory));
+            }
         }
-
-        /// <summary>
-        /// Closes streams for writing growth data
-        /// </summary>
-        public void CloseStreams()
-        {
-
-            SyncGrowthWriter.Dispose();
-            GrowthWriter.Dispose();
-        }
-
     }
 }

@@ -133,13 +133,6 @@ namespace Madingley
         /// </summary>
         private CreateSDSObject SDSCreator;
 
-#if false
-        /// <summary>
-        /// An instance of the class for viewing grid results
-        /// </summary>
-        private ViewGrid GridViewer;
-#endif
-
         /// <summary>
         /// Whether to display live outputs during this model run
         /// </summary>
@@ -154,6 +147,8 @@ namespace Madingley
         /// Instance of the class to calculate ecosystem metrics
         /// </summary>
         private EcosytemMetrics Metrics;
+
+        private string FileName { get; set; }
 
         public OutputGrid(string outputDetail, MadingleyModelInitialisation modelInitialisation)
         {
@@ -351,9 +346,7 @@ namespace Madingley
                 }
             }
 
-#if true
             this.FileName = _OutputPath + "GridOutputs" + outputFilesSuffix + ".nc";
-#endif
         }
 
         /// <summary>
@@ -639,7 +632,6 @@ namespace Madingley
             GridOutput.Dispose();
         }
 
-#if true
         public DataSet Clone()
         {
             var dataSet = this.GridOutput.Clone("msds:memory");
@@ -661,8 +653,5 @@ namespace Madingley
             var fileString = "msds:nc?file=" + this.FileName;
             this.GridOutput = DataSet.Open(fileString);
         }
-
-        public string FileName { get; set; }
-#endif
     }
 }

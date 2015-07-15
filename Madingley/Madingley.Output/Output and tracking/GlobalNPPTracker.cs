@@ -45,6 +45,8 @@ namespace Madingley
         private int _NumLats;
         private int _NumLons;
 
+        private string FileName { get; set; }
+
         /// <summary>
         /// Constructor for the global NPP tracker: sets up the output file and the data arrays
         /// </summary>
@@ -124,9 +126,7 @@ namespace Madingley
                 
             }
 
-#if true
             this.FileName = outputPath + "NPPOutput.nc";
-#endif
         }
 
         /// <summary>
@@ -224,7 +224,6 @@ namespace Madingley
             NPPOutput.Dispose();
         }
 
-#if true
         public DataSet Clone()
         {
             var dataSet = this.NPPOutput.Clone("msds:memory");
@@ -246,8 +245,5 @@ namespace Madingley
             var fileString = "msds:nc?file=" + this.FileName;
             this.NPPOutput = DataSet.Open(fileString);
         }
-
-        public string FileName { get; set; }
-#endif
     }
 }

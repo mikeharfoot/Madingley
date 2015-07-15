@@ -14,13 +14,7 @@ namespace Madingley
         /// <summary>
         /// File to write metabolism data to
         /// </summary>
-        string MetabolismFilename;
-
-        /// <summary>
-        /// A streamwriter to write out data on metabolism
-        /// </summary>
-        private StreamWriter MetabolismWriter;
-        private TextWriter SyncMetabolismWriter;
+        private string FileName { get; set; }
 
         /// <summary>
         /// Set up the metabolism tracker
@@ -31,11 +25,12 @@ namespace Madingley
         /// <param name="cellIndex">The index of the current cell within the list of all cells in this simulation</param>
         public MetabolismTracker(string metabolismFilename, string outputPath, string outputFilesSuffix, int cellIndex)
         {
-            MetabolismFilename = metabolismFilename;
+            this.FileName = outputPath + metabolismFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt";
 
-            MetabolismWriter = new StreamWriter(outputPath + MetabolismFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt");
-            SyncMetabolismWriter = TextWriter.Synchronized(MetabolismWriter);
-            SyncMetabolismWriter.WriteLine("Latitude\tLongitude\ttime_step\tCurrent_body_mass\tfunctional_group\tAmbient_temp\tMetabolic_mass_loss");
+            using (var MetabolismWriter = new StreamWriter(this.FileName))
+            {
+                MetabolismWriter.WriteLine("Latitude\tLongitude\ttime_step\tCurrent_body_mass\tfunctional_group\tAmbient_temp\tMetabolic_mass_loss");
+            }
         }
 
         /// <summary>
@@ -50,23 +45,16 @@ namespace Madingley
         /// <param name="metabolicLoss">The metabolic loss of this cohort in this time step</param>
         public void RecordMetabolism(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, int functionalGroup, double temperature, double metabolicLoss)
         {
-            SyncMetabolismWriter.WriteLine(Convert.ToString(latIndex) + "\t" +
-                                            Convert.ToString(lonIndex) + "\t" +
-                                            Convert.ToString(timeStep) + "\t" +
-                                            Convert.ToString(currentBodyMass) + "\t" +
-                                            Convert.ToString(functionalGroup) + "\t" +
-                                            Convert.ToString(temperature) + "\t" +
-                                            Convert.ToString(metabolicLoss));
-        }
-
-        /// <summary>
-        /// Closes streams for writing metabolism data
-        /// </summary>
-        public void CloseStreams()
-        {
-
-            SyncMetabolismWriter.Dispose();
-            MetabolismWriter.Dispose();
+            using (var MetabolismWriter = File.AppendText(this.FileName))
+            {
+                MetabolismWriter.WriteLine(Convert.ToString(latIndex) + "\t" +
+                                           Convert.ToString(lonIndex) + "\t" +
+                                           Convert.ToString(timeStep) + "\t" +
+                                           Convert.ToString(currentBodyMass) + "\t" +
+                                           Convert.ToString(functionalGroup) + "\t" +
+                                           Convert.ToString(temperature) + "\t" +
+                                           Convert.ToString(metabolicLoss));
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace Madingley
         /// A dataset to store the live screen view
         /// </summary>
         private DataSet DataSetToViewLive;
-        
+
         /// <summary>
         /// A version of the basic outputs dataset to hold data for output in memory while running the model
         /// </summary>
@@ -58,7 +58,7 @@ namespace Madingley
         /// Holds a list of the functional group indices correpsonding to each unique cohort trait in the marine realm
         /// </summary>
         private SortedList<string, int[]> CohortTraitIndicesMarine = new SortedList<string, int[]>();
-        
+
         /// <summary>
         /// Holds a list of the functional group indices corresponding to each unique stock trait
         /// </summary>
@@ -99,7 +99,7 @@ namespace Madingley
         /// Total densities of all cohorts within each combination of cohort traits
         /// </summary>
         private SortedList<string, double> TotalDensitiesOut = new SortedList<string, double>();
-        
+
         /// <summary>
         /// Total densities of all cohorts within each combination of cohort traits (marine)
         /// </summary>
@@ -109,7 +109,7 @@ namespace Madingley
         /// Total biomass densities of all cohorts within each combination of cohort traits
         /// </summary>
         private SortedList<string, double> TotalBiomassDensitiesOut = new SortedList<string, double>();
-        
+
         /// <summary>
         /// Total biomass densities of all cohorts within each combination of cohort traits
         /// </summary>
@@ -159,8 +159,8 @@ namespace Madingley
         /// <summary>
         /// The time steps in this model simulation
         /// </summary>
-        private float[] TimeSteps;     
-        
+        private float[] TimeSteps;
+
         /// <summary>
         /// List to hold cohort IDs of tracked cohorts
         /// </summary>
@@ -183,8 +183,8 @@ namespace Madingley
         /// Get the suffix for ouputs for this grid cell
         /// </summary>
         public string OutputSuffix
-        { get { return _OutputSuffix; }}
-        
+        { get { return _OutputSuffix; } }
+
 
         /// <summary>
         /// The cohort traits to be considered in the outputs
@@ -267,6 +267,7 @@ namespace Madingley
         /// </summary>
         private EcosytemMetrics Metrics;
 
+        private string FileName { get; set; }
 
         /// <summary>
         /// Constructor for the cell output class
@@ -274,7 +275,7 @@ namespace Madingley
         /// <param name="outputDetail">The level of detail to include in the ouputs: 'low', 'medium' or 'high'</param>
         /// <param name="modelInitialisation">Model initialisation object</param>
         /// <param name="cellIndex">The index of the current cell in the list of all cells to run the model for</param>
-        public OutputCell(string outputDetail, MadingleyModelInitialisation modelInitialisation, 
+        public OutputCell(string outputDetail, MadingleyModelInitialisation modelInitialisation,
             int cellIndex)
         {
             // Set the output path
@@ -413,16 +414,13 @@ namespace Madingley
                 SetupMediumLevelOutputs(ecosystemModelGrid, marineCell);
 
                 if (ModelOutputDetail == OutputDetailLevel.High)
-                {                   
+                {
                     // Setup high-level outputs
-                    SetUpHighLevelOutputs(ecosystemModelGrid, cellIndices,cellIndex, cohortFunctionalGroupDefinitions, marineCell);
+                    SetUpHighLevelOutputs(ecosystemModelGrid, cellIndices, cellIndex, cohortFunctionalGroupDefinitions, marineCell);
                 }
             }
 
-
-#if true
             this.FileName = _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc";
-#endif
         }
 
         /// <summary>
@@ -431,15 +429,15 @@ namespace Madingley
         /// <param name="cohortFunctionalGroupDefinitions">Functional group definitions for cohorts in the model</param>
         /// <param name="stockFunctionalGroupDefinitions">Functional group definitions for stocks in the model</param>
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
-        private void InitialiseTraitBasedOutputs(FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions 
+        private void InitialiseTraitBasedOutputs(FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions
             stockFunctionalGroupDefinitions, Boolean marineCell)
         {
             // Define the cohort traits that will be used to separate outputs
-            CohortTraits = new string[2] { "Nutrition source", "Endo/Ectotherm"};
+            CohortTraits = new string[2] { "Nutrition source", "Endo/Ectotherm" };
 
             // Declare a sorted dictionary to hold all unique trait values
             CohortTraitValues = new SortedDictionary<string, string[]>();
-            
+
             // Declare a sorted dictionary to hold all unique trait values for marine systems
             CohortTraitValuesMarine = new SortedDictionary<string, string[]>();
 
@@ -451,7 +449,7 @@ namespace Madingley
                 {
                     CohortTraitValuesMarine.Add(Trait, cohortFunctionalGroupDefinitions.GetUniqueTraitValues(Trait));
                 }
-                
+
                 foreach (string Trait in CohortTraits)
                 {
                     foreach (string TraitValue in CohortTraitValuesMarine[Trait])
@@ -480,7 +478,7 @@ namespace Madingley
 
                             // Add in the indices for this functional group and this realm
                             CohortTraitIndicesMarine.Add(TraitValue, TempIndices3);
-                        }   
+                        }
                     }
                 }
 
@@ -514,7 +512,7 @@ namespace Madingley
                 {
                     TotalBiomassDensitiesMarineOut.Add(TraitValue, 0.0);
                     TotalDensitiesMarineOut.Add(TraitValue, 0.0);
-                }             
+                }
             }
             else
             {
@@ -536,12 +534,12 @@ namespace Madingley
                             if (cohortFunctionalGroupDefinitions.GetTraitNames("Realm", TempIndices[ii]).Equals("Terrestrial", StringComparison.OrdinalIgnoreCase))
                             {
                                 TempIndices2[ii] = true;
-                            }        
+                            }
                         }
 
                         // Extract only the indices which are terrestrial 
                         int[] TempIndices3 = Enumerable.Range(0, TempIndices2.Length).Where(i => TempIndices2[i]).ToArray();
-                        
+
                         if (TempIndices3.Length > 0)
                         {
                             // Extract the values at these indices
@@ -552,7 +550,7 @@ namespace Madingley
 
                             // Add in the indices for this functional group and this realm
                             CohortTraitIndices.Add(TraitValue, TempIndices3);
-                        }   
+                        }
                     }
                 }
 
@@ -567,17 +565,17 @@ namespace Madingley
             if (marineCell)
             {
                 // Define the stock traits that will be used to separate outputs
-                StockTraitsMarine = new string[1] { "Heterotroph/Autotroph"};
+                StockTraitsMarine = new string[1] { "Heterotroph/Autotroph" };
 
                 // Re-initialise the sorted dictionary to hold all unique trait values
                 StockTraitValuesMarine = new SortedDictionary<string, string[]>();
-                
+
                 // Add all unique stock trait values to the sorted dictionary
                 foreach (string Trait in StockTraitsMarine)
                 {
                     StockTraitValuesMarine.Add(Trait, stockFunctionalGroupDefinitions.GetUniqueTraitValues(Trait));
                 }
-                
+
                 // Get the list of functional group indices corresponding to each unique marine trait value
                 foreach (string Trait in StockTraitsMarine)
                 {
@@ -600,7 +598,7 @@ namespace Madingley
 
                 // Re-initialise the sorted dictionary to hold all unique trait values
                 StockTraitValues = new SortedDictionary<string, string[]>();
-                
+
                 // Add all unique marine stock trait values to the sorted dictionary
                 foreach (string Trait in StockTraits)
                 {
@@ -621,7 +619,7 @@ namespace Madingley
                 {
                     TotalBiomassDensitiesOut.Add(TraitValue, 0.0);
                 }
-            }  
+            }
         }
 
 
@@ -677,7 +675,7 @@ namespace Madingley
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
                 }
-                
+
                 foreach (string TraitValue in StockTraitIndicesMarine.Keys)
                 {
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
@@ -697,7 +695,7 @@ namespace Madingley
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
                 }
-                
+
                 foreach (string TraitValue in StockTraitIndices.Keys)
                 {
                     DataConverter.AddVariable(BasicOutputMemory, TraitValue + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
@@ -727,7 +725,7 @@ namespace Madingley
 
             if (OutputMetrics)
             {
-                DataConverter.AddVariable(MassBinsOutputMemory, "Trophic Index Distribution", 2, new string[] {"Time step","Trophic Index Bins"}, ecosystemModelGrid.GlobalMissingValue, TimeSteps, Metrics.TrophicIndexBinValues);
+                DataConverter.AddVariable(MassBinsOutputMemory, "Trophic Index Distribution", 2, new string[] { "Time step", "Trophic Index Bins" }, ecosystemModelGrid.GlobalMissingValue, TimeSteps, Metrics.TrophicIndexBinValues);
             }
 
             if (marineCell)
@@ -754,14 +752,14 @@ namespace Madingley
             // Create an SDS object in memory for tracked cohorts outputs
             // TrackedCohortsOutput = SDSCreator.CreateSDS("netCDF", "TrackedCohorts" + _OutputSuffix, _OutputPath);
             TrackedCohortsOutputMemory = SDSCreator.CreateSDSInMemory(true);
-            
+
             // Initialise list to hold tracked cohorts
             TrackedCohorts = new List<uint>();
 
             // Identify cohorts to track
             GridCellCohortHandler TempCohorts = null;
             bool FoundCohorts = false;
-            
+
             // Get a local copy of the cohorts in the grid cell
             TempCohorts = ecosystemModelGrid.GetGridCellCohorts(cellIndices[cellNumber][0], cellIndices[cellNumber][1]);
 
@@ -775,159 +773,158 @@ namespace Madingley
                 }
             }
 
-            
+
             // If there are some cohorts in the grid cell, then setup the tracked cohorts
             if (FoundCohorts)
             {
                 // Initialise stream writer to hold details of tracked cohorts
-                StreamWriter sw = new StreamWriter(_OutputPath + "TrackedCohortProperties" + _OutputSuffix + ".txt");
-                sw.WriteLine("Output ID\tCohort ID\tFunctional group index\tNutrition source\tDiet\tRealm\tMobility\tJuvenile mass\tAdult mass");
-
-                // Counter for tracked cohorts
-                int TrackedCohortCounter = 0;
-
-                for (int i = 0; i < TempCohorts.Count; i++)
+                using (var sw = new StreamWriter(_OutputPath + "TrackedCohortProperties" + _OutputSuffix + ".txt"))
                 {
-                    if (TempCohorts[i].Count > 0)
+                    sw.WriteLine("Output ID\tCohort ID\tFunctional group index\tNutrition source\tDiet\tRealm\tMobility\tJuvenile mass\tAdult mass");
+
+                    // Counter for tracked cohorts
+                    int TrackedCohortCounter = 0;
+
+                    for (int i = 0; i < TempCohorts.Count; i++)
                     {
-                        for (int j = 0; j < TempCohorts[i].Count; j++)
+                        if (TempCohorts[i].Count > 0)
                         {
-                            // Write out properties of the selected cohort
-                            sw.WriteLine(Convert.ToString(TrackedCohortCounter) + '\t' + Convert.ToString(TempCohorts[i][j].CohortID[0]) + '\t' + i + '\t' +
-                                cohortFunctionalGroupDefinitions.GetTraitNames("Nutrition source", i) + '\t' + cohortFunctionalGroupDefinitions.
-                                GetTraitNames("Diet", i) + '\t' + cohortFunctionalGroupDefinitions.GetTraitNames("Realm", i) + '\t' +
-                                cohortFunctionalGroupDefinitions.GetTraitNames("Mobility", i) + '\t' + TempCohorts[i][j].JuvenileMass + '\t' +
-                                TempCohorts[i][j].AdultMass);
+                            for (int j = 0; j < TempCohorts[i].Count; j++)
+                            {
+                                // Write out properties of the selected cohort
+                                sw.WriteLine(Convert.ToString(TrackedCohortCounter) + '\t' + Convert.ToString(TempCohorts[i][j].CohortID[0]) + '\t' + i + '\t' +
+                                    cohortFunctionalGroupDefinitions.GetTraitNames("Nutrition source", i) + '\t' + cohortFunctionalGroupDefinitions.
+                                    GetTraitNames("Diet", i) + '\t' + cohortFunctionalGroupDefinitions.GetTraitNames("Realm", i) + '\t' +
+                                    cohortFunctionalGroupDefinitions.GetTraitNames("Mobility", i) + '\t' + TempCohorts[i][j].JuvenileMass + '\t' +
+                                    TempCohorts[i][j].AdultMass);
 
-                            // Add the ID of the cohort to the list of tracked cohorts
-                            TrackedCohorts.Add(TempCohorts[i][j].CohortID[0]);
+                                // Add the ID of the cohort to the list of tracked cohorts
+                                TrackedCohorts.Add(TempCohorts[i][j].CohortID[0]);
 
-                            // Increment the counter of tracked cohorts
-                            TrackedCohortCounter++;
+                                // Increment the counter of tracked cohorts
+                                TrackedCohortCounter++;
+                            }
                         }
                     }
+
+                    // Generate an array of floating points to index the tracked cohorts in the output file
+                    float[] OutTrackedCohortIDs = new float[TrackedCohortCounter];
+                    for (int i = 0; i < TrackedCohortCounter; i++)
+                    {
+                        OutTrackedCohortIDs[i] = i;
+                    }
+
+                    // Set up outputs for tracked cohorts
+                    string[] TrackedCohortsDimensions = { "Time step", "Cohort ID" };
+
+
+                    // Add output variables for the tracked cohorts output
+                    DataConverter.AddVariable(TrackedCohortsOutputMemory, "Individual body mass", 2, TrackedCohortsDimensions,
+                    ecosystemModelGrid.GlobalMissingValue, TimeSteps, OutTrackedCohortIDs);
+                    DataConverter.AddVariable(TrackedCohortsOutputMemory, "Number of individuals", 2, TrackedCohortsDimensions,
+                    ecosystemModelGrid.GlobalMissingValue, TimeSteps, OutTrackedCohortIDs);
                 }
-
-                // Generate an array of floating points to index the tracked cohorts in the output file
-                float[] OutTrackedCohortIDs = new float[TrackedCohortCounter];
-                for (int i = 0; i < TrackedCohortCounter; i++)
-                {
-                    OutTrackedCohortIDs[i] = i;
-                }
-
-                // Set up outputs for tracked cohorts
-                string[] TrackedCohortsDimensions = { "Time step", "Cohort ID" };
-
-
-                // Add output variables for the tracked cohorts output
-                DataConverter.AddVariable(TrackedCohortsOutputMemory, "Individual body mass", 2, TrackedCohortsDimensions,
-                ecosystemModelGrid.GlobalMissingValue, TimeSteps, OutTrackedCohortIDs);
-                DataConverter.AddVariable(TrackedCohortsOutputMemory, "Number of individuals", 2, TrackedCohortsDimensions,
-                ecosystemModelGrid.GlobalMissingValue, TimeSteps, OutTrackedCohortIDs);
-
-                // Dispose of the streamwriter
-                sw.Dispose();
             }
-            
-                // Get a list of all possible combinations of trait values as a jagged array
+
+            // Get a list of all possible combinations of trait values as a jagged array
             string[][] TraitValueSearch;
-            
-                if (marineCell)
-                    TraitValueSearch = CalculateAllCombinations(CohortTraitValuesMarine[CohortTraits[0]], CohortTraitValuesMarine[CohortTraits[1]]);
-                else
-                    TraitValueSearch = CalculateAllCombinations(CohortTraitValues[CohortTraits[0]], CohortTraitValues[CohortTraits[1]]);
 
-                
-                // Add the functional group indices of these trait combinations to the list of indices of the trait values to consider, 
-                // keyed with a concatenated version of the trait values
-                string TraitValueJoin = "";
-                string[] TimeDimension = { "Time step" };
-                for (int i = 0; i < TraitValueSearch.Count(); i++)
+            if (marineCell)
+                TraitValueSearch = CalculateAllCombinations(CohortTraitValuesMarine[CohortTraits[0]], CohortTraitValuesMarine[CohortTraits[1]]);
+            else
+                TraitValueSearch = CalculateAllCombinations(CohortTraitValues[CohortTraits[0]], CohortTraitValues[CohortTraits[1]]);
+
+
+            // Add the functional group indices of these trait combinations to the list of indices of the trait values to consider, 
+            // keyed with a concatenated version of the trait values
+            string TraitValueJoin = "";
+            string[] TimeDimension = { "Time step" };
+            for (int i = 0; i < TraitValueSearch.Count(); i++)
+            {
+                TraitValueJoin = "";
+                foreach (string TraitValue in TraitValueSearch[i])
                 {
-                    TraitValueJoin = "";
-                    foreach (string TraitValue in TraitValueSearch[i])
+                    TraitValueJoin += TraitValue + " ";
+                }
+
+                if (marineCell)
+                {
+                    // Only add indices of marine functional groups
+                    int[] TempIndices = cohortFunctionalGroupDefinitions.GetFunctionalGroupIndex(CohortTraits, TraitValueSearch[i], true);
+                    Boolean[] TempIndices2 = new Boolean[TempIndices.GetLength(0)];
+                    for (int ii = 0; ii < TempIndices.GetLength(0); ii++)
                     {
-                        TraitValueJoin += TraitValue + " ";
+                        if (cohortFunctionalGroupDefinitions.GetTraitNames("Realm", TempIndices[ii]).Equals("Marine", StringComparison.OrdinalIgnoreCase))
+                        {
+                            TempIndices2[ii] = true;
+                        }
                     }
 
-                    if (marineCell)
+                    // Extract only the indices which are marine 
+                    int[] TempIndices3 = Enumerable.Range(0, TempIndices2.Length).Where(zz => TempIndices2[zz]).ToArray();
+
+                    if (TempIndices3.Length > 0)
                     {
-                        // Only add indices of marine functional groups
-                        int[] TempIndices = cohortFunctionalGroupDefinitions.GetFunctionalGroupIndex(CohortTraits, TraitValueSearch[i], true);
-                        Boolean[] TempIndices2 = new Boolean[TempIndices.GetLength(0)];
-                        for (int ii = 0; ii < TempIndices.GetLength(0); ii++)
+                        // Extract the values at these indices
+                        for (int ii = 0; ii < TempIndices3.Length; ii++)
                         {
-                            if (cohortFunctionalGroupDefinitions.GetTraitNames("Realm", TempIndices[ii]).Equals("Marine", StringComparison.OrdinalIgnoreCase))
-                            {
-                                TempIndices2[ii] = true;
-                            }
+                            TempIndices3[ii] = TempIndices[TempIndices3[ii]];
                         }
 
-                        // Extract only the indices which are marine 
-                        int[] TempIndices3 = Enumerable.Range(0, TempIndices2.Length).Where(zz => TempIndices2[zz]).ToArray();
+                        // Add in the indices for this functional group and this realm
+                        CohortTraitIndices.Add(TraitValueJoin, TempIndices3);
 
-                        if (TempIndices3.Length > 0)
-                        {
-                            // Extract the values at these indices
-                            for (int ii = 0; ii < TempIndices3.Length; ii++)
-                            {
-                                TempIndices3[ii] = TempIndices[TempIndices3[ii]];
-                            }
+                        DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
+                        DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
 
-                            // Add in the indices for this functional group and this realm
-                            CohortTraitIndices.Add(TraitValueJoin, TempIndices3);
-
-                            DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
-                            DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
-
-                            TotalBiomassDensitiesOut.Add(TraitValueJoin, 0.0);
-                            TotalDensitiesOut.Add(TraitValueJoin, 0.0);
-                        }       
-                    }
-                    else
-                    {
-                        // Only add indices of terrestrial functional groups
-                        int[] TempIndices = cohortFunctionalGroupDefinitions.GetFunctionalGroupIndex(CohortTraits, TraitValueSearch[i], true);
-                        Boolean[] TempIndices2 = new Boolean[TempIndices.GetLength(0)];
-                        for (int ii = 0; ii < TempIndices.GetLength(0); ii++)
-                        {
-                            if (cohortFunctionalGroupDefinitions.GetTraitNames("Realm", TempIndices[ii]).Equals("Terrestrial", StringComparison.OrdinalIgnoreCase))
-                            {
-                                TempIndices2[ii] = true;
-                            }
-                        }
-
-                        // Extract only the indices which are terrestrial 
-                        int[] TempIndices3 = Enumerable.Range(0, TempIndices2.Length).Where(zz => TempIndices2[zz]).ToArray();
-
-                        if (TempIndices3.Length > 0)
-                        {
-                            // Extract the values at these indices
-                            for (int ii = 0; ii < TempIndices3.Length; ii++)
-                            {
-                                TempIndices3[ii] = TempIndices[TempIndices3[ii]];
-                            }
-
-                            // Add in the indices for this functional group and this realm
-                            CohortTraitIndices.Add(TraitValueJoin, TempIndices3);
-
-                            DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
-                            DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
-                            DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
-
-                            TotalBiomassDensitiesOut.Add(TraitValueJoin, 0.0);
-                            TotalDensitiesOut.Add(TraitValueJoin, 0.0);
-                        }       
+                        TotalBiomassDensitiesOut.Add(TraitValueJoin, 0.0);
+                        TotalDensitiesOut.Add(TraitValueJoin, 0.0);
                     }
                 }
-       
+                else
+                {
+                    // Only add indices of terrestrial functional groups
+                    int[] TempIndices = cohortFunctionalGroupDefinitions.GetFunctionalGroupIndex(CohortTraits, TraitValueSearch[i], true);
+                    Boolean[] TempIndices2 = new Boolean[TempIndices.GetLength(0)];
+                    for (int ii = 0; ii < TempIndices.GetLength(0); ii++)
+                    {
+                        if (cohortFunctionalGroupDefinitions.GetTraitNames("Realm", TempIndices[ii]).Equals("Terrestrial", StringComparison.OrdinalIgnoreCase))
+                        {
+                            TempIndices2[ii] = true;
+                        }
+                    }
+
+                    // Extract only the indices which are terrestrial 
+                    int[] TempIndices3 = Enumerable.Range(0, TempIndices2.Length).Where(zz => TempIndices2[zz]).ToArray();
+
+                    if (TempIndices3.Length > 0)
+                    {
+                        // Extract the values at these indices
+                        for (int ii = 0; ii < TempIndices3.Length; ii++)
+                        {
+                            TempIndices3[ii] = TempIndices[TempIndices3[ii]];
+                        }
+
+                        // Add in the indices for this functional group and this realm
+                        CohortTraitIndices.Add(TraitValueJoin, TempIndices3);
+
+                        DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " density", "Individuals / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
+                        DataConverter.AddVariable(BasicOutputMemory, TraitValueJoin + " biomass density", "Kg / km^2", 1, TimeDimension, ecosystemModelGrid.GlobalMissingValue, TimeSteps);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in mass bins", 2, MassBinDimensions, ecosystemModelGrid.GlobalMissingValue, TimeSteps, MassBins);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " abundance in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
+                        DataConverter.AddVariable(MassBinsOutputMemory, "Log " + TraitValueJoin + " biomass in juvenile vs adult bins", 3, DoubleMassBinDimensions, ecosystemModelGrid.GlobalMissingValue, MassBins, MassBins, TimeSteps);
+
+                        TotalBiomassDensitiesOut.Add(TraitValueJoin, 0.0);
+                        TotalDensitiesOut.Add(TraitValueJoin, 0.0);
+                    }
+                }
+            }
+
         }
 
         /// <summary>
@@ -945,11 +942,11 @@ namespace Madingley
         private void CalculateOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             FunctionalGroupDefinitions stockFunctionalGroupDefinitions, List<uint[]> cellIndices, int cellNumber, SortedList<string, double>
             globalDiagnosticVariables, MadingleyModelInitialisation initialisation, uint month, Boolean marineCell)
-        {            
+        {
             // Calculate low-level outputs
             CalculateLowLevelOutputs(ecosystemModelGrid, cellIndices, cellNumber, globalDiagnosticVariables, cohortFunctionalGroupDefinitions,
                 stockFunctionalGroupDefinitions, initialisation, month, marineCell);
-            
+
             if (ModelOutputDetail == OutputDetailLevel.High)
             {
                 // Calculate high-level outputs
@@ -971,9 +968,9 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="month">The current month in the model run</param>
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
-        private void CalculateLowLevelOutputs(ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, int cellIndex, 
-            SortedList<string,double> globalDiagnosticVariables, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
-            FunctionalGroupDefinitions stockFunctionalGroupDefinitions, MadingleyModelInitialisation initialisation, uint month, 
+        private void CalculateLowLevelOutputs(ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, int cellIndex,
+            SortedList<string, double> globalDiagnosticVariables, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
+            FunctionalGroupDefinitions stockFunctionalGroupDefinitions, MadingleyModelInitialisation initialisation, uint month,
             Boolean MarineCell)
         {
             // Reset the total living biomass
@@ -1047,7 +1044,7 @@ namespace Madingley
                     TotalBiomassDensitiesOut[TraitValue] = ecosystemModelGrid.GetStateVariableDensity("Biomass", TraitValue, StockTraitIndices[TraitValue], cellIndices[cellIndex][0], cellIndices[cellIndex][1], "stock", initialisation) / 1000.0;
                 }
             }
-            
+
             // Add the total biomass of all stocks to the total living biomass variable
             TotalLivingBiomass += ecosystemModelGrid.GetStateVariable("Biomass", "NA", stockFunctionalGroupDefinitions.AllFunctionalGroupsIndex,
                 cellIndices[cellIndex][0], cellIndices[cellIndex][1], "stock", initialisation);
@@ -1125,7 +1122,7 @@ namespace Madingley
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
         public void InitialOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             FunctionalGroupDefinitions stockFunctionalGroupDefinitions, List<uint[]> cellIndices, int cellNumber,
-            SortedList<string, double> globalDiagnosticVariables, uint numTimeSteps, MadingleyModelInitialisation initialisation, 
+            SortedList<string, double> globalDiagnosticVariables, uint numTimeSteps, MadingleyModelInitialisation initialisation,
             uint month, Boolean marineCell)
         {
 
@@ -1138,7 +1135,7 @@ namespace Madingley
                 InitialLiveOutputs(ecosystemModelGrid, marineCell);
             }
             // Generate the intial file outputs
-            InitialFileOutputs(ecosystemModelGrid, cohortFunctionalGroupDefinitions, marineCell,cellIndices,cellNumber);
+            InitialFileOutputs(ecosystemModelGrid, cohortFunctionalGroupDefinitions, marineCell, cellIndices, cellNumber);
 
         }
 
@@ -1166,7 +1163,7 @@ namespace Madingley
             }
             else
             {
-               if (marineCell)
+                if (marineCell)
                 {
                     foreach (string TraitValue in CohortTraitIndicesMarine.Keys)
                     {
@@ -1211,12 +1208,12 @@ namespace Madingley
                     }
                 }
 
-                
+
 
             }
         }
 
-        
+
 
         /// <summary>
         /// Generates the initial file outputs
@@ -1226,7 +1223,7 @@ namespace Madingley
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
         /// <param name="cellIndices">The list of all cells to run the model for</param>
         /// <param name="cellIndex">The index of the current cell in the list of all cells to run the model for</param>
-        private void InitialFileOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, 
+        private void InitialFileOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             Boolean MarineCell, List<uint[]> cellIndices, int cellIndex)
         {
             Console.WriteLine("Writing initial grid cell outputs to memory...");
@@ -1245,24 +1242,24 @@ namespace Madingley
             // File outputs for medium and high detail levels
             if ((ModelOutputDetail == OutputDetailLevel.Medium) || (ModelOutputDetail == OutputDetailLevel.High))
             {
-                
+
 
                 if (MarineCell)
                 {
                     foreach (string TraitValue in CohortTraitIndicesMarine.Keys)
                     {
                         // Write densities, biomasses and abundances in different functional groups to the relevant one-dimensional output variables
-                        DataConverter.ValueToSDS1D(TotalDensitiesOut[TraitValue], TraitValue + " density", "Time step", 
+                        DataConverter.ValueToSDS1D(TotalDensitiesOut[TraitValue], TraitValue + " density", "Time step",
                             ecosystemModelGrid.GlobalMissingValue,
                             BasicOutputMemory, 0);
-                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step", 
+                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step",
                             ecosystemModelGrid.GlobalMissingValue,
                             BasicOutputMemory, 0);
                     }
 
                     foreach (string TraitValue in StockTraitIndicesMarine.Keys)
                     {
-                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step", 
+                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step",
                             ecosystemModelGrid.GlobalMissingValue,
                         BasicOutputMemory, 0);
                     }
@@ -1275,11 +1272,11 @@ namespace Madingley
                         DataConverter.ValueToSDS1D(TotalDensitiesOut[TraitValue], TraitValue + " density", "Time step",
                             ecosystemModelGrid.GlobalMissingValue,
                             BasicOutputMemory, 0);
-                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step", 
+                        DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step",
                             ecosystemModelGrid.GlobalMissingValue,
                             BasicOutputMemory, 0);
                     }
-                    
+
                     foreach (string TraitValue in StockTraitIndices.Keys)
                     {
                         DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step",
@@ -1290,17 +1287,17 @@ namespace Madingley
 
                 if (OutputMetrics)
                 {
-                    DataConverter.ValueToSDS1D(Metrics.CalculateMeanTrophicLevelCell(ecosystemModelGrid,cellIndices,cellIndex),
+                    DataConverter.ValueToSDS1D(Metrics.CalculateMeanTrophicLevelCell(ecosystemModelGrid, cellIndices, cellIndex),
                                                 "Mean Trophic Level", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, 0);
-                    DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid, cohortFunctionalGroupDefinitions,cellIndices, cellIndex,"trophic index"),
+                    DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid, cohortFunctionalGroupDefinitions, cellIndices, cellIndex, "trophic index"),
                                                 "Trophic Evenness", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, 0);
                     DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid, cohortFunctionalGroupDefinitions, cellIndices, cellIndex, "biomass"),
                                                 "Biomass Evenness", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, 0);
 
-                    double[] FunctionalDiversity = Metrics.CalculateFunctionalDiversity(ecosystemModelGrid, cohortFunctionalGroupDefinitions, 
+                    double[] FunctionalDiversity = Metrics.CalculateFunctionalDiversity(ecosystemModelGrid, cohortFunctionalGroupDefinitions,
                         cellIndices, cellIndex);
 
                     DataConverter.ValueToSDS1D(FunctionalDiversity[0],
@@ -1350,7 +1347,7 @@ namespace Madingley
                 {
                     if (OutputMetrics)
                     {
-                        DataConverter.VectorToSDS2D(Metrics.CalculateTrophicDistribution(ecosystemModelGrid,cellIndices,cellIndex), "Trophic Index Distribution",
+                        DataConverter.VectorToSDS2D(Metrics.CalculateTrophicDistribution(ecosystemModelGrid, cellIndices, cellIndex), "Trophic Index Distribution",
                         new string[2] { "Time step", "Trophic Index Bins" }, TimeSteps, Metrics.TrophicIndexBinValues, ecosystemModelGrid.GlobalMissingValue, MassBinsOutputMemory, 0);
                     }
 
@@ -1412,9 +1409,9 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="month">The current month in the model run</param>
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
-        public void TimeStepOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, 
+        public void TimeStepOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             FunctionalGroupDefinitions stockFunctionalGroupDefinitions, List<uint[]> cellIndices, int cellNumber,
-            SortedList<string, double> globalDiagnosticVariables, StopWatch timeStepTimer, uint numTimeSteps, uint currentTimestep, 
+            SortedList<string, double> globalDiagnosticVariables, StopWatch timeStepTimer, uint numTimeSteps, uint currentTimestep,
             MadingleyModelInitialisation initialisation, uint month, Boolean marineCell)
         {
 
@@ -1431,7 +1428,7 @@ namespace Madingley
             TimeStepConsoleOutputs(currentTimestep, timeStepTimer);
 
             // Generate the file outputs for the current time step
-            TimeStepFileOutputs(ecosystemModelGrid, cohortFunctionalGroupDefinitions, currentTimestep, marineCell, cellIndices,cellNumber);
+            TimeStepFileOutputs(ecosystemModelGrid, cohortFunctionalGroupDefinitions, currentTimestep, marineCell, cellIndices, cellNumber);
 
         }
 
@@ -1444,7 +1441,7 @@ namespace Madingley
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
         private void TimeStepLiveOutputs(uint numTimeSteps, uint currentTimeStep, ModelGrid ecosystemModelGrid, Boolean marineCell)
         {
-            
+
             // Output to the live graph view according to the specified level of detail
             if (ModelOutputDetail == OutputDetailLevel.Low)
             {
@@ -1492,7 +1489,7 @@ namespace Madingley
                         DataConverter.ValueToSDS1D(TotalDensitiesOut[TraitValue], TraitValue + " density", "Time step", ecosystemModelGrid.GlobalMissingValue, DataSetToViewLive, (int)currentTimeStep + 1);
                         DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass", "Time step", ecosystemModelGrid.GlobalMissingValue, DataSetToViewLive, (int)currentTimeStep + 1);
                     }
-                    
+
                     foreach (string TraitValue in StockTraitIndicesMarine.Keys)
                     {
                         // Add in the initial values of stock biomass density
@@ -1526,7 +1523,7 @@ namespace Madingley
         /// <param name="timeStepTimer">The timer for the current time step</param>
         private void TimeStepConsoleOutputs(uint currentTimeStep, StopWatch timeStepTimer)
         {
-           
+
         }
 
         /// <summary>
@@ -1538,7 +1535,7 @@ namespace Madingley
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
         /// <param name="cellIndices">The list of all cells to run the model for</param>
         /// <param name="cellIndex">The index of the current cell in the list of all cells to run the model for</param>
-        private void TimeStepFileOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, 
+        private void TimeStepFileOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
             uint currentTimeStep, Boolean MarineCell, List<uint[]> cellIndices, int cellIndex)
         {
             Console.WriteLine("Writing grid cell ouputs to file...\n");
@@ -1579,7 +1576,7 @@ namespace Madingley
                         DataConverter.ValueToSDS1D(TotalDensitiesOut[TraitValue], TraitValue + " density", "Time step", ecosystemModelGrid.GlobalMissingValue, BasicOutputMemory, (int)currentTimeStep + 1);
                         DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass density", "Time step", ecosystemModelGrid.GlobalMissingValue, BasicOutputMemory, (int)currentTimeStep + 1);
                     }
-                    
+
                     // Loop over all stock trait value combinations and output biomasses
                     foreach (string TraitValue in StockTraitIndices.Keys)
                     {
@@ -1594,13 +1591,13 @@ namespace Madingley
                     DataConverter.ValueToSDS1D(Metrics.CalculateMeanTrophicLevelCell(ecosystemModelGrid, cellIndices, cellIndex),
                                                 "Mean Trophic Level", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, (int)currentTimeStep + 1);
-                    DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid,cohortFunctionalGroupDefinitions, cellIndices, cellIndex,"trophic index"),
+                    DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid, cohortFunctionalGroupDefinitions, cellIndices, cellIndex, "trophic index"),
                                                 "Trophic Evenness", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, (int)currentTimeStep + 1);
                     DataConverter.ValueToSDS1D(Metrics.CalculateFunctionalEvennessRao(ecosystemModelGrid, cohortFunctionalGroupDefinitions, cellIndices, cellIndex, "biomass"),
                                                 "Biomass Evenness", "Time step", ecosystemModelGrid.GlobalMissingValue,
                                                 BasicOutputMemory, (int)currentTimeStep + 1);
-                    double[] FunctionalDiversity = Metrics.CalculateFunctionalDiversity(ecosystemModelGrid, cohortFunctionalGroupDefinitions, 
+                    double[] FunctionalDiversity = Metrics.CalculateFunctionalDiversity(ecosystemModelGrid, cohortFunctionalGroupDefinitions,
                         cellIndices, cellIndex);
                     DataConverter.ValueToSDS1D(FunctionalDiversity[0],
                                                  "Functional Richness", "Time step", ecosystemModelGrid.GlobalMissingValue,
@@ -1649,7 +1646,7 @@ namespace Madingley
                     BasicOutputMemory.Clone("msds:nc?file=" + _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc&openMode=create");
                     Console.WriteLine("Cloning grid cell ouputs to file...\n");
                 }
-                
+
 
 
                 // File outputs for high detail level
@@ -1658,7 +1655,7 @@ namespace Madingley
 
                     if (OutputMetrics)
                     {
-                        DataConverter.VectorToSDS2D(Metrics.CalculateTrophicDistribution(ecosystemModelGrid,cellIndices,cellIndex), "Trophic Index Distribution",
+                        DataConverter.VectorToSDS2D(Metrics.CalculateTrophicDistribution(ecosystemModelGrid, cellIndices, cellIndex), "Trophic Index Distribution",
                             new string[2] { "Time step", "Trophic Index Bins" }, TimeSteps, Metrics.TrophicIndexBinValues, ecosystemModelGrid.GlobalMissingValue, MassBinsOutputMemory, (int)currentTimeStep + 1);
                     }
 
@@ -1695,7 +1692,7 @@ namespace Madingley
                             ecosystemModelGrid.GlobalMissingValue, TrackedCohortsOutputMemory, (int)currentTimeStep + 1, i);
                     }
 
-                    if (currentTimeStep % 600 ==0 && currentTimeStep > 0)
+                    if (currentTimeStep % 600 == 0 && currentTimeStep > 0)
                     {
                         MassBinsOutputMemory.Clone("msds:nc?file=" + _OutputPath + "MassBinsOutputs" + _OutputSuffix + ".nc&openMode=create");
 
@@ -1724,15 +1721,15 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="month">The current month in the model run</param>
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
-        public void FinalOutputs(ModelGrid EcosystemModelGrid, FunctionalGroupDefinitions CohortFunctionalGroupDefinitions, 
-            FunctionalGroupDefinitions StockFunctionalGroupDefinitions, List<uint[]> cellIndices, int cellNumber, 
+        public void FinalOutputs(ModelGrid EcosystemModelGrid, FunctionalGroupDefinitions CohortFunctionalGroupDefinitions,
+            FunctionalGroupDefinitions StockFunctionalGroupDefinitions, List<uint[]> cellIndices, int cellNumber,
             SortedList<string, double> GlobalDiagnosticVariables, MadingleyModelInitialisation initialisation, uint month, Boolean marineCell)
         {
             // Calculate output variables
-            CalculateOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions, cellIndices,cellNumber, GlobalDiagnosticVariables, initialisation, month, marineCell);
+            CalculateOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions, cellIndices, cellNumber, GlobalDiagnosticVariables, initialisation, month, marineCell);
 
             // Dispose of the dataset objects  
-            BasicOutputMemory.Clone("msds:nc?file="+ _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc&openMode=create");
+            BasicOutputMemory.Clone("msds:nc?file=" + _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc&openMode=create");
             BasicOutputMemory.Dispose();
 
             if (LiveOutputs)
@@ -1743,10 +1740,10 @@ namespace Madingley
             if (ModelOutputDetail == OutputDetailLevel.High)
             {
                 // Dispose of the dataset objects for high detail level outputs
-                MassBinsOutputMemory.Clone("msds:nc?file="+ _OutputPath + "MassBinsOutputs" + _OutputSuffix + ".nc&openMode=create");
+                MassBinsOutputMemory.Clone("msds:nc?file=" + _OutputPath + "MassBinsOutputs" + _OutputSuffix + ".nc&openMode=create");
                 MassBinsOutputMemory.Dispose();
 
-                TrackedCohortsOutputMemory.Clone("msds:nc?file="+ _OutputPath + "TrackedCohortsOutputs" + _OutputSuffix + ".nc&openMode=create");
+                TrackedCohortsOutputMemory.Clone("msds:nc?file=" + _OutputPath + "TrackedCohortsOutputs" + _OutputSuffix + ".nc&openMode=create");
                 TrackedCohortsOutputMemory.Dispose();
 
             }
@@ -1787,7 +1784,7 @@ namespace Madingley
                 double[,] WorkingBiomassJuvenileAdultMassBins = new double[MassBinNumber, MassBinNumber];
 
                 // Create a temporary local copy of the cohorts in this grid cell
-                GridCellCohortHandler TempCohorts = ecosystemModelGrid.GetGridCellCohorts(cellIndices[cellIndex][0],cellIndices[cellIndex][1]);
+                GridCellCohortHandler TempCohorts = ecosystemModelGrid.GetGridCellCohorts(cellIndices[cellIndex][0], cellIndices[cellIndex][1]);
 
                 if (marineCell)
                 {
@@ -1827,11 +1824,11 @@ namespace Madingley
                                     {
                                         a++;
                                     } while (a < (MassBins.Length - 1) && TempCohorts[FunctionalGroupIndex][cohort].AdultMass > MassBins[a]);
-                                        
-                                   // Add the cohort's abundance to this adult vs juvenile mass bins
+
+                                    // Add the cohort's abundance to this adult vs juvenile mass bins
                                     WorkingAbundanceJuvenileAdultMassBins[a - 1, j - 1] += TempCohorts[FunctionalGroupIndex][cohort].CohortAbundance;
                                     // Add the cohort's biomass to this adult vs juvenile mass bins
-                                    WorkingBiomassJuvenileAdultMassBins[a - 1, j - 1] += TempCohorts[FunctionalGroupIndex][cohort].CohortAbundance * TempCohorts[FunctionalGroupIndex][cohort].IndividualBodyMass;       
+                                    WorkingBiomassJuvenileAdultMassBins[a - 1, j - 1] += TempCohorts[FunctionalGroupIndex][cohort].CohortAbundance * TempCohorts[FunctionalGroupIndex][cohort].IndividualBodyMass;
                                 }
                             }
                             else
@@ -1989,7 +1986,6 @@ namespace Madingley
             return AllCombinations;
         }
 
-#if true
         // Clone the dataSet. For some reason .Clone reverses the order of the
         // variables so it is done twice
         public DataSet Clone()
@@ -2028,8 +2024,5 @@ namespace Madingley
                 dataSet = null;
             }
         }
-
-        public string FileName { get; set; }
-#endif
     }
 }

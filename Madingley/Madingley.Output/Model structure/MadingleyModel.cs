@@ -498,8 +498,6 @@ namespace Madingley
             // Write the final global outputs
             GlobalOutputs.FinalOutputs();
 
-            WriteModelState.CloseStreams();
-
             if (SpecificLocations)
             {
                 // Loop over grid cells and write the final grid cell outputs

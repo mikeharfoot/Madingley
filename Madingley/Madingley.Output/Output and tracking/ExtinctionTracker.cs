@@ -12,11 +12,7 @@ namespace Madingley
     /// </summary>
     public class ExtinctionTracker
     {
-        string ExtinctionFilename;
-
-        private StreamWriter ExtinctionWriter;
-
-        private TextWriter SyncedExtinctionWriter;
+        private string FileName { get; set; }
 
         /// <summary>
         /// Constructor for the eating tracker: sets up output file
@@ -27,14 +23,13 @@ namespace Madingley
         /// <param name="cellIndex">The index of the current cell within the list of cells in this simulation</param>
         public ExtinctionTracker(string extinctionFilename, string outputPath, string outputFilesSuffix, int cellIndex)
         {
-            ExtinctionFilename = extinctionFilename;
+            this.FileName = outputPath + extinctionFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt";
 
             // Initialise streamwriter to output properties and ids of extinct cohorts
-            ExtinctionWriter = new StreamWriter(outputPath + extinctionFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt");
-            // Create a threadsafe textwriter to write outputs to the ExtinctionWriter stream
-            SyncedExtinctionWriter = TextWriter.Synchronized(ExtinctionWriter);
-            SyncedExtinctionWriter.WriteLine("Latitude\tLongitude\ttime_step\tmerged\tcohortID");
-
+            using (var ExtinctionWriter = new StreamWriter(this.FileName))
+            {
+                ExtinctionWriter.WriteLine("Latitude\tLongitude\ttime_step\tmerged\tcohortID");
+            }
         }
 
         /// <summary>
@@ -45,16 +40,16 @@ namespace Madingley
         /// <param name="currentTimeStep">The current model time step</param>
         /// <param name="merged">Whether the cohort going extinct has ever been merged with another cohort</param>
         /// <param name="cohortID">The ID of the cohort going extinct</param>
-        public void RecordExtinction(uint latIndex, uint lonIndex,uint currentTimeStep,bool merged,List<uint> cohortID)
+        public void RecordExtinction(uint latIndex, uint lonIndex, uint currentTimeStep, bool merged, List<uint> cohortID)
         {
             string newline = Convert.ToString(latIndex) + '\t' + Convert.ToString(lonIndex) + '\t' +
                 Convert.ToString(currentTimeStep) + '\t' + Convert.ToString(merged) + '\t' +
                 Convert.ToString(cohortID[0]);
 
-            SyncedExtinctionWriter.WriteLine(newline);
+            using (var ExtinctionWriter = File.AppendText(this.FileName))
+            {
+                ExtinctionWriter.WriteLine(newline);
+            }
         }
-
-
-
     }
 }

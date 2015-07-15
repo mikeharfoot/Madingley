@@ -36,14 +36,7 @@ namespace Madingley
         /// </summary>
         private CreateSDSObject SDSCreator;
 
-        /// <summary>
-        /// A streamwriter instance for outputting data on interactions between cohorts
-        /// </summary>
-        private StreamWriter StateWriter;
-        /// <summary>
-        /// A synchronized version of the streamwriter for outuputting data on the interactions between cohorts
-        /// </summary>
-        private TextWriter SyncStateWriter;
+        private string FileName { get; set; }
 
         private int Simulation;
 
@@ -59,17 +52,17 @@ namespace Madingley
             // Initialise the SDS object creator
             SDSCreator = new CreateSDSObject();
 
-            StateWriter = new StreamWriter(_OutputPath + "State" + suffix + simulation.ToString() + ".txt");
-            // Create a threadsafe textwriter to write outputs to the Maturity stream
-            SyncStateWriter = TextWriter.Synchronized(StateWriter);
-            SyncStateWriter.WriteLine("TimeStep\tLatitude\tLongitude\tID" +
-            "\tFunctionalGroup\tJuvenileMass\tAdultMass\tIndividualBodyMass\tCohortAbundance\tBirthTimeStep" +
-                "\tMaturityTimeStep\tLogOptimalPreyBodySizeRatio\tMaximumAchievedBodyMass\tTrophicIndex\tProportionTimeActive");
+            this.FileName = _OutputPath + "State" + suffix + simulation.ToString() + ".txt";
+
+            using (var StateWriter = new StreamWriter(this.FileName))
+            {
+                StateWriter.WriteLine("TimeStep\tLatitude\tLongitude\tID" +
+                "\tFunctionalGroup\tJuvenileMass\tAdultMass\tIndividualBodyMass\tCohortAbundance\tBirthTimeStep" +
+                    "\tMaturityTimeStep\tLogOptimalPreyBodySizeRatio\tMaximumAchievedBodyMass\tTrophicIndex\tProportionTimeActive");
+            }
 
             Simulation = simulation;
-
         }
-
 
         public void OutputCurrentModelState(ModelGrid currentModelGrid, List<uint[]> cellIndices, uint currentTimestep)
         {
@@ -82,67 +75,67 @@ namespace Madingley
 
             context = Convert.ToString(currentTimestep) + "\t";
 
-            foreach (uint[] cell in cellIndices)
+            using (var StateWriter = File.AppendText(this.FileName))
             {
-                context = Convert.ToString(currentTimestep) + "\t" +
-                        Convert.ToString(currentModelGrid.GetCellLatitude(cell[0])) + "\t" +
-                            Convert.ToString(currentModelGrid.GetCellLongitude(cell[1])) + "\t";
-
-                TempStocks = currentModelGrid.GetGridCellStocks(cell[0], cell[1]);
-                TempCohorts = currentModelGrid.GetGridCellCohorts(cell[0], cell[1]);
-
-                foreach (List<Stock> ListS in TempStocks)
+                foreach (uint[] cell in cellIndices)
                 {
-                    foreach (Stock S in ListS)
+                    context = Convert.ToString(currentTimestep) + "\t" +
+                            Convert.ToString(currentModelGrid.GetCellLatitude(cell[0])) + "\t" +
+                                Convert.ToString(currentModelGrid.GetCellLongitude(cell[1])) + "\t";
+
+                    TempStocks = currentModelGrid.GetGridCellStocks(cell[0], cell[1]);
+                    TempCohorts = currentModelGrid.GetGridCellCohorts(cell[0], cell[1]);
+
+                    foreach (List<Stock> ListS in TempStocks)
                     {
-                        organism = "-999\tS" + Convert.ToString(S.FunctionalGroupIndex) + "\t" +
-                                    "-999\t-999\t" + Convert.ToString(S.IndividualBodyMass) + "\t" +
-                                    Convert.ToString(S.TotalBiomass / S.IndividualBodyMass) + "\t" +
-                                    "-999\t-999\t-999\t-999\t-999\t-999";
-                        SyncStateWriter.WriteLine(context + organism);
+                        foreach (Stock S in ListS)
+                        {
+                            organism = "-999\tS" + Convert.ToString(S.FunctionalGroupIndex) + "\t" +
+                                        "-999\t-999\t" + Convert.ToString(S.IndividualBodyMass) + "\t" +
+                                        Convert.ToString(S.TotalBiomass / S.IndividualBodyMass) + "\t" +
+                                        "-999\t-999\t-999\t-999\t-999\t-999";
+                            StateWriter.WriteLine(context + organism);
+                        }
                     }
-                }
 
-                foreach (List<Cohort> ListC in TempCohorts)
-                {
-                    foreach (Cohort C in ListC)
+                    foreach (List<Cohort> ListC in TempCohorts)
                     {
+                        foreach (Cohort C in ListC)
+                        {
 #if true
-                        var cohortIds = C.CohortID.Select(id => Convert.ToString(id));
+                            var cohortIds = C.CohortID.Select(id => Convert.ToString(id));
 
-                        organism = String.Join(";", cohortIds) + "\t" +
+                            organism = String.Join(";", cohortIds) + "\t" +
 #else
-                        organism = Convert.ToString(C.CohortID) + "\t" +
+                            organism = Convert.ToString(C.CohortID) + "\t" +
 #endif
-                            Convert.ToString(C.FunctionalGroupIndex) + "\t" +
-                                    Convert.ToString(C.JuvenileMass) + "\t" +
-                                    Convert.ToString(C.AdultMass) + "\t" +
-                                    Convert.ToString(C.IndividualBodyMass) + "\t" +
-                                    Convert.ToString(C.CohortAbundance) + "\t" +
-                                    Convert.ToString(C.BirthTimeStep) + "\t" +
-                                    Convert.ToString(C.MaturityTimeStep) + "\t" +
-                                    Convert.ToString(C.LogOptimalPreyBodySizeRatio) + "\t" +
-                                    Convert.ToString(C.MaximumAchievedBodyMass) + "\t" +
-                                    Convert.ToString(C.TrophicIndex) + "\t" +
-                                    Convert.ToString(C.ProportionTimeActive);
+ Convert.ToString(C.FunctionalGroupIndex) + "\t" +
+                                        Convert.ToString(C.JuvenileMass) + "\t" +
+                                        Convert.ToString(C.AdultMass) + "\t" +
+                                        Convert.ToString(C.IndividualBodyMass) + "\t" +
+                                        Convert.ToString(C.CohortAbundance) + "\t" +
+                                        Convert.ToString(C.BirthTimeStep) + "\t" +
+                                        Convert.ToString(C.MaturityTimeStep) + "\t" +
+                                        Convert.ToString(C.LogOptimalPreyBodySizeRatio) + "\t" +
+                                        Convert.ToString(C.MaximumAchievedBodyMass) + "\t" +
+                                        Convert.ToString(C.TrophicIndex) + "\t" +
+                                        Convert.ToString(C.ProportionTimeActive);
 
-                        SyncStateWriter.WriteLine(context + organism);
-
+                            StateWriter.WriteLine(context + organism);
+                        }
                     }
                 }
-
             }
-
         }
 
 
-        public void OutputCurrentModelState(ModelGrid currentModelGrid,FunctionalGroupDefinitions functionalGroupHandler, List<uint[]> cellIndices, uint currentTimestep, int maximumNumberOfCohorts,string filename)
+        public void OutputCurrentModelState(ModelGrid currentModelGrid, FunctionalGroupDefinitions functionalGroupHandler, List<uint[]> cellIndices, uint currentTimestep, int maximumNumberOfCohorts, string filename)
         {
-            
+
             float[] Latitude = currentModelGrid.Lats;
 
             float[] Longitude = currentModelGrid.Lons;
-            
+
             float[] CohortFunctionalGroup = new float[functionalGroupHandler.GetNumberOfFunctionalGroups()];
             for (int fg = 0; fg < CohortFunctionalGroup.Length; fg++)
             {
@@ -172,9 +165,9 @@ namespace Madingley
             float[] StockFunctionalGroup = new float[] { 1, 2, 3 };
 
             //Define an array for index of stocks - there is only one currently
-            float[] Stock = new float[] { 1};
+            float[] Stock = new float[] { 1 };
 
-            string Filename = filename + "_" + currentTimestep.ToString() + Simulation.ToString() ;
+            string Filename = filename + "_" + currentTimestep.ToString() + Simulation.ToString();
 
             StateOutput = SDSCreator.CreateSDS("netCDF", Filename, _OutputPath);
 
@@ -191,18 +184,18 @@ namespace Madingley
             // Then calculate the state for this property and put the data to this variable
             foreach (string v in CohortProperties)
             {
-                DataConverter.AddVariable(StateOutput,"Cohort" + v,4,
-                dims,currentModelGrid.GlobalMissingValue,Latitude,
-                Longitude,CohortFunctionalGroup,Cohort);
+                DataConverter.AddVariable(StateOutput, "Cohort" + v, 4,
+                dims, currentModelGrid.GlobalMissingValue, Latitude,
+                Longitude, CohortFunctionalGroup, Cohort);
 
-                StateOutput.PutData<double[,,,]>("Cohort" + v,
-                    CalculateCurrentCohortState(currentModelGrid,v,Latitude.Length,Longitude.Length,CohortFunctionalGroup.Length,Cohort.Length,cellIndices));
+                StateOutput.PutData<double[, , ,]>("Cohort" + v,
+                    CalculateCurrentCohortState(currentModelGrid, v, Latitude.Length, Longitude.Length, CohortFunctionalGroup.Length, Cohort.Length, cellIndices));
 
-               StateOutput.Commit();
+                StateOutput.Commit();
             }
 
             //Define the stock properties for output
-            string[] StockProperties = new string[] { "IndividualBodyMass", "TotalBiomass"};
+            string[] StockProperties = new string[] { "IndividualBodyMass", "TotalBiomass" };
 
 
             //define the dimensions for cohort outputs
@@ -212,7 +205,7 @@ namespace Madingley
             // Then calculate the state for this property and put the data to this variable
             foreach (string v in StockProperties)
             {
-                DataConverter.AddVariable(StateOutput,"Stock" + v, 4,
+                DataConverter.AddVariable(StateOutput, "Stock" + v, 4,
                 dims, currentModelGrid.GlobalMissingValue, Latitude,
                 Longitude, StockFunctionalGroup, Stock);
 
@@ -227,7 +220,7 @@ namespace Madingley
         }
 
 
-        private double[,,,] CalculateCurrentCohortState(ModelGrid currentModelState, string variableName,int numLats, int numLons, int numFG, int numCohorts, List<uint[]> cellList)
+        private double[, , ,] CalculateCurrentCohortState(ModelGrid currentModelState, string variableName, int numLats, int numLons, int numFG, int numCohorts, List<uint[]> cellList)
         {
             //Calculate the cohort state
             double[, , ,] State = new double[numLats, numLons, numFG, numCohorts];
@@ -242,7 +235,7 @@ namespace Madingley
                 {
                     for (int cohortIndex = 0; cohortIndex < CellCohorts[functionalGroupIndex].Count; cohortIndex++)
                     {
-                        switch(variableName)
+                        switch (variableName)
                         {
                             case "JuvenileMass":
                                 State[cellList[cellIndex][0], cellList[cellIndex][1], functionalGroupIndex, cohortIndex] = CellCohorts[functionalGroupIndex][cohortIndex].JuvenileMass;
@@ -282,11 +275,11 @@ namespace Madingley
 
                 }
             }
-            
+
             return State;
         }
 
-        private double[,,,] CalculateCurrentStockState(ModelGrid currentModelState, string variableName, int numLats, int numLons, int numFG, int numStocks, List<uint[]> cellList)
+        private double[, , ,] CalculateCurrentStockState(ModelGrid currentModelState, string variableName, int numLats, int numLons, int numFG, int numStocks, List<uint[]> cellList)
         {
             //Calculate the cohort state
             double[, , ,] State = new double[numLats, numLons, numFG, numStocks];
@@ -317,13 +310,5 @@ namespace Madingley
 
             return State;
         }
-
-        public void CloseStreams()
-        {
-            StateWriter.Close();
-            SyncStateWriter.Close();
-        }
-
-
     }
 }

@@ -242,8 +242,6 @@ namespace Madingley.Output
                 copyOutboundCohortWeights,
                 timeStep,
                 madingleyModelGrid);
-
-            c.TrackDispersal.Flush();
         }
     }
 }

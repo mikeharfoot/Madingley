@@ -290,7 +290,6 @@ namespace Madingley
             return (_AllFunctionalGroupsIndex.Length);
         }
 
-#if true
         public FunctionalGroupDefinitions(
             SortedDictionary<string, SortedDictionary<string, int[]>> IndexLookupFromTrait,
             SortedList<string, double[]> FunctionalGroupProperties,
@@ -302,6 +301,5 @@ namespace Madingley
             this.TraitLookupFromIndex = TraitLookupFromIndex;
             this._AllFunctionalGroupsIndex = AllFunctionalGroupsIndex;
         }
-#endif
     }
 }
