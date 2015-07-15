@@ -73,6 +73,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{B6D5CA17-CAB5-4369-804A-B68F61D59324}"
 	ProjectSection(SolutionItems) = preProject
 		Data\hanpp_2005.nc = Data\hanpp_2005.nc
+		Data\README_DATA.md = Data\README_DATA.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Original", "Original", "{3A34BD86-D794-4C2B-9E93-BF6203B5D733}"

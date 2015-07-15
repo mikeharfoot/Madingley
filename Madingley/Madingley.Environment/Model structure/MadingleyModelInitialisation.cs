@@ -281,7 +281,14 @@ namespace Madingley
                     Filenames[ii] = TempFilename + Extensions[ii];
 #endif
                     // Read in and store the environmental data
-                    EnviroStack.Add(LayerName[ii], new EnviroData(Filenames[ii], DatasetNames[ii], FileTypes[ii], Resolutions[ii], MethodUnits[ii]));
+                    if (File.Exists(Filenames[ii]))
+                    {
+                        EnviroStack.Add(LayerName[ii], new EnviroData(Filenames[ii], DatasetNames[ii], FileTypes[ii], Resolutions[ii], MethodUnits[ii]));
+                    }
+                    else
+                    {
+                        throw new Exception(string.Format("ERROR: Cannot find data file: {0} ({1}), have you added the data files from https://github.com/Madingley/Madingley/releases?", Filenames[ii], System.IO.Path.GetFullPath(Filenames[ii])));
+                    }
                 }
                 else if (Sources[ii].ToLower().Equals("fetchclimate"))
                 {
