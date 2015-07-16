@@ -305,16 +305,96 @@ namespace Madingley
             this._AllFunctionalGroupsIndex = AllFunctionalGroupsIndex;
         }
 
-        public static string ToString(FunctionalGroupDefinitions fg)
+        public static void ToJson(FunctionalGroupDefinitions fg, Newtonsoft.Json.JsonWriter sb)
         {
-            var sb = new StringBuilder();
+            sb.WriteStartObject();
 
-            MadingleyModel.JsonAddArray(sb, "IndexLookupFromTrait", MadingleyModel.IndexLookupFromTraitToString(fg.IndexLookupFromTrait));
-            MadingleyModel.JsonAddArray(sb, "FunctionalGroupProperties", MadingleyModel.KeyValueListListToString<double>(fg.FunctionalGroupProperties, MadingleyModel.TToString<double>));
-            MadingleyModel.JsonAddArray(sb, "TraitLookupFromIndex", MadingleyModel.KeyValueListListToString<string>(fg.TraitLookupFromIndex, MadingleyModel.TToString<string>));
-            MadingleyModel.JsonAddArray(sb, "AllFunctionalGroupsIndex", String.Join(",", fg.AllFunctionalGroupsIndex));
+            sb.WritePropertyName("IndexLookupFromTrait");
+            sb.WriteStartObject();
+            fg.IndexLookupFromTrait.ToList().ForEach(
+                trait =>
+                    {
+                        sb.WritePropertyName(trait.Key);
 
-            return sb.ToString();
+                        sb.Formatting = Newtonsoft.Json.Formatting.None;
+                        sb.WriteStartObject();
+
+                        trait.Value.ToList().ForEach(
+                            value =>
+                            {
+                                sb.WritePropertyName(value.Key);
+                                sb.WriteStartArray();
+
+                                value.Value.ToList().ForEach(
+                                    value2 =>
+                                    {
+                                        sb.WriteValue(value2);
+                                    });
+
+                                sb.WriteEndArray();
+                            });
+
+                        sb.WriteEndObject();
+
+                        sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    });
+            sb.WriteEndObject();
+
+            sb.WritePropertyName("FunctionalGroupProperties");
+            sb.WriteStartObject();
+            fg.FunctionalGroupProperties.ToList().ForEach(
+                property =>
+                {
+                    sb.WritePropertyName(property.Key);
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.None;
+                    sb.WriteStartArray();
+                    property.Value.ToList().ForEach(p => sb.WriteValue(p));
+                    sb.WriteEndArray();
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                });
+            sb.WriteEndObject();
+
+            sb.WritePropertyName("TraitLookupFromIndex");
+            sb.WriteStartObject();
+            fg.IndexLookupFromTrait.ToList().ForEach(
+                trait =>
+                {
+                    sb.WritePropertyName(trait.Key);
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.None;
+                    sb.WriteStartObject();
+
+                    trait.Value.ToList().ForEach(
+                        value =>
+                        {
+                            sb.WritePropertyName(value.Key);
+                            sb.WriteStartArray();
+
+                            value.Value.ToList().ForEach(
+                                value2 =>
+                                {
+                                    sb.WriteValue(value2);
+                                });
+
+                            sb.WriteEndArray();
+                        });
+
+                    sb.WriteEndObject();
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                });
+            sb.WriteEndObject();
+
+            sb.WritePropertyName("AllFunctionalGroupsIndex");
+            sb.Formatting = Newtonsoft.Json.Formatting.None;
+            sb.WriteStartArray();
+            fg.AllFunctionalGroupsIndex.ToList().ForEach(functionalGroup => sb.WriteValue(functionalGroup));
+            sb.WriteEndArray();
+            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+
+            sb.WriteEndObject();
         }
 #endif
     }

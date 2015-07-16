@@ -240,26 +240,48 @@ namespace Madingley
             this._LogOptimalPreyBodySizeRatio = logOptimalPreyBodySizeRatio;
         }
 
-        public static string ToString(Cohort c)
+        public static void ToJson(Cohort c, Newtonsoft.Json.JsonWriter sb)
         {
-            var sb = new StringBuilder();
+            Action<string, bool> JsonAddPropertyBoolean = (name, value) =>
+            {
+                sb.WritePropertyName(name);
+                sb.WriteValue(value);
+            };
 
-            MadingleyModel.JsonAddProperty(sb, "_BirthTimeStep", c._BirthTimeStep);
-            MadingleyModel.JsonAddProperty(sb, "_MaturityTimeStep", c._MaturityTimeStep);
-            MadingleyModel.JsonAddArray(sb, "_CohortID", string.Join(",", c._CohortID));
-            MadingleyModel.JsonAddProperty(sb, "_JuvenileMass", c._JuvenileMass);
-            MadingleyModel.JsonAddProperty(sb, "_AdultMass", c._AdultMass);
-            MadingleyModel.JsonAddProperty(sb, "_IndividualBodyMass", c._IndividualBodyMass);
-            MadingleyModel.JsonAddProperty(sb, "_IndividualReproductivePotentialMass", c._IndividualReproductivePotentialMass);
-            MadingleyModel.JsonAddProperty(sb, "_MaximumAchievedBodyMass", c._MaximumAchievedBodyMass);
-            MadingleyModel.JsonAddProperty(sb, "_CohortAbundance", c._CohortAbundance);
-            MadingleyModel.JsonAddProperty(sb, "_FunctionalGroupIndex", c._FunctionalGroupIndex);
-            MadingleyModel.JsonAddProperty(sb, "_Merged", c._Merged);
-            MadingleyModel.JsonAddProperty(sb, "_ProportionTimeActive", c._ProportionTimeActive);
-            MadingleyModel.JsonAddProperty(sb, "_TrophicIndex", c._TrophicIndex);
-            MadingleyModel.JsonAddProperty(sb, "_LogOptimalPreyBodySizeRatio", c._LogOptimalPreyBodySizeRatio);
+            Action<string, double> JsonAddPropertyNumber = (name, value) =>
+            {
+                sb.WritePropertyName(name);
+                sb.WriteValue(value);
+            };
 
-            return sb.ToString();
+            Action<string, IEnumerable<uint>> JsonAddPropertyNumberArray = (name, value) =>
+            {
+                sb.WritePropertyName(name);
+                sb.Formatting = Newtonsoft.Json.Formatting.None;
+                sb.WriteStartArray();
+                value.ToList().ForEach(v => sb.WriteValue(v));
+                sb.WriteEndArray();
+                sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+            };
+
+            sb.WriteStartObject();
+
+            JsonAddPropertyNumber("_BirthTimeStep", c._BirthTimeStep);
+            JsonAddPropertyNumber("_MaturityTimeStep", c._MaturityTimeStep);
+            JsonAddPropertyNumberArray("_CohortID", c._CohortID);
+            JsonAddPropertyNumber("_JuvenileMass", c._JuvenileMass);
+            JsonAddPropertyNumber("_AdultMass", c._AdultMass);
+            JsonAddPropertyNumber("_IndividualBodyMass", c._IndividualBodyMass);
+            JsonAddPropertyNumber("_IndividualReproductivePotentialMass", c._IndividualReproductivePotentialMass);
+            JsonAddPropertyNumber("_MaximumAchievedBodyMass", c._MaximumAchievedBodyMass);
+            JsonAddPropertyNumber("_CohortAbundance", c._CohortAbundance);
+            JsonAddPropertyNumber("_FunctionalGroupIndex", c._FunctionalGroupIndex);
+            JsonAddPropertyBoolean("_Merged", c._Merged);
+            JsonAddPropertyNumber("_ProportionTimeActive", c._ProportionTimeActive);
+            JsonAddPropertyNumber("_TrophicIndex", c._TrophicIndex);
+            JsonAddPropertyNumber("_LogOptimalPreyBodySizeRatio", c._LogOptimalPreyBodySizeRatio);
+
+            sb.WriteEndObject();
         }
 #endif
     }

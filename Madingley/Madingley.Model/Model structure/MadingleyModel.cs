@@ -527,7 +527,7 @@ namespace Madingley
                  Console.WriteLine("Running time step {0}...",hh + 1);
 
 #if true
-                 DebugPrintModel("before", hh);
+                DebugPrintModelJson("state", hh);
 #endif
 
                  // Start the timer
@@ -705,12 +705,11 @@ namespace Madingley
 
 #endif
 
-#if true
-                DebugPrintModel("after", hh);
-#endif
             }
 
-#if false
+#if true
+            DebugPrintModelJson("state", NumTimeSteps + startTimeStep);
+#else
              if (TrackGlobalProcesses.TrackProcesses) TrackGlobalProcesses.CloseNPPFile();
 
             // Loop over cells and close process trackers
@@ -1619,9 +1618,8 @@ namespace Madingley
             }
         }
 
-
 #if true
-        public void DebugPrintModel(string filePrefix, uint timeStep)
+        public void DebugPrintModelJson(string filePrefix, uint timeStep)
         {
             if (System.IO.Directory.Exists(filePrefix))
             {
@@ -1632,12 +1630,14 @@ namespace Madingley
                     using (var w = new StreamWriter(f))
                     {
                         var sb = new StringBuilder();
+                        var sw = new StringWriter(sb);
 
-                        sb.AppendLine(String.Format("{{"));
+                        using (var writer = new Newtonsoft.Json.JsonTextWriter(sw))
+                        {
+                            writer.Formatting = Newtonsoft.Json.Formatting.Indented;
 
-                        JsonAddObject(sb, "MadingleyModel", ToString(this));
-
-                        sb.AppendLine(String.Format("}}"));
+                            ToJson(this, writer);
+                        }
 
                         w.Write(sb.ToString());
                     }
@@ -1645,233 +1645,119 @@ namespace Madingley
             }
         }
 
-        public string EnviroStackToString()
+        public static void ToJson(MadingleyModel m, Newtonsoft.Json.JsonWriter sb)
         {
-            var sb = new StringBuilder();
-
-            /*
-            this.EnviroStack.ToList().ForEach(
-                trait =>
-                    sb.AppendLine(String.Format("{0},", KeyValueListListToString(trait)))
-            );
-            */
-            sb.AppendLine("<< ENVIRON >>");
-
-            return sb.ToString();
-        }
-
-        public string CellListToString()
-        {
-            var sb = new StringBuilder();
-
-            this._CellList.ToList().ForEach(
-                trait =>
-                    sb.AppendLine(String.Format("[{0},{1}],", trait[0], trait[1]))
-            );
-
-            return sb.ToString();
-        }
-
-        public static string TToString<T>(T t)
-        {
-            return t.ToString();
-        }
-
-        public static string ToString(MadingleyModel m)
-        {
-            var sb = new StringBuilder();
-
-            JsonAddObject(sb, "CohortFunctionalGroupDefinitions", FunctionalGroupDefinitions.ToString(m.CohortFunctionalGroupDefinitions));
-            JsonAddObject(sb, "StockFunctionalGroupDefinitions", FunctionalGroupDefinitions.ToString(m.StockFunctionalGroupDefinitions));
-            JsonAddArray(sb, "EnviroStack", m.EnviroStackToString());
-            JsonAddObject(sb, "EcosystemModelGrid", ModelGrid.ToString(m.EcosystemModelGrid));
-            //JsonAddObject(sb, "MadingleyEcologyCrossGridCell", EcologyCrossGridCell.ToString(m.MadingleyEcologyCrossGridCell));
-            JsonAddProperty(sb, "BottomLatitude", m.BottomLatitude);
-            JsonAddProperty(sb, "TopLatitude", m.TopLatitude);
-            JsonAddProperty(sb, "LeftmostLongitude", m.LeftmostLongitude);
-            JsonAddProperty(sb, "RightmostLongitude", m.RightmostLongitude);
-            JsonAddProperty(sb, "CellSize", m.CellSize);
-            JsonAddProperty(sb, "NumBurninSteps", m.NumBurninSteps);
-            JsonAddProperty(sb, "NumImpactSteps", m.NumImpactSteps);
-            JsonAddProperty(sb, "NumRecoverySteps", m.NumRecoverySteps);
-            JsonAddProperty(sb, "CurrentTimeStep", m.CurrentTimeStep);
-            JsonAddProperty(sb, "CurrentMonth", m.CurrentMonth);
-            JsonAddProperty(sb, "DrawRandomly", m.DrawRandomly);
-            JsonAddProperty(sb, "ExtinctionThreshold", m.ExtinctionThreshold);
-            JsonAddProperty(sb, "MergeDifference", m.MergeDifference);
-            JsonAddProperty(sb, "GlobalModelTimeStepUnit", m.GlobalModelTimeStepUnit);
-            JsonAddArray(sb, "_CellList", m.CellListToString());
-            JsonAddArray(sb, "GlobalDiagnosticVariables", KeyValueListToString(m.GlobalDiagnosticVariables, TToString<double>));
-            JsonAddProperty(sb, "RunGridCellsInParallel", m.RunGridCellsInParallel);
-            JsonAddProperty(sb, "SpecificLocations", m.SpecificLocations);
-            JsonAddArray(sb, "InitialisationFileStrings", KeyValueListToString(m.InitialisationFileStrings, TToString<string>));
-            JsonAddArray(sb, "EnvironmentalDataUnits", KeyValueListToString(m.EnvironmentalDataUnits, TToString<string>));
-            JsonAddProperty(sb, "HumanNPPScenario", m.HumanNPPScenario);
-            JsonAddProperty(sb, "TemperatureScenario", m.TemperatureScenario);
-            JsonAddProperty(sb, "HarvestingScenario", m.HarvestingScenario);
-            JsonAddProperty(sb, "NextCohortID", m.NextCohortID);
-            JsonAddProperty(sb, "Dispersals", m.Dispersals);
-
-            return sb.ToString();
-        }
-
-        public static void JsonAddProperty(StringBuilder sb, string name, double value)
-        {
-            sb.AppendLine(String.Format("{0}: {1:G17},", name, value));
-        }
-
-        public static void JsonAddProperty<TValue>(StringBuilder sb, string name, TValue value)
-        {
-            sb.AppendLine(String.Format("{0}: {1},", name, value));
-        }
-
-        public static void JsonAddArray(StringBuilder sb, string name, string value)
-        {
-            var lines = value.TrimEnd().Split('\n');
-
-            if (lines.Count() == 0)
-            {
-                sb.AppendLine(String.Format("{0}: [],", name));
-            }
-            else if (lines.Count() == 1)
-            {
-                sb.AppendLine(String.Format("{0}: [{1}],", name, lines[0].TrimEnd()));
-            }
-            else
-            {
-                sb.AppendLine(String.Format("{0}: [", name));
-
-                lines.ToList().ForEach(line => sb.AppendLine(String.Format("  {0}", line.TrimEnd())));
-
-                sb.AppendLine(String.Format("],"));
-            }
-        }
-
-        public static void JsonAddObject(StringBuilder sb, string name, string value)
-        {
-            var lines = value.TrimEnd().Split('\n');
-
-            if (lines.Count() == 0)
-            {
-                sb.AppendLine(String.Format("{0}: {{}},", name));
-            }
-            else if (lines.Count() == 1)
-            {
-                sb.AppendLine(String.Format("{0}: {{{1}}},", name, lines[0].TrimEnd()));
-            }
-            else
-            {
-                sb.AppendLine(String.Format("{0}: {{", name));
-
-                lines.ToList().ForEach(line => sb.AppendLine(String.Format("  {0}", line.TrimEnd())));
-
-                sb.AppendLine(String.Format("}},"));
-            }
-        }
-
-        public static void JsonAddArrayValue(StringBuilder sb, string value)
-        {
-            var lines = value.TrimEnd().Split('\n');
-
-            if (lines.Count() == 0)
-            {
-                sb.AppendLine(String.Format("[],"));
-            }
-            else if (lines.Count() == 1)
-            {
-                sb.AppendLine(String.Format("[{0}],", lines[0].TrimEnd()));
-            }
-            else
-            {
-                sb.AppendLine(String.Format("["));
-
-                lines.ToList().ForEach(line => sb.AppendLine(String.Format("  {0}", line.TrimEnd())));
-
-                sb.AppendLine(String.Format("],"));
-            }
-        }
-
-        public static void JsonAddObjectValue(StringBuilder sb, string value)
-        {
-            var lines = value.TrimEnd().Split('\n');
-
-            if (lines.Count() == 0)
-            {
-                sb.AppendLine(String.Format("{{}},"));
-            }
-            else if (lines.Count() == 1)
-            {
-                sb.AppendLine(String.Format("{{{0}}},", lines[0].TrimEnd()));
-            }
-            else
-            {
-                sb.AppendLine(String.Format("{{"));
-
-                lines.ToList().ForEach(line => sb.AppendLine(String.Format("  {0}", line.TrimEnd())));
-
-                sb.AppendLine(String.Format("}},"));
-            }
-        }
-
-        public static string KeyValueListListToString<TValue>(IEnumerable<KeyValuePair<string, TValue[]>> pairs, Func<TValue, string> formatter)
-        {
-            var sb = new StringBuilder();
-
-            pairs.ToList().ForEach(
-                trait =>
-                    {
-                        var vs = trait.Value.Select(v => formatter.Invoke(v));
-                        var s = string.Join(",", vs);
-
-                        JsonAddArray(sb, trait.Key, s);
-                    }
-            );
-
-            return sb.ToString();
-        }
-
-        public static string KeyValueListToString<TValue>(IEnumerable<KeyValuePair<string, TValue>> pairs, Func<TValue, string> formatter)
-        {
-            var sb = new StringBuilder();
-
-            pairs.ToList().ForEach(
-                trait => JsonAddProperty(sb, trait.Key, formatter.Invoke(trait.Value))
-            );
-
-            return sb.ToString();
-        }
-
-        public static string IndexLookupFromTraitToString(IEnumerable<KeyValuePair<string, SortedDictionary<string, int[]>>> dict)
-        {
-            var sb = new StringBuilder();
-
-            dict.ToList().ForEach(
-                trait =>
-                    JsonAddArray(sb, trait.Key, KeyValueListListToString<int>(trait.Value, TToString<int>))
-            );
-
-            return sb.ToString();
-        }
-
-        public static string Array2DToString<TValue>(TValue[,] array, Func<TValue, string> formatter)
-        {
-            var sb = new StringBuilder();
-
-            for (var ii = 0; ii < array.GetLength(0); ii++)
-            {
-                for (var jj = 0; jj < array.GetLength(1); jj++)
+            Action<string, bool> JsonAddPropertyBoolean = (name, value) =>
                 {
-                    if (array[ii, jj] != null)
-                    {
-                        sb.AppendFormat("{{ {0} }},", formatter.Invoke(array[ii, jj]));
-                    }
-                }
-            }
+                    sb.WritePropertyName(name);
+                    sb.WriteValue(value);
+                };
 
-            return sb.ToString();
+            Action<string, double> JsonAddPropertyNumber = (name, value) =>
+                {
+                    sb.WritePropertyName(name);
+                    sb.WriteValue(value);
+                };
+
+            Action<string, string> JsonAddPropertyString = (name, value) =>
+                {
+                    sb.WritePropertyName(name);
+                    sb.WriteValue(value);
+                };
+
+            Action<string, Common.ScenarioParameter> JsonAddPropertyScenario = (name, scenario) =>
+                {
+                    sb.WritePropertyName(name);
+                    sb.WriteStartObject();
+                    JsonAddPropertyString("Param1", scenario.ParamString);
+                    JsonAddPropertyNumber("Param2", scenario.ParamDouble1);
+                    JsonAddPropertyNumber("Param3", scenario.ParamDouble2);
+                    sb.WriteEndObject();
+                };
+
+            Action<string, IEnumerable<KeyValuePair<string, double>>> JsonAddKVPDoubles = (name, kvps) =>
+                {
+                    sb.WritePropertyName(name);
+                    sb.WriteStartObject();
+                    kvps.ToList().ForEach(
+                        kvp =>
+                        {
+                            sb.WritePropertyName(kvp.Key);
+                            sb.WriteValue(kvp.Value);
+                        });
+                    sb.WriteEndObject();
+                };
+
+            Action<string, IEnumerable<KeyValuePair<string, string>>> JsonAddKVPStrings = (name, kvps) =>
+                {
+                    sb.WritePropertyName(name);
+                    sb.WriteStartObject();
+                    kvps.ToList().ForEach(
+                        kvp =>
+                        {
+                            sb.WritePropertyName(kvp.Key);
+                            sb.WriteValue(kvp.Value);
+                        });
+                    sb.WriteEndObject();
+                };
+
+            sb.WriteStartObject();
+
+            sb.WritePropertyName("CohortFunctionalGroupDefinitions");
+            FunctionalGroupDefinitions.ToJson(m.CohortFunctionalGroupDefinitions, sb);
+
+            sb.WritePropertyName("StockFunctionalGroupDefinitions");
+            FunctionalGroupDefinitions.ToJson(m.StockFunctionalGroupDefinitions, sb);
+
+            //JsonAddArray(sb, "EnviroStack", m.EnviroStackToString());
+
+            sb.WritePropertyName("EcosystemModelGrid");
+            sb.WriteStartObject();
+            ModelGrid.ToJson(m.EcosystemModelGrid, sb);
+            sb.WriteEndObject();
+
+            JsonAddPropertyNumber("BottomLatitude", m.BottomLatitude);
+            JsonAddPropertyNumber("TopLatitude", m.TopLatitude);
+            JsonAddPropertyNumber("LeftmostLongitude", m.LeftmostLongitude);
+            JsonAddPropertyNumber("RightmostLongitude", m.RightmostLongitude);
+            JsonAddPropertyNumber("CellSize", m.CellSize);
+            JsonAddPropertyNumber("NumBurninSteps", m.NumBurninSteps);
+            JsonAddPropertyNumber("NumImpactSteps", m.NumImpactSteps);
+            JsonAddPropertyNumber("NumRecoverySteps", m.NumRecoverySteps);
+            JsonAddPropertyNumber("CurrentTimeStep", m.CurrentTimeStep);
+            JsonAddPropertyNumber("CurrentMonth", m.CurrentMonth);
+            JsonAddPropertyBoolean("DrawRandomly", m.DrawRandomly);
+            JsonAddPropertyNumber("ExtinctionThreshold", m.ExtinctionThreshold);
+            JsonAddPropertyNumber("MergeDifference", m.MergeDifference);
+            JsonAddPropertyString("GlobalModelTimeStepUnit", m.GlobalModelTimeStepUnit);
+
+            sb.WritePropertyName("_CellList");
+            sb.Formatting = Newtonsoft.Json.Formatting.None;
+            sb.WriteStartArray();
+            m._CellList.ForEach(
+                cell =>
+                {
+                    sb.WriteStartArray();
+                    sb.WriteValue(cell[0]);
+                    sb.WriteValue(cell[1]);
+                    sb.WriteEndArray();
+                });
+            sb.WriteEndArray();
+            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+
+            JsonAddKVPDoubles("GlobalDiagnosticVariables", m.GlobalDiagnosticVariables);
+            JsonAddPropertyBoolean("RunGridCellsInParallel", m.RunGridCellsInParallel);
+            JsonAddPropertyBoolean("SpecificLocations", m.SpecificLocations);
+            JsonAddKVPStrings("InitialisationFileStrings", m.InitialisationFileStrings);
+            JsonAddKVPStrings("EnvironmentalDataUnits", m.EnvironmentalDataUnits);
+            JsonAddPropertyScenario("HumanNPPScenario", m.HumanNPPScenario);
+            JsonAddPropertyScenario("TemperatureScenario", m.TemperatureScenario);
+            JsonAddPropertyScenario("HarvestingScenario", m.HarvestingScenario);
+            JsonAddPropertyNumber("NextCohortID", m.NextCohortID);
+            JsonAddPropertyNumber("Dispersals", m.Dispersals);
+
+            sb.WriteEndObject();
         }
-
 #endif
     }
-
 }

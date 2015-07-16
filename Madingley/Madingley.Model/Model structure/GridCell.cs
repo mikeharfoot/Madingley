@@ -64,9 +64,9 @@ namespace Madingley
         /// Get the delta biomasses and abundances for this grid cell
         /// </summary>
         public Dictionary<string, Dictionary<string, double>> Deltas
-	    {
-		    get { return _Deltas;}
-	    }
+        {
+            get { return _Deltas; }
+        }
 
         /// <summary>
         /// The latitude of this grid cell
@@ -904,60 +904,106 @@ namespace Madingley
             }
         }
 
-        public static string ToString(GridCell gc)
+        public static void ToJson(GridCell gc, Newtonsoft.Json.JsonWriter sb)
         {
-            var sb = new StringBuilder();
-
-            MadingleyModel.JsonAddProperty(sb, "GridCellCohorts", CohortsStocksToString(gc.GridCellCohorts, new CohortComparer(), Cohort.ToString));
-            MadingleyModel.JsonAddProperty(sb, "GridCellStocks", CohortsStocksToString(gc.GridCellStocks, new StockComparer(), Stock.ToString));
-            MadingleyModel.JsonAddArray(sb, "CellEnvironment", MadingleyModel.KeyValueListListToString(gc.CellEnvironment, MadingleyModel.TToString<double>));
-            MadingleyModel.JsonAddArray(sb, "Deltas", DeltasToString(gc.Deltas));
-            MadingleyModel.JsonAddProperty(sb, "_Latitude", gc._Latitude);
-            MadingleyModel.JsonAddProperty(sb, "_Longitude", gc._Longitude);
-
-            return sb.ToString();
-        }
-
-        public static string CohortsStocksToString<TValue>(IList<List<TValue>> v, IComparer<TValue> c, Func<TValue, string> formatter)
-        {
-            var sb = new StringBuilder();
-
-            for (var ii = 0; ii < v.Count(); ii++)
+            Action<string, float> JsonAddPropertyNumber = (name, value) =>
             {
-                var ss = new string[v[ii].Count()];
+                sb.WritePropertyName(name);
+                sb.WriteValue(value);
+            };
 
-                for (var jj = 0; jj < v[ii].Count(); jj++)
+            sb.WriteStartObject();
+
+            var c = new CohortComparer();
+
+            sb.WritePropertyName("GridCellCohorts");
+            sb.WriteStartArray();
+
+            for (var ii = 0; ii < gc.GridCellCohorts.Count(); ii++)
+            {
+                sb.WriteStartArray();
+
+                var vs = gc.GridCellCohorts[ii].ToList();
+                vs.Sort(c);
+
+                for (var jj = 0; jj < vs.Count(); jj++)
                 {
-                    var vs = v[ii].ToList();
-                    vs.Sort(c);
-
-                    var sb2 = new StringBuilder();
-
-                    MadingleyModel.JsonAddObjectValue(sb2, formatter.Invoke(vs[jj]));
-
-                    ss[jj] = sb2.ToString();
+                    Cohort.ToJson(vs[jj], sb);
                 }
 
-                MadingleyModel.JsonAddArrayValue(sb, string.Join("", ss));
+                sb.WriteEndArray();
             }
 
-            return sb.ToString();
-        }
+            sb.WriteEndArray();
 
-        public static string DeltasToString(IEnumerable<KeyValuePair<string, Dictionary<string, double>>> dict)
-        {
-            var sb = new StringBuilder();
+            var s = new StockComparer();
 
-            dict.ToList().ForEach(
-                trait =>
-                    MadingleyModel.JsonAddArray(sb, trait.Key, MadingleyModel.KeyValueListToString<double>(trait.Value, MadingleyModel.TToString<double>))
-            );
+            sb.WritePropertyName("GridCellStocks");
+            sb.WriteStartArray();
 
-            return sb.ToString();
+            for (var ii = 0; ii < gc.GridCellStocks.Count(); ii++)
+            {
+                sb.WriteStartArray();
+
+                var vs = gc.GridCellStocks[ii].ToList();
+                vs.Sort(s);
+
+                for (var jj = 0; jj < vs.Count(); jj++)
+                {
+                    Stock.ToJson(vs[jj], sb);
+                }
+
+                sb.WriteEndArray();
+            }
+
+            sb.WriteEndArray();
+
+            sb.WritePropertyName("CellEnvironment");
+            sb.WriteStartObject();
+            gc.CellEnvironment.ToList().ForEach(
+                cellEnvironment =>
+                {
+                    sb.WritePropertyName(cellEnvironment.Key);
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.None;
+                    sb.WriteStartArray();
+
+                    cellEnvironment.Value.ToList().ForEach(value => sb.WriteValue(value));
+
+                    sb.WriteEndArray();
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                });
+            sb.WriteEndObject();
+
+            sb.WritePropertyName("Deltas");
+            sb.WriteStartObject();
+            gc.Deltas.ToList().ForEach(
+                delta =>
+                {
+                    sb.WritePropertyName(delta.Key);
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.None;
+                    sb.WriteStartObject();
+
+                    delta.Value.ToList().ForEach(
+                        value =>
+                        {
+                            sb.WritePropertyName(value.Key);
+                            sb.WriteValue(value.Value);
+                        });
+
+                    sb.WriteEndObject();
+
+                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                });
+            sb.WriteEndObject();
+
+            JsonAddPropertyNumber("_Latitude", gc._Latitude);
+            JsonAddPropertyNumber("_Longitude", gc._Longitude);
+
+            sb.WriteEndObject();
         }
 #endif
     }
-
-
 }
-
