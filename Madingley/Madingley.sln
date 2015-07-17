@@ -105,6 +105,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{545F4E
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madingley.Serialization", "Madingley.Serialization\Madingley.Serialization.csproj", "{419BC8D6-E1E1-45C4-8174-5CBEEFF637B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Madingley.Test.Serialization", "Test\Madingley.Test.Serialization\Madingley.Test.Serialization.csproj", "{D1831350-C9B2-4CD7-ABF4-61CED3F286C6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -179,6 +183,14 @@ Global
 		{1181F89A-B25D-4FCA-AAD9-F1A56039586A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1181F89A-B25D-4FCA-AAD9-F1A56039586A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1181F89A-B25D-4FCA-AAD9-F1A56039586A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{419BC8D6-E1E1-45C4-8174-5CBEEFF637B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{419BC8D6-E1E1-45C4-8174-5CBEEFF637B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{419BC8D6-E1E1-45C4-8174-5CBEEFF637B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{419BC8D6-E1E1-45C4-8174-5CBEEFF637B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1831350-C9B2-4CD7-ABF4-61CED3F286C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1831350-C9B2-4CD7-ABF4-61CED3F286C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1831350-C9B2-4CD7-ABF4-61CED3F286C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1831350-C9B2-4CD7-ABF4-61CED3F286C6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -202,5 +214,6 @@ Global
 		{3A34BD86-D794-4C2B-9E93-BF6203B5D733} = {B6D5CA17-CAB5-4369-804A-B68F61D59324}
 		{69E58DE5-2A45-4708-B60F-F10C4C8D68F6} = {3A34BD86-D794-4C2B-9E93-BF6203B5D733}
 		{59DABB40-54E4-412A-B082-D44A986A2C22} = {3A34BD86-D794-4C2B-9E93-BF6203B5D733}
+		{D1831350-C9B2-4CD7-ABF4-61CED3F286C6} = {6B30FE39-4981-4E5D-A67C-8E6535A0CB43}
 	EndGlobalSection
 EndGlobal

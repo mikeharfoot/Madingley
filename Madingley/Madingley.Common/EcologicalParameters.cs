@@ -20,6 +20,15 @@ namespace Madingley.Common
         public IEnumerable<string> TimeUnits { get; set; }
 
         /// <summary>
+        /// EcologicalParameters default constructor
+        /// </summary>
+        public EcologicalParameters()
+        {
+            this.Parameters = new SortedList<string, double>();
+            this.TimeUnits = new string[] {};
+        }
+
+        /// <summary>
         /// EcologicalParameters constructor.
         /// </summary>
         /// <param name="parameters">Set of parameters.</param>

@@ -30,6 +30,17 @@ namespace Madingley.Common
         public Int64 NextCohortID { get; set; }
 
         /// <summary>
+        /// ModelState default constructor
+        /// </summary>
+        public ModelState()
+        {
+            this.TimestepsComplete = 0;
+            this.GlobalDiagnosticVariables = new SortedList<string, double>();
+            this.GridCells = new List<GridCell>();
+            this.NextCohortID = 0;
+        }
+
+        /// <summary>
         /// ModelState constructor.
         /// </summary>
         /// <param name="timestepsComplete">Number of time steps complete.</param>

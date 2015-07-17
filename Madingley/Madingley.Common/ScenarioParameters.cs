@@ -25,6 +25,16 @@ namespace Madingley.Common
         public double ParamDouble2 { get; set; }
 
         /// <summary>
+        /// ScenarioParameter default constructor
+        /// </summary>
+        public ScenarioParameter()
+        {
+            this.ParamString = "";
+            this.ParamDouble1 = 0.0;
+            this.ParamDouble2 = 0.0;
+        }
+
+        /// <summary>
         /// ScenarioParameter constructor
         /// </summary>
         /// <param name="paramString">ParamString.</param>
@@ -128,6 +138,16 @@ namespace Madingley.Common
         /// Set of parameters.
         /// </summary>
         public IDictionary<string, ScenarioParameter> Parameters { get; set; }
+
+        /// <summary>
+        /// ScenarioParameters default constructor
+        /// </summary>
+        public ScenarioParameters()
+        {
+            this.Label = "";
+            this.SimulationNumber = 0;
+            this.Parameters = new SortedList<string, ScenarioParameter>();
+        }
 
         /// <summary>
         /// ScenarioParameters constructor

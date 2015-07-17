@@ -1625,21 +1625,14 @@ namespace Madingley
             {
                 var fileName = string.Format("{0}/{1}.txt", filePrefix, timeStep);
 
-                using (var f = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.Write))
+                using (var fs = File.Open(fileName, FileMode.CreateNew))
                 {
-                    using (var w = new StreamWriter(f))
+                    using (var sw = new StreamWriter(fs))
                     {
-                        var sb = new StringBuilder();
-                        var sw = new StringWriter(sb);
-
                         using (var writer = new Newtonsoft.Json.JsonTextWriter(sw))
                         {
-                            writer.Formatting = Newtonsoft.Json.Formatting.Indented;
-
                             ToJson(this, writer);
                         }
-
-                        w.Write(sb.ToString());
                     }
                 }
             }
@@ -1700,6 +1693,8 @@ namespace Madingley
                         });
                     sb.WriteEndObject();
                 };
+
+            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
 
             sb.WriteStartObject();
 

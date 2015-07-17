@@ -20,6 +20,15 @@ namespace Madingley.Common
         public IDictionary<string, double> Properties { get; set; }
 
         /// <summary>
+        /// FunctionalGroupDefinition default constructor
+        /// </summary>
+        public FunctionalGroupDefinition()
+        {
+            this.Definitions = new SortedList<string, string>();
+            this.Properties = new SortedList<string, double>();
+        }
+
+        /// <summary>
         /// FunctionalGroupDefinition constructor.
         /// </summary>
         /// <param name="definitions">Set of definitions.</param>
@@ -91,6 +100,16 @@ namespace Madingley.Common
         /// List of property keys.
         /// </summary>
         public IEnumerable<string> Properties { get; set; }
+
+        /// <summary>
+        /// FunctionalGroupDefinitions default constructor
+        /// </summary>
+        public FunctionalGroupDefinitions()
+        {
+            this.Data = new FunctionalGroupDefinition[] { };
+            this.Definitions = new string[] { };
+            this.Properties = new string[] { };
+        }
 
         /// <summary>
         /// FunctionalGroupDefinitions constructor.
