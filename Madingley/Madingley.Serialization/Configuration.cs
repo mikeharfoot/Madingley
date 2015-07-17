@@ -223,7 +223,7 @@ namespace Madingley.Serialization
                 {
                     if (reader.TokenType == Newtonsoft.Json.JsonToken.EndArray) break;
 
-                    ret.Add(JsonReadInt.Invoke(reader));
+                    ret.Add(JsonReadInt(reader));
                 }
 
                 return ret;

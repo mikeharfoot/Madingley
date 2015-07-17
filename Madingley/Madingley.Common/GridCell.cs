@@ -35,6 +35,18 @@ namespace Madingley.Common
         public IDictionary<string, double[]> Environment { get; set; }
 
         /// <summary>
+        /// GridCell default constructor
+        /// </summary>
+        public GridCell()
+        {
+            this.Latitude = 0.0;
+            this.Longitude = 0.0;
+            this.Cohorts = new List<IEnumerable<Cohort>>();
+            this.Stocks = new List<IEnumerable<Stock>>();
+            this.Environment = new SortedList<string, double[]>();
+        }
+
+        /// <summary>
         /// GridCell constructor.
         /// </summary>
         /// <param name="latitude">Latitude of this grid cell.</param>

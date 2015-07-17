@@ -75,6 +75,26 @@ namespace Madingley.Common
         public double LogOptimalPreyBodySizeRatio { get; set; }
 
         /// <summary>
+        /// Cohort default constructor
+        /// </summary>
+        public Cohort()
+        {
+            this.BirthTimeStep = 0;
+            this.MaturityTimeStep = 0;
+            this.IDs = new int[] { };
+            this.JuvenileMass = 0.0;
+            this.AdultMass = 0.0;
+            this.IndividualBodyMass = 0.0;
+            this.IndividualReproductivePotentialMass = 0.0;
+            this.MaximumAchievedBodyMass = 0.0;
+            this.Abundance = 0.0;
+            this.Merged = false;
+            this.ProportionTimeActive = 0.0;
+            this.TrophicIndex = 0.0;
+            this.LogOptimalPreyBodySizeRatio = 0.0;
+        }
+
+        /// <summary>
         /// Cohort constructor.
         /// </summary>
         /// <param name="birthTimeStep">Birth time step.</param>

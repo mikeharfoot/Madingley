@@ -73,10 +73,6 @@
       <Project>{ba7bf917-401f-4bc5-a907-d921c1c02040}</Project>
       <Name>Madingley.Test.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Madingley.Test.Environment\Madingley.Test.Environment.csproj">
-      <Project>{2c043146-103a-4cfd-b649-b36fb4f0c9cd}</Project>
-      <Name>Madingley.Test.Environment</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />

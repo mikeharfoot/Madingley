@@ -1,4 +1,6 @@
-﻿
+﻿using System.IO;
+using System.Text;
+
 using NUnit.Framework;
 
 namespace Madingley.Test.Serialization
@@ -12,9 +14,16 @@ namespace Madingley.Test.Serialization
 
             var expected = Madingley.Test.Common.ModelState.RandomModelState(rnd);
 
-            var json = Madingley.Serialization.ModelState.Serialize(expected);
+            var sb = new StringBuilder();
+            var sw = new StringWriter(sb);
 
-            var actual = Madingley.Serialization.ModelState.Deserialize(json);
+            Madingley.Serialization.ModelState.Serialize(expected, sw);
+
+            var json = sb.ToString();
+
+            var sr = new StringReader(json);
+
+            var actual = Madingley.Serialization.ModelState.Deserialize(sr);
 
             Assert.AreEqual(expected, actual);
         }

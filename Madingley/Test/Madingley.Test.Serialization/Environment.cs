@@ -1,4 +1,6 @@
-﻿
+﻿using System.IO;
+using System.Text;
+
 using NUnit.Framework;
 
 namespace Madingley.Test.Serialization
@@ -8,17 +10,20 @@ namespace Madingley.Test.Serialization
         [Test]
         public void TestEnvironmentSerialization()
         {
-            var modelSetupRoot = "Model setup for tests";
-            var environmentDataRoot = "Data for tests";
+            var rnd = new System.Random();
 
-            Madingley.Test.Common.Environment.CreateDirectories(environmentDataRoot);
-            Madingley.Test.Common.Environment.CreateFiles(environmentDataRoot, true);
+            var expected = Madingley.Test.Common.Environment.RandomEnvironment(rnd);
 
-            var expected = Madingley.Environment.Loader.Load(environmentDataRoot, modelSetupRoot);
+            var sb = new StringBuilder();
+            var sw = new StringWriter(sb);
 
-            var json = Madingley.Serialization.Environment.Serialize(expected);
+            Madingley.Serialization.Environment.Serialize(expected, sw);
 
-            var actual = Madingley.Serialization.Environment.Deserialize(json);
+            var json = sb.ToString();
+
+            var sr = new StringReader(json);
+
+            var actual = Madingley.Serialization.Environment.Deserialize(sr);
 
             Assert.AreEqual(expected, actual);
         }

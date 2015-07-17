@@ -18,6 +18,15 @@ namespace Madingley.Common
         public double TotalBiomass { get; set; }
 
         /// <summary>
+        /// Stock default constructor
+        /// </summary>
+        public Stock()
+        {
+            this.IndividualBodyMass = 0.0;
+            this.TotalBiomass = 0.0;
+        }
+
+        /// <summary>
         /// Stock constructor.
         /// </summary>
         /// <param name="individualBodyMass">Mean body mass of an individual.</param>

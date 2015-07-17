@@ -297,7 +297,6 @@ namespace Madingley.Test.Common
             return Enumerable.Range(0, length1).Select(i => RandomCellEnv(rnd, length2)).ToArray();
         }
 
-        /*
         public static Madingley.Common.Environment RandomEnvironment(Random rnd)
         {
             var cellSize = rnd.NextDouble();
@@ -306,7 +305,7 @@ namespace Madingley.Test.Common
             var leftmostLongitude = rnd.NextDouble();
             var rightmostLongitude = rnd.NextDouble();
             var units = RandomUnits(rnd, 5);
-            var specificLocations = true;// Common.RandomBool(rnd);
+            var specificLocations = Common.RandomBool(rnd);
             var focusCells = RandomFocusCells(rnd, 20);
             var cellEnvironment = RandomCellEnvironment(rnd, 5, 7);
             var fileNames = new string[] {
@@ -329,7 +328,6 @@ namespace Madingley.Test.Common
                 cellEnvironment,
                 fileNames);
         }
-        */
 
         public static void CreateDirectories(string directory)
         {

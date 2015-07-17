@@ -69,7 +69,7 @@ namespace Madingley.Common
             this.RightmostLongitude = 0.0;
             this.Units = new SortedList<string, string>();
             this.SpecificLocations = false;
-            this.FocusCells = null;
+            this.FocusCells = new List<Tuple<int, int>>();
             this.CellEnvironment = new SortedList<string, double[]>[] { };
             this.FileNames = new List<string>();
         }
