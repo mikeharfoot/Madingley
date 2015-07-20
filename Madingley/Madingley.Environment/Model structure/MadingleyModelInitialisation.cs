@@ -161,6 +161,8 @@ namespace Madingley
                 }
             }
 
+            InternalData.Dispose();
+
             // Loop over cells defined in the specific locations file
             for (int ii = 0; ii < LatitudeList.Count; ii++)
             {
@@ -214,7 +216,6 @@ namespace Madingley
             string[] f;
             int col;
             // Read in the data
-            DataSet InternalData = DataSet.Open(FileString);
             l = r_env.ReadLine();
             while (!r_env.EndOfStream)
             {

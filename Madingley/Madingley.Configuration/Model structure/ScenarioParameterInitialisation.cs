@@ -120,6 +120,8 @@ namespace Madingley
 
             }
 
+            InternalData.Dispose();
+
             return scenarioParameters;
         }
 

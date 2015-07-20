@@ -96,6 +96,8 @@ namespace Madingley
                 }
             }
 
+            InternalData.Dispose();
+
             var length = TraitLookupFromIndex.Max(p => p.Value.Length);
 
             var data = new FunctionalGroupDefinition[length];
