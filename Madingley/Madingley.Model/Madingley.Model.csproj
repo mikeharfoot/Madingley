@@ -128,6 +128,10 @@
       <Project>{3bde02d3-451b-4dbc-876a-aa8c1e8faacd}</Project>
       <Name>Madingley.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Madingley.Serialization\Madingley.Serialization.csproj">
+      <Project>{419bc8d6-e1e1-45c4-8174-5cbeeff637b9}</Project>
+      <Name>Madingley.Serialization</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -904,105 +904,73 @@ namespace Madingley
             }
         }
 
-        public static void ToJson(GridCell gc, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, GridCell gridCell)
         {
-            Action<string, float> JsonAddPropertyNumber = (name, value) =>
+            Action<Newtonsoft.Json.JsonWriter, string, float> PropertyFloat = (jsonWriter2, name2, value) =>
             {
-                sb.WritePropertyName(name);
-                sb.WriteValue(value);
+                Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter2, name2, (double)value);
             };
 
-            sb.WriteStartObject();
+            jsonWriter.WriteStartObject();
 
             var c = new CohortComparer();
 
-            sb.WritePropertyName("GridCellCohorts");
-            sb.WriteStartArray();
+            jsonWriter.WritePropertyName("GridCellCohorts");
+            jsonWriter.WriteStartArray();
 
-            for (var ii = 0; ii < gc.GridCellCohorts.Count(); ii++)
+            for (var ii = 0; ii < gridCell.GridCellCohorts.Count(); ii++)
             {
-                sb.WriteStartArray();
+                jsonWriter.WriteStartArray();
 
-                var vs = gc.GridCellCohorts[ii].ToList();
+                var vs = gridCell.GridCellCohorts[ii].ToList();
                 vs.Sort(c);
 
                 for (var jj = 0; jj < vs.Count(); jj++)
                 {
-                    Cohort.ToJson(vs[jj], sb);
+                    Cohort.ToJson(jsonWriter, vs[jj]);
                 }
 
-                sb.WriteEndArray();
+                jsonWriter.WriteEndArray();
             }
 
-            sb.WriteEndArray();
+            jsonWriter.WriteEndArray();
 
             var s = new StockComparer();
 
-            sb.WritePropertyName("GridCellStocks");
-            sb.WriteStartArray();
+            jsonWriter.WritePropertyName("GridCellStocks");
+            jsonWriter.WriteStartArray();
 
-            for (var ii = 0; ii < gc.GridCellStocks.Count(); ii++)
+            for (var ii = 0; ii < gridCell.GridCellStocks.Count(); ii++)
             {
-                sb.WriteStartArray();
+                jsonWriter.WriteStartArray();
 
-                var vs = gc.GridCellStocks[ii].ToList();
+                var vs = gridCell.GridCellStocks[ii].ToList();
                 vs.Sort(s);
 
                 for (var jj = 0; jj < vs.Count(); jj++)
                 {
-                    Stock.ToJson(vs[jj], sb);
+                    Stock.ToJson(jsonWriter, vs[jj]);
                 }
 
-                sb.WriteEndArray();
+                jsonWriter.WriteEndArray();
             }
 
-            sb.WriteEndArray();
+            jsonWriter.WriteEndArray();
 
-            sb.WritePropertyName("CellEnvironment");
-            sb.WriteStartObject();
-            gc.CellEnvironment.ToList().ForEach(
-                cellEnvironment =>
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "CellEnvironment", gridCell.CellEnvironment,
+                (jw, key, value) => Madingley.Serialization.Common.Writer.PropertyInlineArray(jw, key, value, Madingley.Serialization.Common.Writer.WriteDouble));
+
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "Deltas", gridCell.Deltas,
+                (jw, key, value) =>
                 {
-                    sb.WritePropertyName(cellEnvironment.Key);
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.None;
-                    sb.WriteStartArray();
-
-                    cellEnvironment.Value.ToList().ForEach(value => sb.WriteValue(value));
-
-                    sb.WriteEndArray();
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                    Madingley.Serialization.Common.Writer.PropertyInlineKeyValuePairs(jw, key, value,
+                        (jw2, key2, value2) => Madingley.Serialization.Common.Writer.PropertyDouble(jw2, key2, value2));
                 });
-            sb.WriteEndObject();
 
-            sb.WritePropertyName("Deltas");
-            sb.WriteStartObject();
-            gc.Deltas.ToList().ForEach(
-                delta =>
-                {
-                    sb.WritePropertyName(delta.Key);
+            PropertyFloat(jsonWriter, "_Latitude", gridCell._Latitude);
+            PropertyFloat(jsonWriter, "_Longitude", gridCell._Longitude);
 
-                    sb.Formatting = Newtonsoft.Json.Formatting.None;
-                    sb.WriteStartObject();
-
-                    delta.Value.ToList().ForEach(
-                        value =>
-                        {
-                            sb.WritePropertyName(value.Key);
-                            sb.WriteValue(value.Value);
-                        });
-
-                    sb.WriteEndObject();
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-                });
-            sb.WriteEndObject();
-
-            JsonAddPropertyNumber("_Latitude", gc._Latitude);
-            JsonAddPropertyNumber("_Longitude", gc._Longitude);
-
-            sb.WriteEndObject();
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

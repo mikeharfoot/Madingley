@@ -240,48 +240,29 @@ namespace Madingley
             this._LogOptimalPreyBodySizeRatio = logOptimalPreyBodySizeRatio;
         }
 
-        public static void ToJson(Cohort c, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, Cohort cohort)
         {
-            Action<string, bool> JsonAddPropertyBoolean = (name, value) =>
+            Action<Newtonsoft.Json.JsonWriter, uint> WriteUInt = (jsonWriter2, value) =>
             {
-                sb.WritePropertyName(name);
-                sb.WriteValue(value);
+                Madingley.Serialization.Common.Writer.WriteInt(jsonWriter2, (int)value);
             };
 
-            Action<string, double> JsonAddPropertyNumber = (name, value) =>
-            {
-                sb.WritePropertyName(name);
-                sb.WriteValue(value);
-            };
-
-            Action<string, IEnumerable<uint>> JsonAddPropertyNumberArray = (name, value) =>
-            {
-                sb.WritePropertyName(name);
-                sb.Formatting = Newtonsoft.Json.Formatting.None;
-                sb.WriteStartArray();
-                value.ToList().ForEach(v => sb.WriteValue(v));
-                sb.WriteEndArray();
-                sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-            };
-
-            sb.WriteStartObject();
-
-            JsonAddPropertyNumber("_BirthTimeStep", c._BirthTimeStep);
-            JsonAddPropertyNumber("_MaturityTimeStep", c._MaturityTimeStep);
-            JsonAddPropertyNumberArray("_CohortID", c._CohortID);
-            JsonAddPropertyNumber("_JuvenileMass", c._JuvenileMass);
-            JsonAddPropertyNumber("_AdultMass", c._AdultMass);
-            JsonAddPropertyNumber("_IndividualBodyMass", c._IndividualBodyMass);
-            JsonAddPropertyNumber("_IndividualReproductivePotentialMass", c._IndividualReproductivePotentialMass);
-            JsonAddPropertyNumber("_MaximumAchievedBodyMass", c._MaximumAchievedBodyMass);
-            JsonAddPropertyNumber("_CohortAbundance", c._CohortAbundance);
-            JsonAddPropertyNumber("_FunctionalGroupIndex", c._FunctionalGroupIndex);
-            JsonAddPropertyBoolean("_Merged", c._Merged);
-            JsonAddPropertyNumber("_ProportionTimeActive", c._ProportionTimeActive);
-            JsonAddPropertyNumber("_TrophicIndex", c._TrophicIndex);
-            JsonAddPropertyNumber("_LogOptimalPreyBodySizeRatio", c._LogOptimalPreyBodySizeRatio);
-
-            sb.WriteEndObject();
+            jsonWriter.WriteStartObject();
+            Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter, "_BirthTimeStep", (int)cohort._BirthTimeStep);
+            Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter, "_MaturityTimeStep", (int)cohort._MaturityTimeStep);
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "_CohortID", cohort._CohortID, WriteUInt);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_JuvenileMass", cohort._JuvenileMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_AdultMass", cohort._AdultMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_IndividualBodyMass", cohort._IndividualBodyMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_IndividualReproductivePotentialMass", cohort._IndividualReproductivePotentialMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_MaximumAchievedBodyMass", cohort._MaximumAchievedBodyMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_CohortAbundance", cohort._CohortAbundance);
+            Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter, "_FunctionalGroupIndex", cohort._FunctionalGroupIndex);
+            Madingley.Serialization.Common.Writer.PropertyBoolean(jsonWriter, "_Merged", cohort._Merged);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_ProportionTimeActive", cohort._ProportionTimeActive);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_TrophicIndex", cohort._TrophicIndex);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_LogOptimalPreyBodySizeRatio", cohort._LogOptimalPreyBodySizeRatio);
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

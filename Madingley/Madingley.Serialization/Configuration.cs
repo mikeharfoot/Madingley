@@ -10,50 +10,50 @@ namespace Madingley.Serialization
     {
         public static void Serialize(Madingley.Common.Configuration configuration, TextWriter textWriter)
         {
-            Action<Newtonsoft.Json.JsonTextWriter, Madingley.Common.FunctionalGroupDefinition> JsonAddPropertyFunctionalGroupDefinition = (jsonTextWriter, value) =>
+            Action<Newtonsoft.Json.JsonWriter, Madingley.Common.FunctionalGroupDefinition> JsonAddPropertyFunctionalGroupDefinition = (JsonWriter, value) =>
             {
-                jsonTextWriter.WriteStartObject();
-                Common.Writer.KeyValuePairArray(jsonTextWriter, "Definitions", value.Definitions, Common.Writer.PropertyString);
-                Common.Writer.KeyValuePairArray(jsonTextWriter, "Properties", value.Properties, Common.Writer.PropertyDouble);
-                jsonTextWriter.WriteEndObject();
+                JsonWriter.WriteStartObject();
+                Common.Writer.PropertyKeyValuePairs(JsonWriter, "Definitions", value.Definitions, Common.Writer.PropertyString);
+                Common.Writer.PropertyKeyValuePairs(JsonWriter, "Properties", value.Properties, Common.Writer.PropertyDouble);
+                JsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, string, Madingley.Common.FunctionalGroupDefinitions> JsonAddPropertyFunctionalGroupDefinitions = (jsonTextWriter, name, value) =>
+            Action<Newtonsoft.Json.JsonWriter, string, Madingley.Common.FunctionalGroupDefinitions> JsonAddPropertyFunctionalGroupDefinitions = (JsonWriter, name, value) =>
             {
-                jsonTextWriter.WritePropertyName(name);
-                jsonTextWriter.WriteStartObject();
-                Common.Writer.PropertyArray(jsonTextWriter, "Data", value.Data, JsonAddPropertyFunctionalGroupDefinition);
-                Common.Writer.PropertyInlineArray(jsonTextWriter, "Definitions", value.Definitions, Common.Writer.WriteString);
-                Common.Writer.PropertyInlineArray(jsonTextWriter, "Properties", value.Properties, Common.Writer.WriteString);
-                jsonTextWriter.WriteEndObject();
+                JsonWriter.WritePropertyName(name);
+                JsonWriter.WriteStartObject();
+                Common.Writer.PropertyArray(JsonWriter, "Data", value.Data, JsonAddPropertyFunctionalGroupDefinition);
+                Common.Writer.PropertyInlineArray(JsonWriter, "Definitions", value.Definitions, Common.Writer.WriteString);
+                Common.Writer.PropertyInlineArray(JsonWriter, "Properties", value.Properties, Common.Writer.WriteString);
+                JsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, string, Madingley.Common.ScenarioParameter> JsonAddPropertyScenarioParameter = (jsonTextWriter, name, value) =>
+            Action<Newtonsoft.Json.JsonWriter, string, Madingley.Common.ScenarioParameter> JsonAddPropertyScenarioParameter = (JsonWriter, name, value) =>
             {
-                jsonTextWriter.WritePropertyName(name);
-                jsonTextWriter.WriteStartObject();
-                Common.Writer.PropertyString(jsonTextWriter, "ParamString", value.ParamString);
-                Common.Writer.PropertyDouble(jsonTextWriter, "ParamDouble1", value.ParamDouble1);
-                Common.Writer.PropertyDouble(jsonTextWriter, "ParamDouble2", value.ParamDouble2);
-                jsonTextWriter.WriteEndObject();
+                JsonWriter.WritePropertyName(name);
+                JsonWriter.WriteStartObject();
+                Common.Writer.PropertyString(JsonWriter, "ParamString", value.ParamString);
+                Common.Writer.PropertyDouble(JsonWriter, "ParamDouble1", value.ParamDouble1);
+                Common.Writer.PropertyDouble(JsonWriter, "ParamDouble2", value.ParamDouble2);
+                JsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, Madingley.Common.ScenarioParameters> JsonAddScenarioParameter = (jsonTextWriter, value) =>
+            Action<Newtonsoft.Json.JsonWriter, Madingley.Common.ScenarioParameters> JsonAddScenarioParameter = (JsonWriter, value) =>
             {
-                jsonTextWriter.WriteStartObject();
-                Common.Writer.PropertyString(jsonTextWriter, "Label", value.Label);
-                Common.Writer.PropertyInt(jsonTextWriter, "SimulationNumber", value.SimulationNumber);
-                Common.Writer.KeyValuePairArray(jsonTextWriter, "Parameters", value.Parameters, JsonAddPropertyScenarioParameter);
-                jsonTextWriter.WriteEndObject();
+                JsonWriter.WriteStartObject();
+                Common.Writer.PropertyString(JsonWriter, "Label", value.Label);
+                Common.Writer.PropertyInt(JsonWriter, "SimulationNumber", value.SimulationNumber);
+                Common.Writer.PropertyKeyValuePairs(JsonWriter, "Parameters", value.Parameters, JsonAddPropertyScenarioParameter);
+                JsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, string, Madingley.Common.EcologicalParameters> JsonAddEcologicalParameters = (jsonTextWriter, name, ecologicalParameters) =>
+            Action<Newtonsoft.Json.JsonWriter, string, Madingley.Common.EcologicalParameters> JsonAddEcologicalParameters = (JsonWriter, name, ecologicalParameters) =>
             {
-                jsonTextWriter.WritePropertyName(name);
-                jsonTextWriter.WriteStartObject();
-                Common.Writer.KeyValuePairArray(jsonTextWriter, "Parameters", ecologicalParameters.Parameters, Common.Writer.PropertyDouble);
-                Common.Writer.PropertyInlineArray(jsonTextWriter, "TimeUnits", ecologicalParameters.TimeUnits, Common.Writer.WriteString);
-                jsonTextWriter.WriteEndObject();
+                JsonWriter.WritePropertyName(name);
+                JsonWriter.WriteStartObject();
+                Common.Writer.PropertyKeyValuePairs(JsonWriter, "Parameters", ecologicalParameters.Parameters, Common.Writer.PropertyDouble);
+                Common.Writer.PropertyInlineArray(JsonWriter, "TimeUnits", ecologicalParameters.TimeUnits, Common.Writer.WriteString);
+                JsonWriter.WriteEndObject();
             };
 
             using (var writer = new Newtonsoft.Json.JsonTextWriter(textWriter))
@@ -107,8 +107,8 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "Definitions": ret.Definitions = Common.Reader.JsonReadKVPs(reader, Common.Reader.JsonReadString); break;
-                        case "Properties": ret.Properties = Common.Reader.JsonReadKVPs(reader, Common.Reader.JsonReadDouble); break;
+                        case "Definitions": ret.Definitions = Common.Reader.ReadKeyValuePairs(reader, Common.Reader.ReadString); break;
+                        case "Properties": ret.Properties = Common.Reader.ReadKeyValuePairs(reader, Common.Reader.ReadDouble); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }
@@ -133,9 +133,9 @@ namespace Madingley.Serialization
 
                         switch (property)
                         {
-                            case "Data": ret.Data = Common.Reader.JsonReadArray(reader, JsonReadFunctionalGroupDefinition); break;
-                            case "Definitions": ret.Definitions = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadString); break;
-                            case "Properties": ret.Properties = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadString); break;
+                            case "Data": ret.Data = Common.Reader.ReadArray(reader, JsonReadFunctionalGroupDefinition); break;
+                            case "Definitions": ret.Definitions = Common.Reader.ReadArray(reader, Common.Reader.ReadString); break;
+                            case "Properties": ret.Properties = Common.Reader.ReadArray(reader, Common.Reader.ReadString); break;
                             default: throw new Exception(string.Format("Unexpected property: {0}", property));
                         }
                     }
@@ -160,9 +160,9 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "ParamString": ret.ParamString = Common.Reader.JsonReadString(reader); break;
-                        case "ParamDouble1": ret.ParamDouble1 = Common.Reader.JsonReadDouble(reader); break;
-                        case "ParamDouble2": ret.ParamDouble2 = Common.Reader.JsonReadDouble(reader); break;
+                        case "ParamString": ret.ParamString = Common.Reader.ReadString(reader); break;
+                        case "ParamDouble1": ret.ParamDouble1 = Common.Reader.ReadDouble(reader); break;
+                        case "ParamDouble2": ret.ParamDouble2 = Common.Reader.ReadDouble(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }
@@ -209,8 +209,8 @@ namespace Madingley.Serialization
 
                         switch (property)
                         {
-                            case "Label": ret.Label = Common.Reader.JsonReadString(reader); break;
-                            case "SimulationNumber": ret.SimulationNumber = Common.Reader.JsonReadInt(reader); break;
+                            case "Label": ret.Label = Common.Reader.ReadString(reader); break;
+                            case "SimulationNumber": ret.SimulationNumber = Common.Reader.ReadInt(reader); break;
                             case "Parameters": ret.Parameters = JsonReadKVPScenarioParameter(reader); break;
                             default: throw new Exception(string.Format("Unexpected property: {0}", property));
                         }
@@ -236,8 +236,8 @@ namespace Madingley.Serialization
 
                         switch (property)
                         {
-                            case "Parameters": ret.Parameters = Common.Reader.JsonReadKVPs(reader, Common.Reader.JsonReadDouble); break;
-                            case "TimeUnits": ret.TimeUnits = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadString); break;
+                            case "Parameters": ret.Parameters = Common.Reader.ReadKeyValuePairs(reader, Common.Reader.ReadDouble); break;
+                            case "TimeUnits": ret.TimeUnits = Common.Reader.ReadArray(reader, Common.Reader.ReadString); break;
                             default: throw new Exception(string.Format("Unexpected property: {0}", property));
                         }
                     }
@@ -263,29 +263,29 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "GlobalModelTimeStepUnit": configuration.GlobalModelTimeStepUnit = Common.Reader.JsonReadString(reader); break;
-                        case "NumTimeSteps": configuration.NumTimeSteps = Common.Reader.JsonReadInt(reader); break;
-                        case "BurninTimeSteps": configuration.BurninTimeSteps = Common.Reader.JsonReadInt(reader); break;
-                        case "ImpactTimeSteps": configuration.ImpactTimeSteps = Common.Reader.JsonReadInt(reader); break;
-                        case "RecoveryTimeSteps": configuration.RecoveryTimeSteps = Common.Reader.JsonReadInt(reader); break;
-                        case "RunCellsInParallel": configuration.RunCellsInParallel = Common.Reader.JsonReadBool(reader); break;
-                        case "RunSimulationsInParallel": configuration.RunSimulationsInParallel = Common.Reader.JsonReadBool(reader); break;
-                        case "RunRealm": configuration.RunRealm = Common.Reader.JsonReadString(reader); break;
-                        case "DrawRandomly": configuration.DrawRandomly = Common.Reader.JsonReadBool(reader); break;
-                        case "ExtinctionThreshold": configuration.ExtinctionThreshold = Common.Reader.JsonReadDouble(reader); break;
-                        case "MaxNumberOfCohorts": configuration.MaxNumberOfCohorts = Common.Reader.JsonReadInt(reader); break;
-                        case "DispersalOnly": configuration.DispersalOnly = Common.Reader.JsonReadBool(reader); break;
-                        case "DispersalOnlyType": configuration.DispersalOnlyType = Common.Reader.JsonReadString(reader); break;
-                        case "PlanktonDispersalThreshold": configuration.PlanktonDispersalThreshold = Common.Reader.JsonReadDouble(reader); break;
+                        case "GlobalModelTimeStepUnit": configuration.GlobalModelTimeStepUnit = Common.Reader.ReadString(reader); break;
+                        case "NumTimeSteps": configuration.NumTimeSteps = Common.Reader.ReadInt(reader); break;
+                        case "BurninTimeSteps": configuration.BurninTimeSteps = Common.Reader.ReadInt(reader); break;
+                        case "ImpactTimeSteps": configuration.ImpactTimeSteps = Common.Reader.ReadInt(reader); break;
+                        case "RecoveryTimeSteps": configuration.RecoveryTimeSteps = Common.Reader.ReadInt(reader); break;
+                        case "RunCellsInParallel": configuration.RunCellsInParallel = Common.Reader.ReadBoolean(reader); break;
+                        case "RunSimulationsInParallel": configuration.RunSimulationsInParallel = Common.Reader.ReadBoolean(reader); break;
+                        case "RunRealm": configuration.RunRealm = Common.Reader.ReadString(reader); break;
+                        case "DrawRandomly": configuration.DrawRandomly = Common.Reader.ReadBoolean(reader); break;
+                        case "ExtinctionThreshold": configuration.ExtinctionThreshold = Common.Reader.ReadDouble(reader); break;
+                        case "MaxNumberOfCohorts": configuration.MaxNumberOfCohorts = Common.Reader.ReadInt(reader); break;
+                        case "DispersalOnly": configuration.DispersalOnly = Common.Reader.ReadBoolean(reader); break;
+                        case "DispersalOnlyType": configuration.DispersalOnlyType = Common.Reader.ReadString(reader); break;
+                        case "PlanktonDispersalThreshold": configuration.PlanktonDispersalThreshold = Common.Reader.ReadDouble(reader); break;
                         case "CohortFunctionalGroupDefinitions": configuration.CohortFunctionalGroupDefinitions = JsonReadFunctionalGroupDefinitions(reader); break;
                         case "StockFunctionalGroupDefinitions": configuration.StockFunctionalGroupDefinitions = JsonReadFunctionalGroupDefinitions(reader); break;
-                        case "ImpactCellIndices": configuration.ImpactCellIndices = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadInt); break;
-                        case "ImpactAll": configuration.ImpactAll = Common.Reader.JsonReadBool(reader); break;
-                        case "ScenarioParameters": configuration.ScenarioParameters = Common.Reader.JsonReadArray(reader, JsonReadScenarioParameters).ToList(); break;
-                        case "ScenarioIndex": configuration.ScenarioIndex = Common.Reader.JsonReadInt(reader); break;
-                        case "Simulation": configuration.Simulation = Common.Reader.JsonReadInt(reader); break;
+                        case "ImpactCellIndices": configuration.ImpactCellIndices = Common.Reader.ReadArray(reader, Common.Reader.ReadInt); break;
+                        case "ImpactAll": configuration.ImpactAll = Common.Reader.ReadBoolean(reader); break;
+                        case "ScenarioParameters": configuration.ScenarioParameters = Common.Reader.ReadArray(reader, JsonReadScenarioParameters).ToList(); break;
+                        case "ScenarioIndex": configuration.ScenarioIndex = Common.Reader.ReadInt(reader); break;
+                        case "Simulation": configuration.Simulation = Common.Reader.ReadInt(reader); break;
                         case "EcologicalParameters": configuration.EcologicalParameters = JsonReadEcologicalParameters(reader); break;
-                        case "FileNames": configuration.FileNames = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadString).ToList(); break;
+                        case "FileNames": configuration.FileNames = Common.Reader.ReadArray(reader, Common.Reader.ReadString).ToList(); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }

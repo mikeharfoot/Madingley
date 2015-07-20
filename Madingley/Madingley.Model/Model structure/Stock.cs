@@ -60,27 +60,13 @@ namespace Madingley
         
 
 #if true
-        public static void ToJson(Stock s, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, Stock stock)
         {
-            Action<string, byte> JsonAddPropertyNumberByte = (name, value) =>
-            {
-                sb.WritePropertyName(name);
-                sb.WriteValue(value);
-            };
-
-            Action<string, double> JsonAddPropertyNumberDouble = (name, value) =>
-            {
-                sb.WritePropertyName(name);
-                sb.WriteValue(value);
-            };
-
-            sb.WriteStartObject();
-
-            JsonAddPropertyNumberByte("_FunctionalGroupIndex", s._FunctionalGroupIndex);
-            JsonAddPropertyNumberDouble("_IndividualBodyMass", s._IndividualBodyMass);
-            JsonAddPropertyNumberDouble("_TotalBiomass", s._TotalBiomass);
-
-            sb.WriteEndObject();
+            jsonWriter.WriteStartObject();
+            Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter, "_FunctionalGroupIndex", stock._FunctionalGroupIndex);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_IndividualBodyMass", stock._IndividualBodyMass);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "_TotalBiomass", stock._TotalBiomass);
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

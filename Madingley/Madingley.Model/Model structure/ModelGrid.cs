@@ -2658,69 +2658,65 @@ namespace Madingley
             return InternalGrid[latIndex, lonIndex];
         }
 
-        public static void ToJson(ModelGrid mg, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, string name, ModelGrid modelGrid)
         {
-            Action<string, double> JsonAddPropertyNumber = (name, value) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.WriteValue(value);
-                };
-
-            Action<string, IEnumerable<float>> JsonAddPropertyFloatArray = (name, value) =>
+            Action<Newtonsoft.Json.JsonWriter, float> WriteFloat = (jsonWriter2, value) =>
             {
-                sb.WritePropertyName(name);
-                sb.Formatting = Newtonsoft.Json.Formatting.None;
-                sb.WriteStartArray();
-                value.ToList().ForEach(v => sb.WriteValue(v));
-                sb.WriteEndArray();
-                sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+                Madingley.Serialization.Common.Writer.WriteDouble(jsonWriter2, (double)value);
             };
 
-            Action<string, IEnumerable<double>> JsonAddPropertyDoubleArray = (name, value) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.Formatting = Newtonsoft.Json.Formatting.None;
-                    sb.WriteStartArray();
-                    value.ToList().ForEach(v => sb.WriteValue(v));
-                    sb.WriteEndArray();
-                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-                };
-
-            JsonAddPropertyNumber("NumGrids", mg.NumGrids);
-            JsonAddPropertyNumber("GlobalMissingValue", mg.GlobalMissingValue);
-            JsonAddPropertyNumber("MinLatitude", mg.MinLatitude);
-            JsonAddPropertyNumber("MinLongitude", mg.MinLongitude);
-            JsonAddPropertyNumber("MaxLatitude", mg.MaxLatitude);
-            JsonAddPropertyNumber("MaxLongitude", mg.MaxLongitude);
-            JsonAddPropertyNumber("LatCellSize", mg.LatCellSize);
-            JsonAddPropertyNumber("LonCellSize", mg.LonCellSize);
-            JsonAddPropertyNumber("GridCellRarefaction", mg.GridCellRarefaction);
-            JsonAddPropertyNumber("NumLatCells", mg.NumLatCells);
-            JsonAddPropertyNumber("NumLonCells", mg.NumLonCells);
-            JsonAddPropertyFloatArray("Lats", mg.Lats);
-            JsonAddPropertyFloatArray("Lons", mg.Lons);
-
-            sb.WritePropertyName("InternalGrid");
-            sb.WriteStartArray();
-
-            for (var ii = 0; ii < mg.InternalGrid.GetLength(0); ii++)
+            Action<Newtonsoft.Json.JsonWriter, string, float> PropertyFloat = (jsonWriter2, name2, value) =>
             {
-                for (var jj = 0; jj < mg.InternalGrid.GetLength(1); jj++)
+                Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter2, name2, (double)value);
+            };
+
+            Action<Newtonsoft.Json.JsonWriter, string, uint> WriteUInt = (jsonWriter2, name2, value) =>
+            {
+                Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter2, name2, (int)value);
+            };
+
+            jsonWriter.WritePropertyName(name);
+            jsonWriter.WriteStartObject();
+            WriteUInt(jsonWriter, "NumGrids", modelGrid.NumGrids);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "GlobalMissingValue", modelGrid.GlobalMissingValue);
+            PropertyFloat(jsonWriter, "MinLatitude", modelGrid.MinLatitude);
+            PropertyFloat(jsonWriter, "MinLongitude", modelGrid.MinLongitude);
+            PropertyFloat(jsonWriter, "MaxLatitude", modelGrid.MaxLatitude);
+            PropertyFloat(jsonWriter, "MaxLongitude", modelGrid.MaxLongitude);
+            PropertyFloat(jsonWriter, "LatCellSize", modelGrid.LatCellSize);
+            PropertyFloat(jsonWriter, "LonCellSize", modelGrid.LonCellSize);
+            Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter, "GridCellRarefaction", modelGrid.GridCellRarefaction);
+            WriteUInt(jsonWriter, "NumLatCells", modelGrid.NumLatCells);
+            WriteUInt(jsonWriter, "NumLonCells", modelGrid.NumLonCells);
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "Lats", modelGrid.Lats, WriteFloat);
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "Lons", modelGrid.Lons, WriteFloat);
+
+            jsonWriter.WritePropertyName("InternalGrid");
+            jsonWriter.WriteStartArray();
+
+            for (var ii = 0; ii < modelGrid.InternalGrid.GetLength(0); ii++)
+            {
+                jsonWriter.WriteStartArray();
+
+                for (var jj = 0; jj < modelGrid.InternalGrid.GetLength(1); jj++)
                 {
-                    if (mg.InternalGrid[ii, jj] != null)
+                    if (modelGrid.InternalGrid[ii, jj] != null)
                     {
-                        GridCell.ToJson(mg.InternalGrid[ii, jj], sb);
+                        GridCell.ToJson(jsonWriter, modelGrid.InternalGrid[ii, jj]);
                     }
                 }
+
+                jsonWriter.WriteEndArray();
             }
-            sb.WriteEndArray();
+            jsonWriter.WriteEndArray();
 
-            //MadingleyModel.JsonAddArray(sb, "DeltaFunctionalGroupDispersalArray", MadingleyModel.Array2DToString(mg.DeltaFunctionalGroupDispersalArray, FormatUintList));
-            //MadingleyModel.JsonAddArray(sb, "DeltaCohortNumberDispersalArray", MadingleyModel.Array2DToString(mg.DeltaCohortNumberDispersalArray, FormatUintList));
-            //MadingleyModel.JsonAddArray(sb, "DeltaCellToDisperseToArray", MadingleyModel.Array2DToString(mg.DeltaCellToDisperseToArray, FormatUintArrayList));
+            //MadingleyModel.JsonAddArray(jsonWriter, "DeltaFunctionalGroupDispersalArray", MadingleyModel.Array2DToString(mg.DeltaFunctionalGroupDispersalArray, FormatUintList));
+            //MadingleyModel.JsonAddArray(jsonWriter, "DeltaCohortNumberDispersalArray", MadingleyModel.Array2DToString(mg.DeltaCohortNumberDispersalArray, FormatUintList));
+            //MadingleyModel.JsonAddArray(jsonWriter, "DeltaCellToDisperseToArray", MadingleyModel.Array2DToString(mg.DeltaCellToDisperseToArray, FormatUintArrayList));
 
-            JsonAddPropertyDoubleArray("CellHeightsKm", mg.CellHeightsKm != null ? mg.CellHeightsKm : new double[] {});
-            JsonAddPropertyDoubleArray("CellWidthsKm", mg.CellWidthsKm != null ? mg.CellWidthsKm : new double[] { });
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "CellHeightsKm", modelGrid.CellHeightsKm != null ? modelGrid.CellHeightsKm : new double[] { }, Madingley.Serialization.Common.Writer.WriteDouble);
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "CellWidthsKm", modelGrid.CellWidthsKm != null ? modelGrid.CellWidthsKm : new double[] { }, Madingley.Serialization.Common.Writer.WriteDouble);
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

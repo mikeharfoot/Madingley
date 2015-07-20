@@ -172,11 +172,11 @@ namespace Madingley
             int[] TempIndexList;
             
             //Sorted dictionary to hold the trait value index list sorted dictionary from the lookup table
-			SortedDictionary<string, int[]> TraitIndexList;
+            SortedDictionary<string, int[]> TraitIndexList;
 
             //Loop over the number of trait name and trait value pairs
             for (int nn = 0; nn < searchTraits.Length; nn++)
-			{ 
+            {
                 //Check if the trait name is in the lookup table and if so pull out the <trait value, index vector> sorted dictionary for it
                 if (IndexLookupFromTrait.TryGetValue(searchTraits[nn].ToLower(), out TraitIndexList))
                 {
@@ -197,7 +197,7 @@ namespace Madingley
                 {
                     Debug.Fail("Trait to search for not found in lookup tables");
                 }
-			}
+            }
 
             //If we are only searching for one traitname and trait value pair then return the index vector
             if (searchTraits.Length == 1)
@@ -305,96 +305,40 @@ namespace Madingley
             this._AllFunctionalGroupsIndex = AllFunctionalGroupsIndex;
         }
 
-        public static void ToJson(FunctionalGroupDefinitions fg, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, string name, FunctionalGroupDefinitions functionalGroupDefinitions)
         {
-            sb.WriteStartObject();
+            jsonWriter.WritePropertyName(name);
+            jsonWriter.WriteStartObject();
 
-            sb.WritePropertyName("IndexLookupFromTrait");
-            sb.WriteStartObject();
-            fg.IndexLookupFromTrait.ToList().ForEach(
-                trait =>
-                    {
-                        sb.WritePropertyName(trait.Key);
-
-                        sb.Formatting = Newtonsoft.Json.Formatting.None;
-                        sb.WriteStartObject();
-
-                        trait.Value.ToList().ForEach(
-                            value =>
-                            {
-                                sb.WritePropertyName(value.Key);
-                                sb.WriteStartArray();
-
-                                value.Value.ToList().ForEach(
-                                    value2 =>
-                                    {
-                                        sb.WriteValue(value2);
-                                    });
-
-                                sb.WriteEndArray();
-                            });
-
-                        sb.WriteEndObject();
-
-                        sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-                    });
-            sb.WriteEndObject();
-
-            sb.WritePropertyName("FunctionalGroupProperties");
-            sb.WriteStartObject();
-            fg.FunctionalGroupProperties.ToList().ForEach(
-                property =>
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "IndexLookupFromTrait", functionalGroupDefinitions.IndexLookupFromTrait,
+                (jw, key, value) =>
                 {
-                    sb.WritePropertyName(property.Key);
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.None;
-                    sb.WriteStartArray();
-                    property.Value.ToList().ForEach(p => sb.WriteValue(p));
-                    sb.WriteEndArray();
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-                });
-            sb.WriteEndObject();
-
-            sb.WritePropertyName("TraitLookupFromIndex");
-            sb.WriteStartObject();
-            fg.IndexLookupFromTrait.ToList().ForEach(
-                trait =>
-                {
-                    sb.WritePropertyName(trait.Key);
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.None;
-                    sb.WriteStartObject();
-
-                    trait.Value.ToList().ForEach(
-                        value =>
+                    Madingley.Serialization.Common.Writer.PropertyInlineKeyValuePairs(jw, key, value,
+                        (jw2, key2, value2) =>
                         {
-                            sb.WritePropertyName(value.Key);
-                            sb.WriteStartArray();
-
-                            value.Value.ToList().ForEach(
-                                value2 =>
-                                {
-                                    sb.WriteValue(value2);
-                                });
-
-                            sb.WriteEndArray();
+                            Madingley.Serialization.Common.Writer.PropertyArray(jw2, key2, value2, Madingley.Serialization.Common.Writer.WriteInt);
                         });
-
-                    sb.WriteEndObject();
-
-                    sb.Formatting = Newtonsoft.Json.Formatting.Indented;
                 });
-            sb.WriteEndObject();
 
-            sb.WritePropertyName("AllFunctionalGroupsIndex");
-            sb.Formatting = Newtonsoft.Json.Formatting.None;
-            sb.WriteStartArray();
-            fg.AllFunctionalGroupsIndex.ToList().ForEach(functionalGroup => sb.WriteValue(functionalGroup));
-            sb.WriteEndArray();
-            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "FunctionalGroupProperties", functionalGroupDefinitions.FunctionalGroupProperties,
+                (jw, key, value) =>
+                {
+                    Madingley.Serialization.Common.Writer.PropertyInlineArray(jw, key, value, Madingley.Serialization.Common.Writer.WriteDouble);
+                });
 
-            sb.WriteEndObject();
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "TraitLookupFromIndex", functionalGroupDefinitions.IndexLookupFromTrait,
+                (jw, key, value) =>
+                {
+                    Madingley.Serialization.Common.Writer.PropertyInlineKeyValuePairs(jw, key, value,
+                        (jw2, key2, value2) =>
+                        {
+                            Madingley.Serialization.Common.Writer.PropertyArray(jw2, key2, value2, Madingley.Serialization.Common.Writer.WriteInt);
+                        });
+                });
+
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "AllFunctionalGroupsIndex", functionalGroupDefinitions.AllFunctionalGroupsIndex, Madingley.Serialization.Common.Writer.WriteInt);
+
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

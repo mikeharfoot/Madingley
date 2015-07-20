@@ -1625,133 +1625,90 @@ namespace Madingley
             {
                 var fileName = string.Format("{0}/{1}.txt", filePrefix, timeStep);
 
-                using (var fs = File.Open(fileName, FileMode.CreateNew))
+                using (var fs = File.Open(fileName, FileMode.Create))
                 {
                     using (var sw = new StreamWriter(fs))
                     {
                         using (var writer = new Newtonsoft.Json.JsonTextWriter(sw))
                         {
-                            ToJson(this, writer);
+                            ToJson(writer, this);
                         }
                     }
                 }
             }
         }
 
-        public static void ToJson(MadingleyModel m, Newtonsoft.Json.JsonWriter sb)
+        public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, MadingleyModel madingleyModel)
         {
-            Action<string, bool> JsonAddPropertyBoolean = (name, value) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.WriteValue(value);
-                };
+            Action<Newtonsoft.Json.JsonWriter, float> WriteFloat = (jsonWriter2, value) =>
+            {
+                Madingley.Serialization.Common.Writer.WriteDouble(jsonWriter2, (double)value);
+            };
 
-            Action<string, double> JsonAddPropertyNumber = (name, value) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.WriteValue(value);
-                };
+            Action<Newtonsoft.Json.JsonWriter, string, float> PropertyFloat = (jsonWriter2, name, value) =>
+            {
+                Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter2, name, (double)value);
+            };
 
-            Action<string, string> JsonAddPropertyString = (name, value) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.WriteValue(value);
-                };
+            Action<Newtonsoft.Json.JsonWriter, string, uint> WriteUInt = (jsonWriter2, name, value) =>
+            {
+                Madingley.Serialization.Common.Writer.PropertyInt(jsonWriter2, name, (int)value);
+            };
 
             Action<string, Common.ScenarioParameter> JsonAddPropertyScenario = (name, scenario) =>
                 {
-                    sb.WritePropertyName(name);
-                    sb.WriteStartObject();
-                    JsonAddPropertyString("Param1", scenario.ParamString);
-                    JsonAddPropertyNumber("Param2", scenario.ParamDouble1);
-                    JsonAddPropertyNumber("Param3", scenario.ParamDouble2);
-                    sb.WriteEndObject();
+                    jsonWriter.WritePropertyName(name);
+                    jsonWriter.WriteStartObject();
+                    Madingley.Serialization.Common.Writer.PropertyString(jsonWriter, "Param1", scenario.ParamString);
+                    Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "Param2", scenario.ParamDouble1);
+                    Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "Param3", scenario.ParamDouble2);
+                    jsonWriter.WriteEndObject();
                 };
 
-            Action<string, IEnumerable<KeyValuePair<string, double>>> JsonAddKVPDoubles = (name, kvps) =>
+            jsonWriter.Formatting = Newtonsoft.Json.Formatting.Indented;
+
+            jsonWriter.WriteStartObject();
+            FunctionalGroupDefinitions.ToJson(jsonWriter, "CohortFunctionalGroupDefinitions", madingleyModel.CohortFunctionalGroupDefinitions);
+            FunctionalGroupDefinitions.ToJson(jsonWriter, "StockFunctionalGroupDefinitions", madingleyModel.StockFunctionalGroupDefinitions);
+            //JsonAddArray(jsonWriter, "EnviroStack", m.EnviroStackToString());
+            ModelGrid.ToJson(jsonWriter, "EcosystemModelGrid", madingleyModel.EcosystemModelGrid);
+
+            PropertyFloat(jsonWriter, "BottomLatitude", madingleyModel.BottomLatitude);
+            PropertyFloat(jsonWriter, "TopLatitude", madingleyModel.TopLatitude);
+            PropertyFloat(jsonWriter, "LeftmostLongitude", madingleyModel.LeftmostLongitude);
+            PropertyFloat(jsonWriter, "RightmostLongitude", madingleyModel.RightmostLongitude);
+            PropertyFloat(jsonWriter, "CellSize", madingleyModel.CellSize);
+            WriteUInt(jsonWriter, "NumBurninSteps", madingleyModel.NumBurninSteps);
+            WriteUInt(jsonWriter, "NumImpactSteps", madingleyModel.NumImpactSteps);
+            WriteUInt(jsonWriter, "NumRecoverySteps", madingleyModel.NumRecoverySteps);
+            WriteUInt(jsonWriter, "CurrentTimeStep", madingleyModel.CurrentTimeStep);
+            WriteUInt(jsonWriter, "CurrentMonth", madingleyModel.CurrentMonth);
+            Madingley.Serialization.Common.Writer.PropertyBoolean(jsonWriter, "DrawRandomly", madingleyModel.DrawRandomly);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "ExtinctionThreshold", madingleyModel.ExtinctionThreshold);
+            Madingley.Serialization.Common.Writer.PropertyDouble(jsonWriter, "MergeDifference", madingleyModel.MergeDifference);
+            Madingley.Serialization.Common.Writer.PropertyString(jsonWriter, "GlobalModelTimeStepUnit", madingleyModel.GlobalModelTimeStepUnit);
+
+            Madingley.Serialization.Common.Writer.PropertyInlineArray(jsonWriter, "_CellList", madingleyModel._CellList,
+                (jw, cell) =>
                 {
-                    sb.WritePropertyName(name);
-                    sb.WriteStartObject();
-                    kvps.ToList().ForEach(
-                        kvp =>
-                        {
-                            sb.WritePropertyName(kvp.Key);
-                            sb.WriteValue(kvp.Value);
-                        });
-                    sb.WriteEndObject();
-                };
-
-            Action<string, IEnumerable<KeyValuePair<string, string>>> JsonAddKVPStrings = (name, kvps) =>
-                {
-                    sb.WritePropertyName(name);
-                    sb.WriteStartObject();
-                    kvps.ToList().ForEach(
-                        kvp =>
-                        {
-                            sb.WritePropertyName(kvp.Key);
-                            sb.WriteValue(kvp.Value);
-                        });
-                    sb.WriteEndObject();
-                };
-
-            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
-
-            sb.WriteStartObject();
-
-            sb.WritePropertyName("CohortFunctionalGroupDefinitions");
-            FunctionalGroupDefinitions.ToJson(m.CohortFunctionalGroupDefinitions, sb);
-
-            sb.WritePropertyName("StockFunctionalGroupDefinitions");
-            FunctionalGroupDefinitions.ToJson(m.StockFunctionalGroupDefinitions, sb);
-
-            //JsonAddArray(sb, "EnviroStack", m.EnviroStackToString());
-
-            sb.WritePropertyName("EcosystemModelGrid");
-            sb.WriteStartObject();
-            ModelGrid.ToJson(m.EcosystemModelGrid, sb);
-            sb.WriteEndObject();
-
-            JsonAddPropertyNumber("BottomLatitude", m.BottomLatitude);
-            JsonAddPropertyNumber("TopLatitude", m.TopLatitude);
-            JsonAddPropertyNumber("LeftmostLongitude", m.LeftmostLongitude);
-            JsonAddPropertyNumber("RightmostLongitude", m.RightmostLongitude);
-            JsonAddPropertyNumber("CellSize", m.CellSize);
-            JsonAddPropertyNumber("NumBurninSteps", m.NumBurninSteps);
-            JsonAddPropertyNumber("NumImpactSteps", m.NumImpactSteps);
-            JsonAddPropertyNumber("NumRecoverySteps", m.NumRecoverySteps);
-            JsonAddPropertyNumber("CurrentTimeStep", m.CurrentTimeStep);
-            JsonAddPropertyNumber("CurrentMonth", m.CurrentMonth);
-            JsonAddPropertyBoolean("DrawRandomly", m.DrawRandomly);
-            JsonAddPropertyNumber("ExtinctionThreshold", m.ExtinctionThreshold);
-            JsonAddPropertyNumber("MergeDifference", m.MergeDifference);
-            JsonAddPropertyString("GlobalModelTimeStepUnit", m.GlobalModelTimeStepUnit);
-
-            sb.WritePropertyName("_CellList");
-            sb.Formatting = Newtonsoft.Json.Formatting.None;
-            sb.WriteStartArray();
-            m._CellList.ForEach(
-                cell =>
-                {
-                    sb.WriteStartArray();
-                    sb.WriteValue(cell[0]);
-                    sb.WriteValue(cell[1]);
-                    sb.WriteEndArray();
+                    jsonWriter.WriteStartArray();
+                    jsonWriter.WriteValue(cell[0]);
+                    jsonWriter.WriteValue(cell[1]);
+                    jsonWriter.WriteEndArray();
                 });
-            sb.WriteEndArray();
-            sb.Formatting = Newtonsoft.Json.Formatting.Indented;
 
-            JsonAddKVPDoubles("GlobalDiagnosticVariables", m.GlobalDiagnosticVariables);
-            JsonAddPropertyBoolean("RunGridCellsInParallel", m.RunGridCellsInParallel);
-            JsonAddPropertyBoolean("SpecificLocations", m.SpecificLocations);
-            JsonAddKVPStrings("InitialisationFileStrings", m.InitialisationFileStrings);
-            JsonAddKVPStrings("EnvironmentalDataUnits", m.EnvironmentalDataUnits);
-            JsonAddPropertyScenario("HumanNPPScenario", m.HumanNPPScenario);
-            JsonAddPropertyScenario("TemperatureScenario", m.TemperatureScenario);
-            JsonAddPropertyScenario("HarvestingScenario", m.HarvestingScenario);
-            JsonAddPropertyNumber("NextCohortID", m.NextCohortID);
-            JsonAddPropertyNumber("Dispersals", m.Dispersals);
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "GlobalDiagnosticVariables", madingleyModel.GlobalDiagnosticVariables, Madingley.Serialization.Common.Writer.PropertyDouble);
+            Madingley.Serialization.Common.Writer.PropertyBoolean(jsonWriter, "RunGridCellsInParallel", madingleyModel.RunGridCellsInParallel);
+            Madingley.Serialization.Common.Writer.PropertyBoolean(jsonWriter, "SpecificLocations", madingleyModel.SpecificLocations);
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "InitialisationFileStrings", madingleyModel.InitialisationFileStrings, Madingley.Serialization.Common.Writer.PropertyString);
+            Madingley.Serialization.Common.Writer.PropertyKeyValuePairs(jsonWriter, "EnvironmentalDataUnits", madingleyModel.EnvironmentalDataUnits, Madingley.Serialization.Common.Writer.PropertyString);
+            JsonAddPropertyScenario("HumanNPPScenario", madingleyModel.HumanNPPScenario);
+            JsonAddPropertyScenario("TemperatureScenario", madingleyModel.TemperatureScenario);
+            JsonAddPropertyScenario("HarvestingScenario", madingleyModel.HarvestingScenario);
+            Madingley.Serialization.Common.Writer.PropertyLong(jsonWriter, "NextCohortID", madingleyModel.NextCohortID);
+            WriteUInt(jsonWriter, "Dispersals", madingleyModel.Dispersals);
 
-            sb.WriteEndObject();
+            jsonWriter.WriteEndObject();
         }
 #endif
     }

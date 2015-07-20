@@ -10,42 +10,42 @@ namespace Madingley.Serialization
     {
         public static void Serialize(Madingley.Common.ModelState modelState, TextWriter sw)
         {
-            Action<Newtonsoft.Json.JsonTextWriter, Madingley.Common.Cohort> JsonAddPropertyCohort = (sb, value) =>
+            Action<Newtonsoft.Json.JsonWriter, Madingley.Common.Cohort> JsonAddPropertyCohort = (jsonWriter, value) =>
             {
-                sb.WriteStartObject();
-                Common.Writer.PropertyInt(sb, "BirthTimeStep", value.BirthTimeStep);
-                Common.Writer.PropertyInt(sb, "MaturityTimeStep", value.MaturityTimeStep);
-                Common.Writer.PropertyInlineArray(sb, "IDs", value.IDs, Common.Writer.WriteInt);
-                Common.Writer.PropertyDouble(sb, "JuvenileMass", value.JuvenileMass);
-                Common.Writer.PropertyDouble(sb, "AdultMass", value.AdultMass);
-                Common.Writer.PropertyDouble(sb, "IndividualBodyMass", value.IndividualBodyMass);
-                Common.Writer.PropertyDouble(sb, "IndividualReproductivePotentialMass", value.IndividualReproductivePotentialMass);
-                Common.Writer.PropertyDouble(sb, "MaximumAchievedBodyMass", value.MaximumAchievedBodyMass);
-                Common.Writer.PropertyDouble(sb, "Abundance", value.Abundance);
-                Common.Writer.PropertyBoolean(sb, "Merged", value.Merged);
-                Common.Writer.PropertyDouble(sb, "ProportionTimeActive", value.ProportionTimeActive);
-                Common.Writer.PropertyDouble(sb, "TrophicIndex", value.TrophicIndex);
-                Common.Writer.PropertyDouble(sb, "LogOptimalPreyBodySizeRatio", value.LogOptimalPreyBodySizeRatio);
-                sb.WriteEndObject();
+                jsonWriter.WriteStartObject();
+                Common.Writer.PropertyInt(jsonWriter, "BirthTimeStep", value.BirthTimeStep);
+                Common.Writer.PropertyInt(jsonWriter, "MaturityTimeStep", value.MaturityTimeStep);
+                Common.Writer.PropertyInlineArray(jsonWriter, "IDs", value.IDs, Common.Writer.WriteInt);
+                Common.Writer.PropertyDouble(jsonWriter, "JuvenileMass", value.JuvenileMass);
+                Common.Writer.PropertyDouble(jsonWriter, "AdultMass", value.AdultMass);
+                Common.Writer.PropertyDouble(jsonWriter, "IndividualBodyMass", value.IndividualBodyMass);
+                Common.Writer.PropertyDouble(jsonWriter, "IndividualReproductivePotentialMass", value.IndividualReproductivePotentialMass);
+                Common.Writer.PropertyDouble(jsonWriter, "MaximumAchievedBodyMass", value.MaximumAchievedBodyMass);
+                Common.Writer.PropertyDouble(jsonWriter, "Abundance", value.Abundance);
+                Common.Writer.PropertyBoolean(jsonWriter, "Merged", value.Merged);
+                Common.Writer.PropertyDouble(jsonWriter, "ProportionTimeActive", value.ProportionTimeActive);
+                Common.Writer.PropertyDouble(jsonWriter, "TrophicIndex", value.TrophicIndex);
+                Common.Writer.PropertyDouble(jsonWriter, "LogOptimalPreyBodySizeRatio", value.LogOptimalPreyBodySizeRatio);
+                jsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, Madingley.Common.Stock> JsonAddPropertyStock = (sb, value) =>
+            Action<Newtonsoft.Json.JsonWriter, Madingley.Common.Stock> JsonAddPropertyStock = (jsonWriter, value) =>
             {
-                sb.WriteStartObject();
-                Common.Writer.PropertyDouble(sb, "IndividualBodyMass", value.IndividualBodyMass);
-                Common.Writer.PropertyDouble(sb, "TotalBiomass", value.TotalBiomass);
-                sb.WriteEndObject();
+                jsonWriter.WriteStartObject();
+                Common.Writer.PropertyDouble(jsonWriter, "IndividualBodyMass", value.IndividualBodyMass);
+                Common.Writer.PropertyDouble(jsonWriter, "TotalBiomass", value.TotalBiomass);
+                jsonWriter.WriteEndObject();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, Madingley.Common.GridCell> JsonAddPropertyGridCell = (sb, gridCell) =>
+            Action<Newtonsoft.Json.JsonWriter, Madingley.Common.GridCell> JsonAddPropertyGridCell = (jsonWriter, gridCell) =>
             {
-                sb.WriteStartObject();
-                Common.Writer.PropertyDouble(sb, "Latitude", gridCell.Latitude);
-                Common.Writer.PropertyDouble(sb, "Longitude", gridCell.Longitude);
-                Common.Writer.PropertyArray(sb, "Cohorts", gridCell.Cohorts, (jsonTextWriter, value) => Common.Writer.PropertyArrayValue(jsonTextWriter, value, JsonAddPropertyCohort));
-                Common.Writer.PropertyArray(sb, "Stocks", gridCell.Stocks, (jsonTextWriter, value) => Common.Writer.PropertyArrayValue(jsonTextWriter, value, JsonAddPropertyStock));
-                Common.Writer.KeyValuePairArray(sb, "Environment", gridCell.Environment, (jsonTextWriter, key, val) => Common.Writer.PropertyInlineArray(jsonTextWriter, key, val, Common.Writer.WriteDouble));
-                sb.WriteEndObject();
+                jsonWriter.WriteStartObject();
+                Common.Writer.PropertyDouble(jsonWriter, "Latitude", gridCell.Latitude);
+                Common.Writer.PropertyDouble(jsonWriter, "Longitude", gridCell.Longitude);
+                Common.Writer.PropertyArray(jsonWriter, "Cohorts", gridCell.Cohorts, (JsonWriter, value) => Common.Writer.WriteArray(JsonWriter, value, JsonAddPropertyCohort));
+                Common.Writer.PropertyArray(jsonWriter, "Stocks", gridCell.Stocks, (JsonWriter, value) => Common.Writer.WriteArray(JsonWriter, value, JsonAddPropertyStock));
+                Common.Writer.PropertyKeyValuePairs(jsonWriter, "Environment", gridCell.Environment, (JsonWriter, key, val) => Common.Writer.PropertyInlineArray(JsonWriter, key, val, Common.Writer.WriteDouble));
+                jsonWriter.WriteEndObject();
             };
 
             using (var writer = new Newtonsoft.Json.JsonTextWriter(sw))
@@ -54,7 +54,7 @@ namespace Madingley.Serialization
 
                 writer.WriteStartObject();
                 Common.Writer.PropertyInt(writer, "TimestepsComplete", modelState.TimestepsComplete);
-                Common.Writer.KeyValuePairArray(writer, "GlobalDiagnosticVariables", modelState.GlobalDiagnosticVariables, Common.Writer.PropertyDouble);
+                Common.Writer.PropertyKeyValuePairs(writer, "GlobalDiagnosticVariables", modelState.GlobalDiagnosticVariables, Common.Writer.PropertyDouble);
                 Common.Writer.PropertyArray(writer, "GridCells", modelState.GridCells, JsonAddPropertyGridCell);
                 Common.Writer.PropertyLong(writer, "NextCohortID", modelState.NextCohortID);
                 writer.WriteEndObject();
@@ -80,19 +80,19 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "BirthTimeStep": ret.BirthTimeStep = Common.Reader.JsonReadInt(reader); break;
-                        case "MaturityTimeStep": ret.MaturityTimeStep = Common.Reader.JsonReadInt(reader); break;
-                        case "IDs": ret.IDs = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadInt); break;
-                        case "JuvenileMass": ret.JuvenileMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "AdultMass": ret.AdultMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "IndividualReproductivePotentialMass": ret.IndividualReproductivePotentialMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "MaximumAchievedBodyMass": ret.MaximumAchievedBodyMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "Abundance": ret.Abundance = Common.Reader.JsonReadDouble(reader); break;
-                        case "Merged": ret.Merged = Common.Reader.JsonReadBool(reader); break;
-                        case "ProportionTimeActive": ret.ProportionTimeActive = Common.Reader.JsonReadDouble(reader); break;
-                        case "TrophicIndex": ret.TrophicIndex = Common.Reader.JsonReadDouble(reader); break;
-                        case "LogOptimalPreyBodySizeRatio": ret.LogOptimalPreyBodySizeRatio = Common.Reader.JsonReadDouble(reader); break;
+                        case "BirthTimeStep": ret.BirthTimeStep = Common.Reader.ReadInt(reader); break;
+                        case "MaturityTimeStep": ret.MaturityTimeStep = Common.Reader.ReadInt(reader); break;
+                        case "IDs": ret.IDs = Common.Reader.ReadArray(reader, Common.Reader.ReadInt); break;
+                        case "JuvenileMass": ret.JuvenileMass = Common.Reader.ReadDouble(reader); break;
+                        case "AdultMass": ret.AdultMass = Common.Reader.ReadDouble(reader); break;
+                        case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.ReadDouble(reader); break;
+                        case "IndividualReproductivePotentialMass": ret.IndividualReproductivePotentialMass = Common.Reader.ReadDouble(reader); break;
+                        case "MaximumAchievedBodyMass": ret.MaximumAchievedBodyMass = Common.Reader.ReadDouble(reader); break;
+                        case "Abundance": ret.Abundance = Common.Reader.ReadDouble(reader); break;
+                        case "Merged": ret.Merged = Common.Reader.ReadBoolean(reader); break;
+                        case "ProportionTimeActive": ret.ProportionTimeActive = Common.Reader.ReadDouble(reader); break;
+                        case "TrophicIndex": ret.TrophicIndex = Common.Reader.ReadDouble(reader); break;
+                        case "LogOptimalPreyBodySizeRatio": ret.LogOptimalPreyBodySizeRatio = Common.Reader.ReadDouble(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }
@@ -117,8 +117,8 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.JsonReadDouble(reader); break;
-                        case "TotalBiomass": ret.TotalBiomass = Common.Reader.JsonReadDouble(reader); break;
+                        case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.ReadDouble(reader); break;
+                        case "TotalBiomass": ret.TotalBiomass = Common.Reader.ReadDouble(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }
@@ -140,7 +140,7 @@ namespace Madingley.Serialization
 
                     var key = Convert.ToString(reader.Value);
                     reader.Read();
-                    var value = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadDouble);
+                    var value = Common.Reader.ReadArray(reader, Common.Reader.ReadDouble);
 
                     ret.Add(key, value.ToArray());
                 }
@@ -165,10 +165,10 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "Latitude": ret.Latitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "Longitude": ret.Longitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "Cohorts": ret.Cohorts = Common.Reader.JsonReadArray(reader, r => Common.Reader.JsonReadArray(r, JsonReadCohort)).ToList(); break;
-                        case "Stocks": ret.Stocks = Common.Reader.JsonReadArray(reader, r => Common.Reader.JsonReadArray(r, JsonReadStock)).ToList(); break;
+                        case "Latitude": ret.Latitude = Common.Reader.ReadDouble(reader); break;
+                        case "Longitude": ret.Longitude = Common.Reader.ReadDouble(reader); break;
+                        case "Cohorts": ret.Cohorts = Common.Reader.ReadArray(reader, r => Common.Reader.ReadArray(r, JsonReadCohort)).ToList(); break;
+                        case "Stocks": ret.Stocks = Common.Reader.ReadArray(reader, r => Common.Reader.ReadArray(r, JsonReadStock)).ToList(); break;
                         case "Environment": ret.Environment = JsonReadCellEnvironment(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
@@ -195,10 +195,10 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "TimestepsComplete": modelState.TimestepsComplete = Common.Reader.JsonReadInt(reader); break;
-                        case "GlobalDiagnosticVariables": modelState.GlobalDiagnosticVariables = Common.Reader.JsonReadKVPs(reader, Common.Reader.JsonReadDouble); break;
-                        case "GridCells": modelState.GridCells = Common.Reader.JsonReadArray(reader, JsonReadGridCell).ToList(); break;
-                        case "NextCohortID": modelState.NextCohortID = Common.Reader.JsonReadLong(reader); break;
+                        case "TimestepsComplete": modelState.TimestepsComplete = Common.Reader.ReadInt(reader); break;
+                        case "GlobalDiagnosticVariables": modelState.GlobalDiagnosticVariables = Common.Reader.ReadKeyValuePairs(reader, Common.Reader.ReadDouble); break;
+                        case "GridCells": modelState.GridCells = Common.Reader.ReadArray(reader, JsonReadGridCell).ToList(); break;
+                        case "NextCohortID": modelState.NextCohortID = Common.Reader.ReadLong(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }

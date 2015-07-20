@@ -10,17 +10,17 @@ namespace Madingley.Serialization
     {
         public static void Serialize(Madingley.Common.Environment environment, TextWriter sw)
         {
-            Action<Newtonsoft.Json.JsonTextWriter, Tuple<int, int>> JsonAddPropertyFocusCell = (sb, value) =>
+            Action<Newtonsoft.Json.JsonWriter, Tuple<int, int>> JsonAddPropertyFocusCell = (jsonWriter, value) =>
             {
-                sb.WriteStartArray();
-                Common.Writer.WriteInt(sb, value.Item1);
-                Common.Writer.WriteInt(sb, value.Item2);
-                sb.WriteEndArray();
+                jsonWriter.WriteStartArray();
+                Common.Writer.WriteInt(jsonWriter, value.Item1);
+                Common.Writer.WriteInt(jsonWriter, value.Item2);
+                jsonWriter.WriteEndArray();
             };
 
-            Action<Newtonsoft.Json.JsonTextWriter, IEnumerable<KeyValuePair<string, double[]>>> JsonAddPropertyCellEnvironment = (sb, value) =>
+            Action<Newtonsoft.Json.JsonWriter, IEnumerable<KeyValuePair<string, double[]>>> JsonAddPropertyCellEnvironment = (jsonWriter, value) =>
             {
-                Common.Writer.KeyValuePairArrayValue(sb, value, (jsonTextWriter, key, val) => Common.Writer.PropertyInlineArray(jsonTextWriter, key, val, Common.Writer.WriteDouble));
+                Common.Writer.WriteKeyValuePairs(jsonWriter, value, (JsonWriter, key, val) => Common.Writer.PropertyInlineArray(JsonWriter, key, val, Common.Writer.WriteDouble));
             };
 
             using (var writer = new Newtonsoft.Json.JsonTextWriter(sw))
@@ -33,7 +33,7 @@ namespace Madingley.Serialization
                 Common.Writer.PropertyDouble(writer, "TopLatitude", environment.TopLatitude);
                 Common.Writer.PropertyDouble(writer, "LeftmostLongitude", environment.LeftmostLongitude);
                 Common.Writer.PropertyDouble(writer, "RightmostLongitude", environment.RightmostLongitude);
-                Common.Writer.KeyValuePairArray(writer, "Units", environment.Units, Common.Writer.PropertyString);
+                Common.Writer.PropertyKeyValuePairs(writer, "Units", environment.Units, Common.Writer.PropertyString);
                 Common.Writer.PropertyBoolean(writer, "SpecificLocations", environment.SpecificLocations);
                 Common.Writer.PropertyInlineArray(writer, "FocusCells", environment.FocusCells, JsonAddPropertyFocusCell);
                 Common.Writer.PropertyArray(writer, "CellEnvironment", environment.CellEnvironment, JsonAddPropertyCellEnvironment);
@@ -49,10 +49,10 @@ namespace Madingley.Serialization
                 Debug.Assert(reader.TokenType == Newtonsoft.Json.JsonToken.StartArray);
 
                 reader.Read();
-                var item1 = Common.Reader.JsonReadInt(reader);
+                var item1 = Common.Reader.ReadInt(reader);
 
                 reader.Read();
-                var item2 = Common.Reader.JsonReadInt(reader);
+                var item2 = Common.Reader.ReadInt(reader);
 
                 reader.Read();
                 Debug.Assert(reader.TokenType == Newtonsoft.Json.JsonToken.EndArray);
@@ -74,7 +74,7 @@ namespace Madingley.Serialization
 
                     var key = Convert.ToString(reader.Value);
                     reader.Read();
-                    var value = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadDouble);
+                    var value = Common.Reader.ReadArray(reader, Common.Reader.ReadDouble);
 
                     ret.Add(key, value.ToArray());
                 }
@@ -100,16 +100,16 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
-                        case "CellSize": environment.CellSize = Common.Reader.JsonReadDouble(reader); break;
-                        case "BottomLatitude": environment.BottomLatitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "TopLatitude": environment.TopLatitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "LeftmostLongitude": environment.LeftmostLongitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "RightmostLongitude": environment.RightmostLongitude = Common.Reader.JsonReadDouble(reader); break;
-                        case "Units": environment.Units = Common.Reader.JsonReadKVPs(reader, Common.Reader.JsonReadString); break;
-                        case "SpecificLocations": environment.SpecificLocations = Common.Reader.JsonReadBool(reader); break;
-                        case "FocusCells": environment.FocusCells = Common.Reader.JsonReadArray(reader, JsonReadFocusCell).ToList(); break;
-                        case "CellEnvironment": environment.CellEnvironment = Common.Reader.JsonReadArray(reader, JsonReadCellEnvironment).ToList(); break;
-                        case "FileNames": environment.FileNames = Common.Reader.JsonReadArray(reader, Common.Reader.JsonReadString).ToList(); break;
+                        case "CellSize": environment.CellSize = Common.Reader.ReadDouble(reader); break;
+                        case "BottomLatitude": environment.BottomLatitude = Common.Reader.ReadDouble(reader); break;
+                        case "TopLatitude": environment.TopLatitude = Common.Reader.ReadDouble(reader); break;
+                        case "LeftmostLongitude": environment.LeftmostLongitude = Common.Reader.ReadDouble(reader); break;
+                        case "RightmostLongitude": environment.RightmostLongitude = Common.Reader.ReadDouble(reader); break;
+                        case "Units": environment.Units = Common.Reader.ReadKeyValuePairs(reader, Common.Reader.ReadString); break;
+                        case "SpecificLocations": environment.SpecificLocations = Common.Reader.ReadBoolean(reader); break;
+                        case "FocusCells": environment.FocusCells = Common.Reader.ReadArray(reader, JsonReadFocusCell).ToList(); break;
+                        case "CellEnvironment": environment.CellEnvironment = Common.Reader.ReadArray(reader, JsonReadCellEnvironment).ToList(); break;
+                        case "FileNames": environment.FileNames = Common.Reader.ReadArray(reader, Common.Reader.ReadString).ToList(); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));
                     }
                 }
