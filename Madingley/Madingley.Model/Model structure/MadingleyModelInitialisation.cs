@@ -5,7 +5,6 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -66,7 +65,6 @@ namespace Madingley
             set { _ImpactTimeSteps = value; }
         }
 
-
         /// <summary>
         /// For scenarios with temporary impacts, the number of time steps to apply the impact for
         /// </summary>
@@ -94,7 +92,6 @@ namespace Madingley
             get { return _InstantaneousTimeStep; }
             set { _InstantaneousTimeStep = value; }
         }
-
 
         /// <summary>
         /// For scenarios with instantaneous impacts, the number of time steps to apply the impact for
@@ -175,7 +172,6 @@ namespace Madingley
             set { _RightmostLongitude = value; }
         }
 
-
         /// <summary>
         /// Whether to run the model for different grid cells in parallel
         /// </summary>
@@ -188,7 +184,6 @@ namespace Madingley
             get { return _RunInParallel; }
             set { _RunInParallel = value; }
         }
-
 
         /// <summary>
         /// Whether to run the model for different grid cells in parallel
@@ -228,7 +223,6 @@ namespace Madingley
             get { return _RunRealm; }
             set { _RunRealm = value; }
         }
-
 
         /// <summary>
         /// Whether to draw cohort properties randomly when seeding them, and whether cohorts will undergo ecological processes in a random order
@@ -283,7 +277,6 @@ namespace Madingley
             get { return _MaxNumberOfCohorts; }
             set { _MaxNumberOfCohorts = value; }
         }
-
 
         /// <summary>
         /// Whether to run only dispersal (i.e. turn all other ecological processes off, and set dispersal probability to one temporarily)
@@ -435,7 +428,6 @@ namespace Madingley
             set { _ImpactAll = value; }
         }
 
-
         private List<uint> _OutputStateTimestep = new List<uint>();
 
         public List<uint> OutputStateTimestep
@@ -500,7 +492,4 @@ namespace Madingley
         }
 
     }
-
-
-
 }

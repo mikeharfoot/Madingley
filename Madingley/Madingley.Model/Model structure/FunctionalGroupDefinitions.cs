@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -24,11 +23,11 @@ namespace Madingley
         /// <summary>
         /// A sorted list of all of the properties of functional groups and their values
         /// </summary>
-        private SortedList<string,double[]> _FunctionalGroupProperties;
+        private SortedList<string, double[]> _FunctionalGroupProperties;
         /// <summary>
         /// Get and set the sorted list of all of the properties of functional groups and their values
         /// </summary>
-        public SortedList<string,double[]> FunctionalGroupProperties
+        public SortedList<string, double[]> FunctionalGroupProperties
         {
             get { return _FunctionalGroupProperties; }
             set { _FunctionalGroupProperties = value; }
@@ -97,12 +96,11 @@ namespace Madingley
 
             foreach (var key in temp.Keys)
             {
-                if(!TraitValues.Contains(key)) TraitValues.Add(key);
+                if (!TraitValues.Contains(key)) TraitValues.Add(key);
             }
 
             return TraitValues.ToArray();
         }
-
 
         /// <summary>
         /// Returns a string of Trait Names associated with the specified search trait for all functional group index value
@@ -122,7 +120,7 @@ namespace Madingley
         /// <returns>The value of the specified trait for the specified functional group</returns>
         public string GetTraitNames(string searchTrait, int functionalGroupIndex)
         {
-             return TraitLookupFromIndex[searchTrait.ToLower()].GetValue(functionalGroupIndex).ToString();   
+            return TraitLookupFromIndex[searchTrait.ToLower()].GetValue(functionalGroupIndex).ToString();
         }
 
         /// <summary>
@@ -152,8 +150,6 @@ namespace Madingley
             return TraitNames;
         }
 
-
-
         /// <summary>
         /// Get the functional group indices that have specified values of specified traits
         /// </summary>
@@ -168,9 +164,9 @@ namespace Madingley
 
             // List to hold the functional group indices for each trait-trait value pair
             List<int[]> IndexList = new List<int[]>();
-            
+
             int[] TempIndexList;
-            
+
             //Sorted dictionary to hold the trait value index list sorted dictionary from the lookup table
             SortedDictionary<string, int[]> TraitIndexList;
 
@@ -245,7 +241,7 @@ namespace Madingley
         /// <returns>Int array containing functional group indices corresponding to the given search conditions</returns>
         public int[] GetFunctionalGroupIndex(string searchTraits, string searchTraitValues, Boolean intersection)
         {
-            
+
             //List to hold the index vectors for each trait trait value pair
             int[] IndexList;
 

@@ -11,7 +11,7 @@ namespace Madingley
     /// <summary>
     /// A revised version of the herbivory process, written November 2011
     /// </summary>
-    public partial class RevisedHerbivory: IEatingImplementation
+    public partial class RevisedHerbivory : IEatingImplementation
     {
         /// <summary>
         /// The time unit associated with this herbivory implementation and its parameters
@@ -52,9 +52,8 @@ namespace Madingley
         /// <summary>
         /// Get the scalar of the relationship between handling time and the function of herbivore mass for the marine realm
         /// </summary>
-        public  double HandlingTimeScalarMarine
+        public double HandlingTimeScalarMarine
         { get { return _HandlingTimeScalarMarine; } }
-        
 
         /// <summary>
         /// The exponent applied to herbivore mass in the handling time relationship for the terrestrial realm
@@ -75,7 +74,6 @@ namespace Madingley
         /// </summary>
         public double HandlingTimeExponentMarine
         { get { return _HandlingTimeExponentMarine; } }
-        
 
         /// <summary>
         /// Reference mass of plant matter for calculating handling times
@@ -84,8 +82,8 @@ namespace Madingley
         /// <summary>
         /// Get the reference mass of plant matter for calculating handling times
         /// </summary>
-        public double ReferenceMass {  get { return _ReferenceMass; } }
-        
+        public double ReferenceMass { get { return _ReferenceMass; } }
+
         /// <summary>
         /// The maximum herbivory rate for a herbivore of 1 g
         /// </summary>
@@ -104,7 +102,7 @@ namespace Madingley
         /// Get and set the exponent to apply to body mass in the relationship between body mass and herbivory rate
         /// </summary>
         public double HerbivoryRateMassExponent
-        {   get { return _HerbivoryRateMassExponent; }      }
+        { get { return _HerbivoryRateMassExponent; } }
 
         /// <summary>
         /// The exponent applied to prey density when calculating attack rates for organisms in the terrestrial realm
@@ -114,7 +112,7 @@ namespace Madingley
         /// Get and set the exponent applied to prey density when calculating attack rates for organisms in the terrestrial realm
         /// </summary>
         public double AttackRateExponentTerrestrial
-        {    get { return _AttackRateExponentTerrestrial; }  }
+        { get { return _AttackRateExponentTerrestrial; } }
 
         /// <summary>
         /// The exponent applied to prey density when calculating attack rates for organisms in the marine realm
@@ -125,12 +123,10 @@ namespace Madingley
         /// Get and set the exponent applied to prey density when calculating attack rates for organisms in the marine realm
         /// </summary>
         public double AttackRateExponentMarine
-        {  get { return _AttackRateExponentMarine; }  }
+        { get { return _AttackRateExponentMarine; } }
 
         // Variable to hold the instantaneous fraction of the autotroph stock biomass that is eaten
         double InstantFractionEaten;
-
-
         public void InitialiseParametersHerbivory()
         {
             _TimeUnitImplementation =
@@ -145,7 +141,6 @@ namespace Madingley
             _AttackRateExponentMarine = EcologicalParameters.Parameters["Herbivory.RevisedHerbivory.Marine.AttackRateExponent"];
             _ReferenceMass = EcologicalParameters.Parameters["Herbivory.RevisedHerbivory.HandlingTimeReferenceMass"];
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -167,8 +162,6 @@ namespace Madingley
             sw.WriteLine("Herbivory\tHerbivoryRateMassExponent\t" + Convert.ToString(HerbivoryRateMassExponent));
         }
 
-
-
         /// <summary>
         /// Calculates the potential biomass of an autotroph stock eaten by a herbivore cohort (terrestrial)
         /// </summary>
@@ -182,7 +175,7 @@ namespace Madingley
 
             // Calculate autotroph biomass density per hectare
             double AutotrophBiomassDensity = autotrophBiomass / _CellAreaHectares;
-            
+
             // Calculate the expected autotroph biomass eaten
             return IndividualHerbivoryRate * Math.Pow(AutotrophBiomassDensity, _AttackRateExponentTerrestrial);
         }
@@ -204,7 +197,6 @@ namespace Madingley
             // Calculate the expected autotroph biomass eaten
             return IndividualHerbivoryRate * Math.Pow(AutotrophBiomassDensity, _AttackRateExponentMarine);
         }
-
 
         /// <summary>
         /// Calculate the herbivory rate of an individual herbivore per unit autotroph mass-density per hectare
@@ -228,7 +220,6 @@ namespace Madingley
             return _HandlingTimeScalarMarine * Math.Pow((_ReferenceMass / herbivoreIndividualMass), _HandlingTimeExponentMarine);
         }
 
-
         /// <summary>
         /// Calculate the time taken for a herbivore in the terrestrial realm to handle unit mass (1 g) of autotroph mass
         /// </summary>
@@ -236,7 +227,7 @@ namespace Madingley
         /// <returns>The time taken for a herbivore to handle unit mass (1 g) of autotroph mass</returns>
         private double CalculateHandlingTimeTerrestrial(double herbivoreIndividualMass)
         {
-               return _HandlingTimeScalarTerrestrial * Math.Pow((_ReferenceMass / herbivoreIndividualMass), _HandlingTimeExponentTerrestrial);
+            return _HandlingTimeScalarTerrestrial * Math.Pow((_ReferenceMass / herbivoreIndividualMass), _HandlingTimeExponentTerrestrial);
         }
 
         /// <summary>
@@ -260,7 +251,7 @@ namespace Madingley
                 // Set the instantaneous fraction of the autotroph stock eaten to zero
                 InstantFractionEaten = 0.0;
             }
-            
+
             // Return the total  biomass of the autotroph stock eaten
             return autotrophBiomass * (1 - Math.Exp(-InstantFractionEaten * _DeltaT * _ProportionOfTimeEating));
         }

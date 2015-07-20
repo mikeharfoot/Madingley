@@ -20,7 +20,7 @@ namespace Madingley
         /// <summary>
         /// Get the conversion ratio for phytoplankton from grams carbon to grams wet weight
         /// </summary>
-        public double PhytoplanktonConversionRatio { get {return _PhytoplanktonConversionRatio; } }
+        public double PhytoplanktonConversionRatio { get { return _PhytoplanktonConversionRatio; } }
 
         /// <summary>
         /// Factor to convert NPP from units per m^2 to units per km^2
@@ -55,9 +55,9 @@ namespace Madingley
         /// <param name="outputDetail">The level of output detail to use for the outputs</param>
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
         /// <param name="currentMonth">The current month in the model run</param>
-        public void ConvertNPPToAutotroph(SortedList<string,double[]> cellEnvironment, GridCellStockHandler gridCellStockHandler, int[] 
+        public void ConvertNPPToAutotroph(SortedList<string, double[]> cellEnvironment, GridCellStockHandler gridCellStockHandler, int[]
             actingStock, string terrestrialNPPUnits, string oceanicNPPUnits, uint currentTimestep, string GlobalModelTimeStepUnit,
-            ProcessTracker trackProcesses, GlobalProcessTracker globalTracker, string outputDetail, bool specificLocations,uint currentMonth)
+            ProcessTracker trackProcesses, GlobalProcessTracker globalTracker, string outputDetail, bool specificLocations, uint currentMonth)
         {
 
             // Get NPP from the cell environment
@@ -93,7 +93,7 @@ namespace Madingley
 
                 if (globalTracker.TrackProcesses)
                 {
-                    globalTracker.RecordNPP((uint)cellEnvironment["LatIndex"][0], (uint)cellEnvironment["LonIndex"][0],(uint)actingStock[0],
+                    globalTracker.RecordNPP((uint)cellEnvironment["LatIndex"][0], (uint)cellEnvironment["LonIndex"][0], (uint)actingStock[0],
                             NPP / cellEnvironment["Cell Area"][0]);
                 }
 

@@ -17,8 +17,8 @@ namespace Madingley
             set { _ModelGridCatchTotal = value; }
         }
 
-        private double[,,] _ModelGridCatch;
-        public double[,,] ModelGridCatch
+        private double[, ,] _ModelGridCatch;
+        public double[, ,] ModelGridCatch
         {
             get { return _ModelGridCatch; }
             set { _ModelGridCatch = value; }
@@ -31,8 +31,8 @@ namespace Madingley
             set { _CatchTotal = value; }
         }
 
-        private double[,,] _CatchBinned;
-        public double[,,] CatchBinned
+        private double[, ,] _CatchBinned;
+        public double[, ,] CatchBinned
         {
             get { return _CatchBinned; }
             set { _CatchBinned = value; }
@@ -69,15 +69,11 @@ namespace Madingley
             get { return _UnknownMassBinIndex; }
             set { _UnknownMassBinIndex = value; }
         }
-        
 
         public List<string>[,] UnknownTaxa;
 
         //Instance of class to hold the fish traits data
         FishTraits Traits;
-
-        
-
 
         public InputCatchData(float[] modelLats, float[] modelLons, float cellSize)
         {
@@ -85,13 +81,12 @@ namespace Madingley
             StreamReader r = new StreamReader("input\\data\\Fisheries\\catchrateyr2000.csv");
 
             //Read trait data
-             Traits = new FishTraits();
+            Traits = new FishTraits();
             //Retrieve the Max Mass range from the trait data
             var temp = Traits.MassRange();
             double[] MaxMassRange = temp.Item1;
             string[] MaxMassRangeSp = temp.Item2;
-            
-            
+
             //Calculate a set of mass bins to be used for removing fisheries catches from binned Madingley biomasses 
             //TO DO: make these bins flexible and user defined
             int MinMassbinMax = Convert.ToInt32(Math.Ceiling(Math.Log10(MaxMassRange[0])));
@@ -100,18 +95,17 @@ namespace Madingley
             int NumBins = (MaxMassbinMax - MinMassbinMax) + 1;
 
             _MassBins = new double[NumBins];
-            for (int i = 0; i < NumBins-1; i++)
+            for (int i = 0; i < NumBins - 1; i++)
             {
-                _MassBins[i] = Math.Pow(10,MinMassbinMax + i);
+                _MassBins[i] = Math.Pow(10, MinMassbinMax + i);
             }
             _UnknownMassBinIndex = NumBins - 1;
-
 
             string l;
             char[] comma = ",".ToCharArray();
 
             string[] f;
-            
+
             List<int> year_ht = new List<int>();
             List<int> cell_ht = new List<int>();
             List<double> catchRate_ht = new List<Double>();
@@ -123,8 +117,8 @@ namespace Madingley
             List<string> taxa = new List<string>();
 
             //Read the Higher Taxonomy file
-            while(! r_ht.EndOfStream)
-            {                
+            while (!r_ht.EndOfStream)
+            {
                 l = r_ht.ReadLine();
                 // Split fields by commas
                 f = l.Split(comma);
@@ -170,7 +164,6 @@ namespace Madingley
                 }
             }
 
-
             _CatchLats = new float[_CatchNumLats];
             _CatchLons = new float[_CatchNumLons];
 
@@ -202,7 +195,7 @@ namespace Madingley
                 _CatchBinned[Index[0], Index[1], mb] += catchRate[i] * 1E6;
 
                 //If the taxa does not have trait data then list this taxa
-                if(mb == UnknownMassBinIndex) UnknownTaxa[Index[0], Index[1]].Add(taxa[i]);
+                if (mb == UnknownMassBinIndex) UnknownTaxa[Index[0], Index[1]].Add(taxa[i]);
             }
             //Allocate the higher taxa level catch to cells and mass bins
             for (int i = 0; i < catchRate_ht.Count; i++)
@@ -228,18 +221,15 @@ namespace Madingley
             for (int i = 0; i < _CatchTotal.GetLength(0); i++)
             {
                 for (int j = 0; j < _CatchTotal.GetLength(1); j++)
-			    {
-			       CumulativeCatch += _CatchTotal[i,j];
-			    }
+                {
+                    CumulativeCatch += _CatchTotal[i, j];
+                }
             }
 
             Console.WriteLine(CumulativeCatch);
 
-            AggregateCatchData(modelLats,modelLons, cellSize);
-
-
+            AggregateCatchData(modelLats, modelLons, cellSize);
         }
-
 
         private int AssignCatchToMassBin(string t)
         {
@@ -260,16 +250,14 @@ namespace Madingley
             return (mb);
         }
 
-        private void AggregateCatchData(float[] modelLats,float[] modelLons, float cellSize)
+        private void AggregateCatchData(float[] modelLats, float[] modelLons, float cellSize)
         {
-
             int NumModelLats = modelLats.Length;
             int NumModelLons = modelLons.Length;
 
-            
             //Dimension the model grid catch data
-            _ModelGridCatchTotal = new double[NumModelLats,NumModelLons];
-            _ModelGridCatch = new double[NumModelLats, NumModelLons,MassBins.Length];
+            _ModelGridCatchTotal = new double[NumModelLats, NumModelLons];
+            _ModelGridCatch = new double[NumModelLats, NumModelLons, MassBins.Length];
 
             List<int> LatIndexes;
             List<int> LonIndexes;
@@ -304,7 +292,6 @@ namespace Madingley
 
                     CumulativeArea = 0.0;
 
-
                     //Calculate the total catch for the model grid cell
                     //Original data was in units of t km-2,
                     // Above catch rate is multiplied by 1E6 to convert to g.
@@ -313,7 +300,7 @@ namespace Madingley
                     foreach (int ci in LatIndexes)
                     {
                         foreach (int cj in LonIndexes)
-	                    {
+                        {
                             Area = Utilities.CalculateGridCellArea(_CatchLats[ci], 0.5, 0.5);
                             _ModelGridCatchTotal[i, j] += _CatchTotal[ci, cj] * Area;
                             CumulativeArea += Area;
@@ -321,7 +308,7 @@ namespace Madingley
                             {
                                 _ModelGridCatch[i, j, mb] += _CatchBinned[ci, cj, mb] * Area;
                             }
-	                    }
+                        }
                     }
 
                     //_ModelGridCatch[i, j] /= CumulativeArea;
@@ -330,7 +317,7 @@ namespace Madingley
 
             }
 
-        } 
+        }
 
         private int[] IndexLookup(int i)
         {

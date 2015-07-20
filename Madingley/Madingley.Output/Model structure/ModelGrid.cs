@@ -12,7 +12,6 @@ using Timing;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -33,19 +32,18 @@ namespace Madingley
             get { return _GlobalMissingValue; }
         }
 
-
         // Field to hold minimum latitude of the grid
-        private float _MinLatitude;    
+        private float _MinLatitude;
 
         // Field to hold minumum longitude of the grid
         private float _MinLongitude;
-        
+
         // Field to hold maximum latitude of the grid
         private float _MaxLatitude;
-        
+
         // Field to hold maximum longitude of the grid
         private float _MaxLongitude;
-        
+
         // Field to hold latitude resolution of each grid cell
         private float _LatCellSize;
         /// <summary>
@@ -55,7 +53,7 @@ namespace Madingley
         {
             get { return _LatCellSize; }
         }
-        
+
         // Field to hold longitude resolution of each grid cell
         private float _LonCellSize;
         /// <summary>
@@ -75,7 +73,7 @@ namespace Madingley
         /// </summary>
         public int GridCellRarefaction
         { get { return _GridCellRarefaction; } }
-        
+
         /// <summary>
         /// The number of latitudinal cells in the model grid
         /// </summary>
@@ -87,7 +85,7 @@ namespace Madingley
         {
             get { return _NumLatCells; }
         }
-        
+
         /// <summary>
         /// The number of longitudinal cells in the model grid
         /// </summary>
@@ -99,7 +97,7 @@ namespace Madingley
         {
             get { return _NumLonCells; }
         }
-        
+
         /// <summary>
         /// The bottom (southern-most) latitude of each row of grid cells
         /// </summary>
@@ -111,7 +109,7 @@ namespace Madingley
         {
             get { return _Lats; }
         }
-        
+
         /// <summary>
         /// The left (western-most) longitude of each column of grid cells
         /// </summary>
@@ -173,7 +171,7 @@ namespace Madingley
             FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics, Boolean tracking, 
             Boolean specificLocations, Boolean runInParallel)
 #endif
-        { 
+        {
             // CURRENTLY DEFINING MODEL CELLS BY BOTTOM LEFT CORNER
             _MinLatitude = minLat;
             _MinLongitude = minLon;
@@ -185,7 +183,6 @@ namespace Madingley
 
             // Check to see if the number of grid cells is an integer
             Debug.Assert((((_MaxLatitude - _MinLatitude) % _LatCellSize) == 0), "Error: number of grid cells is non-integer: check cell size");
-
 
             _NumLatCells = (UInt32)((_MaxLatitude - _MinLatitude) / _LatCellSize);
             _NumLonCells = (UInt32)((_MaxLongitude - _MinLongitude) / _LonCellSize);
@@ -237,7 +234,7 @@ namespace Madingley
         /// <returns>The value of the environmental layer, or a missing value if the environmental layer does not exist</returns>
         public double GetEnviroLayer(string variableName, uint timeInterval, uint latCellIndex, uint lonCellIndex, out bool variableExists)
         {
-            return InternalGrid[latCellIndex, lonCellIndex].GetEnviroLayer(variableName,timeInterval, out variableExists);
+            return InternalGrid[latCellIndex, lonCellIndex].GetEnviroLayer(variableName, timeInterval, out variableExists);
         }
 
         /// <summary>
@@ -251,7 +248,7 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model intialisation</param>
         /// <returns>Summed value of variable over whole grid</returns>
         /// <todo>Overload to work with vector and array state variables</todo>
-        public double StateVariableGridTotal(string variableName, string traitValue, int[] functionalGroups, List<uint[]> cellIndices, 
+        public double StateVariableGridTotal(string variableName, string traitValue, int[] functionalGroups, List<uint[]> cellIndices,
             string stateVariableType, MadingleyModelInitialisation initialisation)
         {
 
@@ -279,7 +276,7 @@ namespace Madingley
         /// <param name="stateVariableType">The type of entity to return the state variable for: 'stock' or 'cohort'</param>
         /// <param name="modelInitialisation">The Madingley Model initialisation</param>
         /// <returns>The state variable for specified functional groups of specified entity types in a specified grid cell</returns>
-        public double GetStateVariable(string variableName, string traitValue, int[] functionalGroups, uint latCellIndex, uint lonCellIndex, 
+        public double GetStateVariable(string variableName, string traitValue, int[] functionalGroups, uint latCellIndex, uint lonCellIndex,
             string stateVariableType, MadingleyModelInitialisation modelInitialisation)
         {
 
@@ -288,7 +285,7 @@ namespace Madingley
             switch (stateVariableType.ToLower())
             {
                 case "cohort":
-                    
+
                     GridCellCohortHandler TempCohorts = InternalGrid[latCellIndex, lonCellIndex].GridCellCohorts;
 
                     switch (variableName.ToLower())
@@ -311,7 +308,7 @@ namespace Madingley
                                     foreach (var item in TempCohorts[f])
                                     {
                                         if (item.IndividualBodyMass <= modelInitialisation.PlanktonDispersalThreshold)
-                                        returnValue += ((item.IndividualBodyMass + item.IndividualReproductivePotentialMass) * item.CohortAbundance);
+                                            returnValue += ((item.IndividualBodyMass + item.IndividualReproductivePotentialMass) * item.CohortAbundance);
                                     }
                                 }
                             }
@@ -335,7 +332,7 @@ namespace Madingley
                                     foreach (var item in TempCohorts[f])
                                     {
                                         if (item.IndividualBodyMass <= modelInitialisation.PlanktonDispersalThreshold)
-                                        returnValue += item.CohortAbundance;
+                                            returnValue += item.CohortAbundance;
                                     }
                                 }
                             }
@@ -373,12 +370,6 @@ namespace Madingley
 
             }
 
-            
-
-
-
-
-
             return returnValue;
         }
 
@@ -393,7 +384,7 @@ namespace Madingley
         /// <param name="stateVariableType">The type of entity to return the state variable for: 'stock' or 'cohort'</param>
         /// <param name="modelInitialisation">The Madingley Model initialisation</param>
         /// <returns>The state variable density for specified functional groups of specified entity types in a specified grid cell</returns>
-        public double GetStateVariableDensity(string variableName, string traitValue, int[] functionalGroups, uint latCellIndex, 
+        public double GetStateVariableDensity(string variableName, string traitValue, int[] functionalGroups, uint latCellIndex,
             uint lonCellIndex, string stateVariableType, MadingleyModelInitialisation modelInitialisation)
         {
 
@@ -487,7 +478,6 @@ namespace Madingley
 
             }
 
-
             return returnValue / (InternalGrid[latCellIndex, lonCellIndex].CellEnvironment["Cell Area"][0]);
         }
 
@@ -501,7 +491,7 @@ namespace Madingley
         /// <param name="stateVariableType">A string indicating the type of state variable; 'cohort' or 'stock'</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <returns>Array of state variable values for each grid cell</returns>
-        public double[,] GetStateVariableGrid(string variableName, string traitValue, int[] functionalGroups, List<uint[]> cellIndices, 
+        public double[,] GetStateVariableGrid(string variableName, string traitValue, int[] functionalGroups, List<uint[]> cellIndices,
             string stateVariableType, MadingleyModelInitialisation initialisation)
         {
             double[,] TempStateVariable = new double[this.NumLatCells, this.NumLonCells];
@@ -525,7 +515,7 @@ namespace Madingley
                                         {
                                             foreach (Cohort item in InternalGrid[cellIndices[ii][0], cellIndices[ii][1]].GridCellCohorts[functionalGroups[nn]].ToArray())
                                             {
-                                                    TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] += ((item.IndividualBodyMass + item.IndividualReproductivePotentialMass) * item.CohortAbundance);
+                                                TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] += ((item.IndividualBodyMass + item.IndividualReproductivePotentialMass) * item.CohortAbundance);
                                             }
                                         }
                                     }
@@ -573,7 +563,7 @@ namespace Madingley
                         {
                             Debug.Fail("Variable 'state variable type' must be either 'stock' 'or 'cohort'");
                         }
-                        
+
                     }
                     break;
                 case "abundance":
@@ -643,7 +633,7 @@ namespace Madingley
         /// <param name="stateVariableType">A string indicating the type of state variable; 'cohort' or 'stock'</param>
         /// <param name="initialisation">The Madingley Model intialisation</param>
         /// <returns>Array of log(state variable values +1 ) for each grid cell</returns>
-        public double[,] GetStateVariableGridLogDensityPerSqKm(string variableName, string traitValue, int[] functionalGroups, 
+        public double[,] GetStateVariableGridLogDensityPerSqKm(string variableName, string traitValue, int[] functionalGroups,
             List<uint[]> cellIndices, string stateVariableType, MadingleyModelInitialisation initialisation)
         {
 
@@ -656,7 +646,7 @@ namespace Madingley
             {
                 CellArea = GetCellEnvironment(cellIndices[ii][0], cellIndices[ii][1])["Cell Area"][0];
                 TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] /= CellArea;
-                TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] = Math.Log(TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]]+1);
+                TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] = Math.Log(TempStateVariable[cellIndices[ii][0], cellIndices[ii][1]] + 1);
             }
 
             return TempStateVariable;
@@ -696,7 +686,7 @@ namespace Madingley
 
             double TempLatitude = double.MaxValue;
 
-            for (int jj = 0; jj < _NumLonCells ; jj++)
+            for (int jj = 0; jj < _NumLonCells; jj++)
             {
                 if (InternalGrid[cellLatIndex, jj] != null)
                 {
@@ -721,7 +711,7 @@ namespace Madingley
         {
             return InternalGrid[cellLatIndex, cellLonIndex].CellEnvironment;
         }
-        
+
         /// <summary>
         /// Get a grid of values for an environmental data layer
         /// </summary>
@@ -729,23 +719,23 @@ namespace Madingley
         /// <param name="timeInterval">The desired time interval within the environmental variable (i.e. 0 if it is a yearly variable
         /// or the month index - 0=Jan, 1=Feb etc. - for monthly variables)</param>
         /// <returns>The values in each grid cell</returns>
-        public double[,] GetEnviroGrid(string enviroVariable,uint timeInterval)
+        public double[,] GetEnviroGrid(string enviroVariable, uint timeInterval)
         {
             // Check to see if environmental variable exists
             for (int ii = 0; ii < _NumLatCells; ii++)
             {
                 for (int jj = 0; jj < _NumLonCells; jj++)
                 {
-                    if(InternalGrid[ii,jj] != null)
+                    if (InternalGrid[ii, jj] != null)
                         Debug.Assert(InternalGrid[ii, jj].CellEnvironment.ContainsKey(enviroVariable), "Environmental variable not found when running GetEnviroGrid");
                 }
             }
 
             double[,] outputData = new double[_NumLatCells, _NumLonCells];
 
-            for (int ii = 0; ii < _NumLatCells; ii+=GridCellRarefaction)
+            for (int ii = 0; ii < _NumLatCells; ii += GridCellRarefaction)
             {
-                for (int jj = 0; jj < _NumLonCells; jj+=GridCellRarefaction)
+                for (int jj = 0; jj < _NumLonCells; jj += GridCellRarefaction)
                 {
                     outputData[ii, jj] = InternalGrid[ii, jj].CellEnvironment[enviroVariable][timeInterval];
                 }
@@ -768,9 +758,9 @@ namespace Madingley
             for (int ii = 0; ii < cellIndices.Count; ii++)
             {
                 if (InternalGrid[cellIndices[ii][0], cellIndices[ii][1]] != null)
-                        Debug.Assert(InternalGrid[cellIndices[ii][0], cellIndices[ii][1]].CellEnvironment.ContainsKey(enviroVariable), 
-                            "Environmental variable not found when running GetEnviroGrid");
-                
+                    Debug.Assert(InternalGrid[cellIndices[ii][0], cellIndices[ii][1]].CellEnvironment.ContainsKey(enviroVariable),
+                        "Environmental variable not found when running GetEnviroGrid");
+
             }
 
             // Create grid to hold the data to return
@@ -795,7 +785,7 @@ namespace Madingley
         /// <returns>The total of the variable over the whole grid</returns>
         public double GetEnviroGridTotal(string enviroVariable, uint timeInterval, List<uint[]> cellIndices)
         {
-            double[,] enviroGrid = GetEnviroGrid(enviroVariable,timeInterval, cellIndices);
+            double[,] enviroGrid = GetEnviroGrid(enviroVariable, timeInterval, cellIndices);
             double enviroTotal = 0.0;
 
             for (int ii = 0; ii < cellIndices.Count; ii++)

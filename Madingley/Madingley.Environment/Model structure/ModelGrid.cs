@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -24,11 +23,11 @@ namespace Madingley
         private double _GlobalMissingValue = -9999;
 
         // Field to hold minimum latitude of the grid
-        private float _MinLatitude;    
+        private float _MinLatitude;
 
         // Field to hold minumum longitude of the grid
         private float _MinLongitude;
-        
+
         // Field to hold maximum latitude of the grid
         private float _MaxLatitude;
         /// <summary>
@@ -38,7 +37,7 @@ namespace Madingley
         {
             get { return _MaxLatitude; }
         }
-        
+
         // Field to hold maximum longitude of the grid
         private float _MaxLongitude;
         /// <summary>
@@ -48,10 +47,10 @@ namespace Madingley
         {
             get { return _MaxLongitude; }
         }
-        
+
         // Field to hold latitude resolution of each grid cell
         private float _LatCellSize;
-        
+
         // Field to hold longitude resolution of each grid cell
         private float _LonCellSize;
 
@@ -64,7 +63,7 @@ namespace Madingley
         /// </summary>
         public int GridCellRarefaction
         { get { return _GridCellRarefaction; } }
-        
+
         /// <summary>
         /// The number of latitudinal cells in the model grid
         /// </summary>
@@ -76,17 +75,17 @@ namespace Madingley
         {
             get { return _NumLatCells; }
         }
-        
+
         /// <summary>
         /// The number of longitudinal cells in the model grid
         /// </summary>
         private UInt32 _NumLonCells;
-        
+
         /// <summary>
         /// The bottom (southern-most) latitude of each row of grid cells
         /// </summary>
         private float[] _Lats;
-        
+
         /// <summary>
         /// The left (western-most) longitude of each column of grid cells
         /// </summary>
@@ -151,7 +150,6 @@ namespace Madingley
             // Check to see if the number of grid cells is an integer
             Debug.Assert((((_MaxLatitude - _MinLatitude) % _LatCellSize) == 0), "Error: number of grid cells is non-integer: check cell size");
 
-
             _NumLatCells = (UInt32)((_MaxLatitude - _MinLatitude) / _LatCellSize);
             _NumLonCells = (UInt32)((_MaxLongitude - _MinLongitude) / _LonCellSize);
             _Lats = new float[_NumLatCells];
@@ -167,12 +165,10 @@ namespace Madingley
                 _Lons[jj] = _MinLongitude + jj * _LonCellSize;
             }
 
-
             // Set up a grid of grid cells
             InternalGrid = new GridCell[_NumLatCells, _NumLonCells];
 
             Console.WriteLine("Initialising grid cell environment:");
-
 
             int Count = 0;
 
@@ -231,14 +227,12 @@ namespace Madingley
 
             }
 
-
             if (!specificLocations)
             {
                 InterpolateMissingValues();
             }
 
             Console.WriteLine("\n");
-
         }
 
         /// <summary>
@@ -260,7 +254,7 @@ namespace Madingley
                     {
                         //If NPP doesn't exist the interpolate from surrounding values (of the same realm)
                         WorkingCellEnvironment["NPP"] = GetInterpolatedValues(ii, jj, GetCellLatitude(ii), GetCellLongitude(jj), "NPP", WorkingCellEnvironment["Realm"][0]);
-                        
+
                         //Calculate NPP seasonality - for use in converting annual NPP estimates to monthly
                         WorkingCellEnvironment["Seasonality"] = InternalGrid[ii, jj].CalculateNPPSeasonality(WorkingCellEnvironment["NPP"], WorkingCellEnvironment["Missing Value"][0]);
                         Changed = true;
@@ -306,8 +300,8 @@ namespace Madingley
                     {
                         WorkingCellEnvironment["vVel"] = InternalGrid[ii, jj].ConvertMissingValuesToZero(WorkingCellEnvironment["vVel"], WorkingCellEnvironment["Missing Value"][0]);
                     }
-                    
-                    if(Changed) InternalGrid[ii, jj].CellEnvironment = WorkingCellEnvironment;
+
+                    if (Changed) InternalGrid[ii, jj].CellEnvironment = WorkingCellEnvironment;
                 }
             }
         }
@@ -333,7 +327,6 @@ namespace Madingley
             uint UpperLatIndex = latIndex + 1;
             uint LowerLonIndex = lonIndex - 1;
             uint UpperLonIndex = lonIndex + 1;
-
 
             if (latIndex == 0) LowerLatIndex = latIndex;
             if (lat.CompareTo(this.MaxLatitude) == 0) UpperLatIndex = latIndex;
@@ -399,7 +392,6 @@ namespace Madingley
             uint LowerLonIndex = lonIndex - 1;
             uint UpperLonIndex = lonIndex + 1;
 
-
             if (latIndex == 0) LowerLatIndex = latIndex;
             if (lat.CompareTo(this.MaxLatitude) == 0) UpperLatIndex = latIndex;
 
@@ -445,10 +437,8 @@ namespace Madingley
                 }
             }
 
-
             return InterpData;
         }
-
 
         /// <summary>
         /// Return the longitude of a cell at a particular lon. index
@@ -483,7 +473,7 @@ namespace Madingley
 
             double TempLatitude = double.MaxValue;
 
-            for (int jj = 0; jj < _NumLonCells ; jj++)
+            for (int jj = 0; jj < _NumLonCells; jj++)
             {
                 if (InternalGrid[cellLatIndex, jj] != null)
                 {

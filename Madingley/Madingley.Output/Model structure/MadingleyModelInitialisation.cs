@@ -6,7 +6,6 @@ using System.Diagnostics;
 using System.IO;
 using Microsoft.Research.Science.Data;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -105,7 +104,6 @@ namespace Madingley
             set { _RightmostLongitude = value; }
         }
 
-
         /// <summary>
         /// Which realm to run the model for
         /// </summary>
@@ -202,7 +200,6 @@ namespace Madingley
         }
 #endif
 
-
         /// <summary>
         /// The full path for the output files for a set of simulations
         /// </summary>
@@ -285,7 +282,6 @@ namespace Madingley
         public MassBinsHandler ModelMassBins
         { get { return _ModelMassBins; } }
 #endif
-        
 
         /// <summary>
         /// Whether to display live outputs using Dataset Viewer during the model runs
@@ -393,9 +389,6 @@ namespace Madingley
             //Don't do this now as the parameter values are read in from file and this file is copied to the output directory
             //CopyParameterValues(outputPath);
 #endif
-
-
-
         }
 
 #if true
@@ -601,7 +594,4 @@ namespace Madingley
 
         }
     }
-
-
-
 }

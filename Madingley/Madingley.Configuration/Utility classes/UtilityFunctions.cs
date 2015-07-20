@@ -32,23 +32,23 @@ namespace Madingley
                     switch (toUnit.ToLower())
                     {
                         case "year":
-                            ConversionValue =  1.0;
+                            ConversionValue = 1.0;
                             break;
                         case "month":
-                            ConversionValue =  MonthsInYear;
+                            ConversionValue = MonthsInYear;
                             break;
                         case "bimonth":
-                            ConversionValue = MonthsInYear*2;
+                            ConversionValue = MonthsInYear * 2;
                             break;
                         case "week":
-                            ConversionValue = DaysInYear/DaysInWeek;
+                            ConversionValue = DaysInYear / DaysInWeek;
                             break;
                         case "day":
-                            ConversionValue =  DaysInYear;
+                            ConversionValue = DaysInYear;
                             break;
                         default:
                             Debug.Fail("Requested combination of time units not currently supported");
-                            ConversionValue =  0;
+                            ConversionValue = 0;
                             break;
                     }
                     break;
@@ -56,16 +56,16 @@ namespace Madingley
                     switch (toUnit.ToLower())
                     {
                         case "year":
-                            ConversionValue =  1.0 / MonthsInYear;
+                            ConversionValue = 1.0 / MonthsInYear;
                             break;
                         case "month":
-                            ConversionValue =  1.0;
+                            ConversionValue = 1.0;
                             break;
                         case "bimonth":
                             ConversionValue = 2.0;
                             break;
                         case "week":
-                            ConversionValue = (DaysInYear/MonthsInYear)/DaysInWeek;
+                            ConversionValue = (DaysInYear / MonthsInYear) / DaysInWeek;
                             break;
                         case "day":
                             ConversionValue = (DaysInYear / MonthsInYear);
@@ -75,7 +75,7 @@ namespace Madingley
                             break;
                         default:
                             Debug.Fail("Requested combination of time units not currently supported");
-                            ConversionValue =  0;
+                            ConversionValue = 0;
                             break;
                     }
                     break;
@@ -83,7 +83,7 @@ namespace Madingley
                     switch (toUnit.ToLower())
                     {
                         case "year":
-                            ConversionValue = 1.0 / (MonthsInYear*2);
+                            ConversionValue = 1.0 / (MonthsInYear * 2);
                             break;
                         case "month":
                             ConversionValue = 1 / 2.0;
@@ -111,13 +111,13 @@ namespace Madingley
                     switch (toUnit.ToLower())
                     {
                         case "year":
-                            ConversionValue = DaysInWeek/DaysInYear;
+                            ConversionValue = DaysInWeek / DaysInYear;
                             break;
                         case "month":
-                            ConversionValue = DaysInWeek/(DaysInYear / MonthsInYear);
+                            ConversionValue = DaysInWeek / (DaysInYear / MonthsInYear);
                             break;
                         case "bimonth":
-                            ConversionValue = DaysInWeek / (DaysInYear / (MonthsInYear*2));
+                            ConversionValue = DaysInWeek / (DaysInYear / (MonthsInYear * 2));
                             break;
                         case "week":
                             ConversionValue = 1.0;
@@ -138,7 +138,7 @@ namespace Madingley
                     switch (toUnit.ToLower())
                     {
                         case "year":
-                            ConversionValue =  1.0 / DaysInYear;
+                            ConversionValue = 1.0 / DaysInYear;
                             break;
                         case "month":
                             ConversionValue = 1.0 / (DaysInYear / MonthsInYear);
@@ -150,17 +150,17 @@ namespace Madingley
                             ConversionValue = 1.0 / DaysInWeek;
                             break;
                         case "day":
-                            ConversionValue =  1.0;
+                            ConversionValue = 1.0;
                             break;
                         default:
                             Debug.Fail("Requested combination of time units not currently supported");
-                            ConversionValue =  0;
+                            ConversionValue = 0;
                             break;
                     }
                     break;
                 default:
                     Debug.Fail("Requested combination of time units not currently supported");
-                    ConversionValue =  0;
+                    ConversionValue = 0;
                     break;
             }
 

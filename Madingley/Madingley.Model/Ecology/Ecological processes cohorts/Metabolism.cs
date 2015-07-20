@@ -64,9 +64,9 @@ namespace Madingley
         /// <param name="outputDetail">The level of output detail being used for the current model run</param>
         /// <param name="currentMonth">The current model month</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, 
-            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, 
-            FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, 
+        public void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks,
+            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas,
+            FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions,
             uint currentTimestep, ProcessTracker trackProcesses, ref ThreadLockedParallelVariables partial,
             Boolean specificLocations, string outputDetail, uint currentMonth, MadingleyModelInitialisation initialisation)
         {
@@ -76,11 +76,11 @@ namespace Madingley
                 if (madingleyCohortDefinitions.GetTraitNames("Endo/Ectotherm", gridCellCohorts[actingCohort].FunctionalGroupIndex) == "endotherm")
                 {
 
-                        Implementations["basic endotherm"].RunMetabolism(gridCellCohorts, gridCellStocks, actingCohort, cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, currentMonth);
+                    Implementations["basic endotherm"].RunMetabolism(gridCellCohorts, gridCellStocks, actingCohort, cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, currentMonth);
                 }
                 else
                 {
-                        Implementations["basic ectotherm"].RunMetabolism(gridCellCohorts, gridCellStocks, actingCohort, cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, currentMonth);
+                    Implementations["basic ectotherm"].RunMetabolism(gridCellCohorts, gridCellStocks, actingCohort, cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, currentMonth);
 
                 }
 
@@ -98,10 +98,7 @@ namespace Madingley
                                                 actingCohort[0],
                                                 cellEnvironment["Temperature"][currentMonth],
                                                 deltas["biomass"]["metabolism"]);
-
             }
         }
-
-
     }
 }

@@ -11,7 +11,7 @@ namespace Madingley
     public interface IReproductionImplementation
     {
         #region Property and field definitions
-        
+
         /// <summary>
         /// Time units associated with the formulation of reproduction
         /// </summary>
@@ -21,7 +21,7 @@ namespace Madingley
         /// Scalar to convert from the time units associated with reproduction to the global model time step unit
         /// </summary>
         double DeltaT { get; }
-        
+
         #endregion
 
         /// <summary>
@@ -39,11 +39,11 @@ namespace Madingley
         /// <param name="partial">Thread-locked variables</param>
         /// <param name="iteroparous">Whether the acting cohort is iteroparous, as opposed to semelparous</param>
         /// <param name="currentMonth">The current model month</param>
-        void RunReproductionEvents(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort, 
-            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions 
-            madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentTimestep, ProcessTracker trackProcesses, 
+        void RunReproductionEvents(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort,
+            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions
+            madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentTimestep, ProcessTracker trackProcesses,
             ref ThreadLockedParallelVariables partial, bool iteroparous, uint currentMonth);
-        
+
         /// <summary>
         /// Assigns surplus body mass to reproductive potential mass
         /// </summary>

@@ -11,7 +11,6 @@ namespace Madingley
         //A sorted dictionary to hold the trait data by taxon
         public SortedDictionary<string, double[]> AllometricParameters;
 
-
         public LWAllometries()
         {
             StreamReader r = new StreamReader("input\\data\\Fisheries\\taxonLW.csv");
@@ -46,9 +45,6 @@ namespace Madingley
                 //Add this taxon's trait data to the sorted dictionary
                 AllometricParameters.Add(f[0], temp);
             }
-
         }
-
-
     }
 }

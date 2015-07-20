@@ -1,15 +1,4 @@
-﻿
-
-
-
-
-
-
-
-
-
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -60,7 +49,7 @@ namespace Madingley
         /// </summary>
         public void RunCrossGridCellEcologicalProcess(uint[] cellIndex, ModelGrid gridForDispersal, bool dispersalOnly, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentMonth)
         {
-        
+
             // Create a temporary handler for grid cell cohorts
             GridCellCohortHandler WorkingGridCellCohorts;
 
@@ -70,13 +59,13 @@ namespace Madingley
 
             // A boolean to check that the environmental layer exists
             bool varExists;
-            
+
             // Check to see if the cell is marine
             double CellRealm = gridForDispersal.GetEnviroLayer("Realm", 0, ii, jj, out varExists);
 
             // Go through all of the cohorts in turn and see if they disperse
             WorkingGridCellCohorts = gridForDispersal.GetGridCellCohorts(ii, jj);
-                    
+
             // Loop through cohorts, and perform dispersal according to cohort type and status
             for (int kk = 0; kk < WorkingGridCellCohorts.Count; kk++)
             {
@@ -84,12 +73,12 @@ namespace Madingley
                 for (int ll = 0; ll < WorkingGridCellCohorts[kk].Count; ll++)
                 {
                     // Check to see if the cell is marine and the cohort type is planktonic
-                    if (CellRealm == 2.0 && 
-                        ((madingleyCohortDefinitions.GetTraitNames("Mobility", WorkingGridCellCohorts[kk][ll].FunctionalGroupIndex) == "planktonic") || (WorkingGridCellCohorts[kk][ll].IndividualBodyMass <= PlanktonThreshold)))                    
-                    {   
+                    if (CellRealm == 2.0 &&
+                        ((madingleyCohortDefinitions.GetTraitNames("Mobility", WorkingGridCellCohorts[kk][ll].FunctionalGroupIndex) == "planktonic") || (WorkingGridCellCohorts[kk][ll].IndividualBodyMass <= PlanktonThreshold)))
+                    {
                         // Run advective dispersal
                         Implementations["basic advective dispersal"].RunDispersal(cellIndex, gridForDispersal, WorkingGridCellCohorts[kk][ll], kk, ll, currentMonth);
-                        
+
                     }
                     // Otherwise, if mature do responsive dispersal
                     else if (WorkingGridCellCohorts[kk][ll].MaturityTimeStep < uint.MaxValue)

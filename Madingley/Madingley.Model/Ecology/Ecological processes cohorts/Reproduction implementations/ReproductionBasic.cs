@@ -10,7 +10,7 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of reproduction
     /// </summary>
-    public partial class ReproductionBasic: IReproductionImplementation
+    public partial class ReproductionBasic : IReproductionImplementation
     {
         #region Declare fields and properties
 
@@ -22,7 +22,7 @@ namespace Madingley
         /// Get the time units associated with this implementation of reproduction
         /// </summary>
         public string TimeUnitImplementation { get { return _TimeUnitImplementation; } }
-           
+
         /// <summary>
         /// The per individual ratio of (adult body mass + reproductive potential mass) to adult body mass above which reproduction is possible
         /// </summary>
@@ -40,7 +40,7 @@ namespace Madingley
         /// <summary>
         /// Get the probability threshold for evolution of juvenuile and adult masses of offspring cohorts
         /// </summary>
-        public double MassEvolutionProbabilityThreshold { get {return _MassEvolutionProbabilityThreshold; } }
+        public double MassEvolutionProbabilityThreshold { get { return _MassEvolutionProbabilityThreshold; } }
 
         /// <summary>
         /// The standard deviation around the parent cohort's adult and juvenile masses to apply when drawing offspring
@@ -66,7 +66,7 @@ namespace Madingley
 
         public void InitialiseReproductionParameters()
         {
-            _TimeUnitImplementation = 
+            _TimeUnitImplementation =
             EcologicalParameters.TimeUnits[(int)EcologicalParameters.Parameters["Reproduction.Basic.TimeUnitImplementation"]];
             _MassEvolutionProbabilityThreshold = EcologicalParameters.Parameters["Reproduction.Basic.MassEvolutionProbabilityThreshold"];
             _MassRatioThreshold = EcologicalParameters.Parameters["Reproduction.Basic.MassRatioThreshold"];
@@ -79,7 +79,7 @@ namespace Madingley
         /// </summary>
         /// <param name="sw">A streamwriter object to write the parameter values to</param>
         public void WriteOutParameterValues(StreamWriter sw)
-        {   
+        {
             // Write out parameters
             sw.WriteLine("Reproduction\tTimeUnitImplementation\t" + Convert.ToString(_TimeUnitImplementation));
             sw.WriteLine("Reproduction\tMassRatioThreshold\t" + Convert.ToString(_MassRatioThreshold));
@@ -97,19 +97,19 @@ namespace Madingley
         /// <returns>A vector containing the juvenile and adult masses of the cohort to be produced</returns>
         private double[] GetOffspringCohortProperties(GridCellCohortHandler gridCellCohorts, int[] actingCohort, FunctionalGroupDefinitions madingleyCohortDefinitions)
         {
-                    // A two-element vector holding adult and juvenile body masses in elements zero and one respectively
-         double[] _CohortJuvenileAdultMasses = new double[2];
+            // A two-element vector holding adult and juvenile body masses in elements zero and one respectively
+            double[] _CohortJuvenileAdultMasses = new double[2];
 
             // Determine whether offspring cohort 'evolves' in terms of adult and juvenile body masses
             if (RandomNumberGenerator.GetUniform() > _MassEvolutionProbabilityThreshold)
             {
                 // Determine the new juvenile body mass
-                _CohortJuvenileAdultMasses[0] = Math.Max(RandomNumberGenerator.GetNormal(gridCellCohorts[actingCohort].JuvenileMass, _MassEvolutionStandardDeviation * gridCellCohorts[actingCohort].JuvenileMass), 
-                    madingleyCohortDefinitions.GetBiologicalPropertyOneFunctionalGroup("Minimum mass",actingCohort[0]));
+                _CohortJuvenileAdultMasses[0] = Math.Max(RandomNumberGenerator.GetNormal(gridCellCohorts[actingCohort].JuvenileMass, _MassEvolutionStandardDeviation * gridCellCohorts[actingCohort].JuvenileMass),
+                    madingleyCohortDefinitions.GetBiologicalPropertyOneFunctionalGroup("Minimum mass", actingCohort[0]));
 
                 // Determine the new adult body mass
                 _CohortJuvenileAdultMasses[1] = Math.Min(RandomNumberGenerator.GetNormal(gridCellCohorts[actingCohort].AdultMass, _MassEvolutionStandardDeviation * gridCellCohorts[actingCohort].AdultMass),
-                    madingleyCohortDefinitions.GetBiologicalPropertyOneFunctionalGroup("Maximum mass", actingCohort[0]));                
+                    madingleyCohortDefinitions.GetBiologicalPropertyOneFunctionalGroup("Maximum mass", actingCohort[0]));
             }
             // If not, it just gets the same values as the parent cohort
             else

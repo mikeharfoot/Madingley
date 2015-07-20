@@ -20,7 +20,7 @@ namespace Madingley
         public static uint GetCurrentMonth(uint currentTimestep, string modelTimestepUnits)
         {
             uint Month;
-            
+
             double DaysInYear = 360.0;
             double MonthsInYear = 12.0;
             double DaysInWeek = 7.0;
@@ -34,14 +34,14 @@ namespace Madingley
                     Month = currentTimestep % 12;
                     break;
                 case "week":
-                    Month = (uint)Math.Floor(currentTimestep / ((DaysInYear/MonthsInYear)/DaysInWeek)) % 12;
+                    Month = (uint)Math.Floor(currentTimestep / ((DaysInYear / MonthsInYear) / DaysInWeek)) % 12;
                     break;
                 case "day":
                     Month = (uint)Math.Floor(currentTimestep / (DaysInYear / MonthsInYear)) % 12;
                     break;
                 default:
                     Debug.Fail("Requested model time units not currently supported");
-                    Month =  100;
+                    Month = 100;
                     break;
 
             }

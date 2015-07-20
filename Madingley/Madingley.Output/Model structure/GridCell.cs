@@ -12,7 +12,6 @@ using Microsoft.Research.Science.Data.CSV;
 using Microsoft.Research.Science.Data.Imperative;
 using Microsoft.Research.Science.Data.Utilities;
 
-
 namespace Madingley
 {
     /// <summary>

@@ -20,8 +20,8 @@ namespace Madingley
         /// <param name="madingleyCohortDefinitions">The functional group definitions for cohorts in the model</param>
         /// <param name="madingleyStockDefinitions">The functional group definitions for stocks in the model</param>
         /// <param name="currentMonth">The current model month</param>
-        void RunCrossGridCellEcologicalProcess(uint[] cellIndex, ModelGrid gridForDispersal, bool dispersalOnly, 
-            FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, 
+        void RunCrossGridCellEcologicalProcess(uint[] cellIndex, ModelGrid gridForDispersal, bool dispersalOnly,
+            FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions,
             uint currentMonth);
     }
 }

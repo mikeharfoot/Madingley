@@ -25,7 +25,7 @@ namespace Madingley.Common
         public EcologicalParameters()
         {
             this.Parameters = new SortedList<string, double>();
-            this.TimeUnits = new string[] {};
+            this.TimeUnits = new string[] { };
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace Madingley.Common
             IDictionary<string, double> parameters,
             IEnumerable<string> timeUnits)
         {
-            this.Parameters = new SortedList<string,double>(parameters);
+            this.Parameters = new SortedList<string, double>(parameters);
             this.TimeUnits = timeUnits.OrderBy(m => m).ToArray();
         }
 

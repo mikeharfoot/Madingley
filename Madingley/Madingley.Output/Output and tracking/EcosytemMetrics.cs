@@ -47,11 +47,10 @@ namespace Madingley
         /// </summary>
         private Process _RServeProcess;
 
-
         //Define upp and lower limits for trophic index
         private double MaxTI = 40.0;
         private double MinTI = 1.0;
-       
+
         /// <summary>
         /// Constructor for the ecosystem metrics class: sets up trophic level bins
         /// </summary>
@@ -71,7 +70,6 @@ namespace Madingley
 
             /*Console.WriteLine("Opening R connection");
 
-            
             int port = int.Parse((6).ToString() + (2*scenarioIndex).ToString() + (simulationNumber).ToString() + cellIndex.ToString());
 
             ProcessStartInfo StartInfo = new ProcessStartInfo();
@@ -105,7 +103,7 @@ namespace Madingley
         /// <param name="cellIndices">The list of cell indices in the current model simulation</param>
         /// <param name="cellIndex">The index of the current cell in the list of cells to run</param>
         /// <returns>The mean trophic level of individuals in the grid cell</returns>
-        public double CalculateMeanTrophicLevelCell(ModelGrid ecosystemModelGrid,List<uint[]> cellIndices, int cellIndex)
+        public double CalculateMeanTrophicLevelCell(ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, int cellIndex)
         {
             //Get the cohorts for the specified cell
             GridCellCohortHandler CellCohorts = ecosystemModelGrid.GetGridCellCohorts(cellIndices[cellIndex][0], cellIndices[cellIndex][1]);
@@ -123,7 +121,7 @@ namespace Madingley
                 }
             }
 
-            return BiomassWeightedTI/TotalBiomass;
+            return BiomassWeightedTI / TotalBiomass;
         }
 
         /// <summary>
@@ -140,7 +138,6 @@ namespace Madingley
             double[] TrophicIndexBinMasses = new double[NumberTrophicBins];
             int BinIndex;
 
-
             foreach (var CohortList in CellCohorts)
             {
                 foreach (Cohort c in CohortList)
@@ -153,8 +150,7 @@ namespace Madingley
             return TrophicIndexBinMasses;
         }
 
-
-        public double[] CalculateFunctionalRichness(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortDefinitions, 
+        public double[] CalculateFunctionalRichness(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortDefinitions,
             List<uint[]> cellIndices, int cellIndex, string trait)
         {
 
@@ -181,7 +177,6 @@ namespace Madingley
                         }
                     }
 
-
                     //Define upper and lower limits for body mass
                     MinModelTraitValue = cohortDefinitions.GetBiologicalPropertyAllFunctionalGroups("minimum mass").Min();
                     MaxModelTraitValue = cohortDefinitions.GetBiologicalPropertyAllFunctionalGroups("maximum mass").Max();
@@ -195,10 +190,8 @@ namespace Madingley
                             if (cohort.TrophicIndex < MinCurrentTraitValue) MinCurrentTraitValue = cohort.TrophicIndex;
 
                             if (cohort.TrophicIndex > MaxCurrentTraitValue) MaxCurrentTraitValue = cohort.TrophicIndex;
-
                         }
                     }
-
 
                     //Define upper and lower limits for body mass
                     MinModelTraitValue = MinTI;
@@ -212,7 +205,7 @@ namespace Madingley
 
             Debug.Assert((MaxModelTraitValue - MinModelTraitValue) > 0.0, "Division by zero or negative model trait values in calculation of functional richness");
 
-            double[] NewArray = {(MaxCurrentTraitValue-MinCurrentTraitValue)/(MaxModelTraitValue-MinModelTraitValue),MinCurrentTraitValue,MaxCurrentTraitValue};
+            double[] NewArray = { (MaxCurrentTraitValue - MinCurrentTraitValue) / (MaxModelTraitValue - MinModelTraitValue), MinCurrentTraitValue, MaxCurrentTraitValue };
 
             return NewArray;
         }
@@ -235,12 +228,11 @@ namespace Madingley
             double[,] Distances = new double[CellCohorts.GetNumberOfCohorts(), CellCohorts.GetNumberOfCohorts()];
 
             double[] FunctionalTrait = new double[CellCohorts.GetNumberOfCohorts()];
-            double MaxModelTraitValue=0;
-            double MinModelTraitValue=0;
+            double MaxModelTraitValue = 0;
+            double MinModelTraitValue = 0;
 
             // Construct a vector of cohort biomass (in case we want to weight by them)
             double[] CohortTotalBiomasses = new double[CellCohorts.GetNumberOfCohorts()];
-
 
             int CohortNumberCounter = 0;
             switch (trait.ToLower())
@@ -250,7 +242,6 @@ namespace Madingley
                     {
                         foreach (Cohort c in CellCohorts[fg])
                         {
-
                             FunctionalTrait[CohortNumberCounter] = c.IndividualBodyMass;
                             CohortTotalBiomasses[CohortNumberCounter] = (c.IndividualBodyMass + c.IndividualReproductivePotentialMass) * c.CohortAbundance;
 
@@ -278,7 +269,6 @@ namespace Madingley
                     MaxModelTraitValue = MaxTI;
                     break;
             }
-
 
             Distances = CalculateDistanceMatrix(FunctionalTrait, MaxModelTraitValue, MinModelTraitValue);
 
@@ -331,7 +321,7 @@ namespace Madingley
             GridCellCohortHandler CellCohorts = ecosystemModelGrid.GetGridCellCohorts(cellIndices[cellIndex][0], cellIndices[cellIndex][1]);
             double CumulativeAbundance = 0.0;
             double CumulativeLogBiomass = 0.0;
-            
+
             //Retrieve the biomass
             foreach (var CohortList in CellCohorts)
             {
@@ -378,14 +368,13 @@ namespace Madingley
 
             TrophicIndexBiomassDistribution = TrophicIndexBiomassDistribution.OrderBy(x => x[0]).ToList();
 
-
             //Use the Mouillot Evenness index - Functional Regularity Index or FRO
             //From Mouillot et al (2005) Functional regularity: a neglected aspect of functional diversity, Oecologia
 
             EW = new double[TrophicIndexBiomassDistribution.Count];
-            double TotalEW = 0.0 ;
+            double TotalEW = 0.0;
 
-            for (int ii = 0; ii < TrophicIndexBiomassDistribution.Count-1; ii++)
+            for (int ii = 0; ii < TrophicIndexBiomassDistribution.Count - 1; ii++)
             {
                 EW[ii] = (TrophicIndexBiomassDistribution[ii + 1][0] - TrophicIndexBiomassDistribution[ii][0]) / (TrophicIndexBiomassDistribution[ii + 1][1] + TrophicIndexBiomassDistribution[ii][1]);
                 TotalEW += EW[ii];
@@ -395,7 +384,7 @@ namespace Madingley
 
             for (int ii = 0; ii < TrophicIndexBiomassDistribution.Count - 1; ii++)
             {
-                FRO += Math.Min(EW[ii]/TotalEW,1.0/(TrophicIndexBiomassDistribution.Count-1));
+                FRO += Math.Min(EW[ii] / TotalEW, 1.0 / (TrophicIndexBiomassDistribution.Count - 1));
             }
 
             return FRO;
@@ -409,7 +398,7 @@ namespace Madingley
         /// <param name="cellIndices">The list of cell indices in the current model simulation</param>
         /// <param name="cellIndex">The index of the current cell within the list of cells to run</param>
         /// <returns>A pair of values representing the functional richness and functional divergence (functional richness currently disabled!)</returns>
-        public double[] CalculateFunctionalDiversity(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortDefinitions, 
+        public double[] CalculateFunctionalDiversity(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortDefinitions,
             List<uint[]> cellIndices, int cellIndex)
         {
             //Get the cohorts for the specified cell
@@ -419,7 +408,7 @@ namespace Madingley
             double FunctionalRichness;
             //Variable to hold the functional divergence value for the current cohorts
             double RaoFunctionalDivergence = 0.0;
-            double[,] Distances= new double[CellCohorts.GetNumberOfCohorts(), CellCohorts.GetNumberOfCohorts()];
+            double[,] Distances = new double[CellCohorts.GetNumberOfCohorts(), CellCohorts.GetNumberOfCohorts()];
 
             List<string> AllTraitNames = cohortDefinitions.GetAllTraitNames().ToList();
 
@@ -427,7 +416,6 @@ namespace Madingley
             AllTraitNames.Remove("heterotroph/autotroph");
             AllTraitNames.Remove("diet");
             string[] TraitNames = AllTraitNames.ToArray();
-
 
             //Define upper and lower limits for body mass
             double MinMass = cohortDefinitions.GetBiologicalPropertyAllFunctionalGroups("minimum mass").Min();
@@ -444,45 +432,43 @@ namespace Madingley
             Tuple<double[], string[]>[] CohortFunctionalTraits = new Tuple<double[], string[]>[CellCohorts.GetNumberOfCohorts()];
             double[] IndividualBodyMasses = new double[CellCohorts.GetNumberOfCohorts()];
             double[] TrophicIndex = new double[CellCohorts.GetNumberOfCohorts()];
-            string[][] CohortNominalTraitValues= new string[TraitNames.Length][];
+            string[][] CohortNominalTraitValues = new string[TraitNames.Length][];
 
             for (int i = 0; i < TraitNames.Length; i++)
-			{
-			    CohortNominalTraitValues[i] = new string[CellCohorts.GetNumberOfCohorts()];
-			}
+            {
+                CohortNominalTraitValues[i] = new string[CellCohorts.GetNumberOfCohorts()];
+            }
 
             // Construct a vector of cohort biomass (in case we want to weight by them)
             double[] CohortTotalBiomasses = new double[CellCohorts.GetNumberOfCohorts()];
 
-            
             string[] TraitValues = new string[TraitNames.Length];
-            double[] QuantitativeTraitValues= new double[2];
+            double[] QuantitativeTraitValues = new double[2];
             int CohortNumberCounter = 0;
             for (int fg = 0; fg < CellCohorts.Count; fg++)
-			{
+            {
                 foreach (Cohort c in CellCohorts[fg])
                 {
                     TraitValues = cohortDefinitions.GetTraitValues(TraitNames, fg);
                     for (int ii = 0; ii < TraitValues.Length; ii++)
                     {
-			            CohortNominalTraitValues[ii][CohortNumberCounter] = TraitValues[ii];
+                        CohortNominalTraitValues[ii][CohortNumberCounter] = TraitValues[ii];
                     }
-
 
                     IndividualBodyMasses[CohortNumberCounter] = c.IndividualBodyMass;
                     TrophicIndex[CohortNumberCounter] = c.TrophicIndex;
- 
+
                     QuantitativeTraitValues[0] = c.IndividualBodyMass;
                     QuantitativeTraitValues[1] = c.TrophicIndex;
 
                     CohortFunctionalTraits[CohortNumberCounter] = new Tuple<double[], string[]>(QuantitativeTraitValues, TraitValues);
-                    
+
                     CohortTotalBiomasses[CohortNumberCounter] = (c.IndividualBodyMass + c.IndividualReproductivePotentialMass) * c.CohortAbundance;
-                    
+
                     CohortNumberCounter++;
                 }
             }
-            
+
             List<double[,]> DistanceList = new List<double[,]>();
 
             DistanceList.Add(CalculateDistanceMatrix(IndividualBodyMasses, MaxMass, MinMass));
@@ -496,9 +482,7 @@ namespace Madingley
 
             RaoFunctionalDivergence = RaoEntropy(Distances, CohortTotalBiomasses);
 
-            return new double[] {0.0,RaoFunctionalDivergence};
-            
-
+            return new double[] { 0.0, RaoFunctionalDivergence };
         }
 
         private double[,] CalculateDistanceMatrix(double[] continuousTrait, double traitMaxVal, double traitMinVal)
@@ -543,7 +527,6 @@ namespace Madingley
             return D;
         }
 
-
         private double[,] CalculateAggregateDistance(List<double[,]> distanceList)
         {
             int NumberOfTraits = distanceList.Count();
@@ -575,12 +558,12 @@ namespace Madingley
                 TotalB += b[ii];
             }
 
-            for (int ii = 0; ii < d.GetLength(0)-1; ii++)
+            for (int ii = 0; ii < d.GetLength(0) - 1; ii++)
             {
                 for (int jj = 1; jj < d.GetLength(0); jj++)
                 {
-                    R += d[ii,jj]*b[ii]*b[jj]/(TotalB*TotalB);
-                }   
+                    R += d[ii, jj] * b[ii] * b[jj] / (TotalB * TotalB);
+                }
             }
 
             return R;

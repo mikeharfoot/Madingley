@@ -7,8 +7,6 @@ using System.Text;
 using System.Diagnostics;
 using System.IO;
 
-
-
 namespace Madingley
 {
     /// <summary>
@@ -19,7 +17,6 @@ namespace Madingley
     /// </summary>
     public class GridCell
     {
-
         /// <summary>
         /// The handler for the cohorts in this grid cell
         /// </summary>
@@ -116,13 +113,13 @@ namespace Madingley
         /// <param name="globalDiagnostics">A list of global diagnostic variables for the model grid</param>
         /// <param name="tracking">Whether process-tracking is enabled</param>
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
-        public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize, 
+        public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize,
 #if true
-            SortedList<string, double[]> dataLayers, double missingValue, FunctionalGroupDefinitions cohortFunctionalGroups, 
+ SortedList<string, double[]> dataLayers, double missingValue, FunctionalGroupDefinitions cohortFunctionalGroups,
 #else
             SortedList<string, EnviroData> dataLayers, double missingValue, FunctionalGroupDefinitions cohortFunctionalGroups, 
 #endif
-            FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics,Boolean tracking,
+ FunctionalGroupDefinitions stockFunctionalGroups, SortedList<string, double> globalDiagnostics, Boolean tracking,
             bool specificLocations)
         {
             // Initialise deltas sorted list
@@ -172,7 +169,6 @@ namespace Madingley
             _Latitude = latitude;
             _Longitude = longitude;
 
-
             // Initialise list of environmental data layer values
 #if true
             this._CellEnvironment = dataLayers;
@@ -186,7 +182,6 @@ namespace Madingley
             tempVector = new double[1];
             tempVector[0] = longitude;
             _CellEnvironment.Add("Longitude", tempVector);
-
 
             // Add an organic matter pool to the cell environment to track organic biomass not held by animals or plants with an initial value of 0
             tempVector = new double[1];
@@ -213,7 +208,6 @@ namespace Madingley
             tempVector[0] = lonIndex;
             _CellEnvironment.Add("LonIndex", tempVector);
 
-
             // Add the missing value of data in the grid cell to the cell environment
             tempVector = new double[1];
             tempVector[0] = missingValue;
@@ -239,7 +233,6 @@ namespace Madingley
                 // Add the values of the environmental variables to the cell environment, with the name of the variable as the key
                 _CellEnvironment.Add(LayerName, tempVector);
             }
-
 
             if (_CellEnvironment.ContainsKey("LandSeaMask"))
             {
@@ -392,10 +385,10 @@ namespace Madingley
         /// <param name="DrawRandomly">Whether the model is set to use random draws</param>
         /// <param name="ZeroAbundance">Set this parameter to 'true' if you want to seed the cohorts with zero abundance</param>
         public void SeedGridCellCohortsAndStocks(FunctionalGroupDefinitions cohortFunctionalGroups, FunctionalGroupDefinitions stockFunctionalGroups,
-            SortedList<string, double> globalDiagnostics, Int64 nextCohortID, Boolean tracking, double totalCellTerrestrialCohorts, 
+            SortedList<string, double> globalDiagnostics, Int64 nextCohortID, Boolean tracking, double totalCellTerrestrialCohorts,
             double totalCellMarineCohorts, Boolean DrawRandomly, Boolean ZeroAbundance)
         {
-            SeedGridCellCohorts(ref cohortFunctionalGroups, ref _CellEnvironment, globalDiagnostics, nextCohortID, tracking, 
+            SeedGridCellCohorts(ref cohortFunctionalGroups, ref _CellEnvironment, globalDiagnostics, nextCohortID, tracking,
                 totalCellTerrestrialCohorts, totalCellMarineCohorts, DrawRandomly, ZeroAbundance);
             SeedGridCellStocks(ref stockFunctionalGroups, ref _CellEnvironment, globalDiagnostics);
         }
@@ -491,7 +484,7 @@ namespace Madingley
         /// <param name="DrawRandomly">Whether the model is set to use random draws</param>
         /// <param name="ZeroAbundance">Set this parameter to 'true' if you want to seed the cohorts with zero abundance</param>
         private void SeedGridCellCohorts(ref FunctionalGroupDefinitions functionalGroups, ref SortedList<string, double[]>
-            cellEnvironment, SortedList<string, double> globalDiagnostics, Int64 nextCohortID, Boolean tracking, double totalCellTerrestrialCohorts, 
+            cellEnvironment, SortedList<string, double> globalDiagnostics, Int64 nextCohortID, Boolean tracking, double totalCellTerrestrialCohorts,
             double totalCellMarineCohorts, Boolean DrawRandomly, Boolean ZeroAbundance)
         {
             // Set the seed for the random number generator from the system time
@@ -507,7 +500,7 @@ namespace Madingley
             double ExpectedLnAdultMassRatio;
             int[] FunctionalGroupsToUse;
             double NumCohortsThisCell;
-            double TotalNewBiomass =0.0;
+            double TotalNewBiomass = 0.0;
 
             // Get the minimum and maximum possible body masses for organisms in each functional group
             double[] MassMinima = functionalGroups.GetBiologicalPropertyAllFunctionalGroups("minimum mass");
@@ -518,7 +511,7 @@ namespace Madingley
 
             //Variable for altering the juvenile to adult mass ratio for marine cells when handling certain functional groups eg baleen whales
             double Scaling = 0.0;
-            
+
             Int64 CohortIDIncrementer = nextCohortID;
 
             // Check which realm the cell is in
@@ -585,7 +578,6 @@ namespace Madingley
 
                                 }
 
-
                                 // Draw from a log-normal distribution with mean 10.0 and standard deviation 5.0, then add one to obtain 
                                 // the ratio of adult to juvenile body mass, and then calculate juvenile mass based on this ratio and within the
                                 // bounds of the minimum and maximum body masses for this functional group
@@ -627,9 +619,9 @@ namespace Madingley
                                 // Draw adult mass from a log-normal distribution with mean -6.9 and standard deviation 10.0,
                                 // within the bounds of the minimum and maximum body masses for the functional group
                                 CohortAdultMass = Math.Pow(10, (RandomNumberGenerator.GetUniform() * (Math.Log10(MassMaxima[FunctionalGroup]) - Math.Log10(50 * MassMinima[FunctionalGroup])) + Math.Log10(50 * MassMinima[FunctionalGroup])));
-                                
+
                                 OptimalPreyBodySizeRatio = Math.Max(0.01, RandomNumberGenerator.GetNormal(0.1, 0.02));
-                                
+
                                 // Draw from a log-normal distribution with mean 10.0 and standard deviation 5.0, then add one to obtain 
                                 // the ratio of adult to juvenile body mass, and then calculate juvenile mass based on this ratio and within the
                                 // bounds of the minimum and maximum body masses for this functional group
@@ -662,7 +654,7 @@ namespace Madingley
                             // * 100 to give g km-2
                             // * cell area to give g grid cell
                             //*3300/NumCohortsThisCell scales total initial biomass in the cell to some approximately reasonable mass
-                            double NewBiomass = (3300 / NumCohortsThisCell) * 100 * 3000 * 
+                            double NewBiomass = (3300 / NumCohortsThisCell) * 100 * 3000 *
                                 Math.Pow(0.6, (Math.Log10(CohortJuvenileMass))) * (_CellEnvironment["Cell Area"][0]);
                             TotalNewBiomass += NewBiomass;
                             double NewAbund = 0.0;
@@ -695,15 +687,13 @@ namespace Madingley
                                     TrophicIndex = 0.0;
                                     break;
                             }
-                            
+
                             // Initialise the new cohort with the relevant properties
                             NewCohort = new Cohort((byte)FunctionalGroup, CohortJuvenileMass, CohortAdultMass, CohortJuvenileMass, NewAbund,
-                            OptimalPreyBodySizeRatio, (ushort)0, ProportionTimeActive[FunctionalGroup], ref CohortIDIncrementer,TrophicIndex, tracking);
+                            OptimalPreyBodySizeRatio, (ushort)0, ProportionTimeActive[FunctionalGroup], ref CohortIDIncrementer, TrophicIndex, tracking);
 
                             // Add the new cohort to the list of grid cell cohorts
                             _GridCellCohorts[FunctionalGroup].Add(NewCohort);
-
-
 
                             // TEMPORARY
                             /*
@@ -738,24 +728,18 @@ namespace Madingley
 
                             // Incrememt the variable tracking the total number of cohorts in the model
                             globalDiagnostics["NumberOfCohortsInModel"]++;
-
-
-
                         }
-
                     }
                 }
-
             }
             else
             {
-                                // Loop over all functional groups in the model
+                // Loop over all functional groups in the model
                 for (int FunctionalGroup = 0; FunctionalGroup < functionalGroups.GetNumberOfFunctionalGroups(); FunctionalGroup++)
                 {
-
                     // Create a new list to hold the cohorts in the grid cell
                     _GridCellCohorts[FunctionalGroup] = new List<Cohort>();
-                }       
+                }
             }
 
             // tempsw.Dispose();
@@ -767,7 +751,7 @@ namespace Madingley
         /// <param name="functionalGroups">A reference to the stock functional group handler</param>
         /// <param name="cellEnvironment">The environment in the grid cell</param>
         /// <param name="globalDiagnostics">A list of global diagnostic variables for the model grid</param>
-        private void SeedGridCellStocks(ref FunctionalGroupDefinitions functionalGroups, ref SortedList<string, double[]> 
+        private void SeedGridCellStocks(ref FunctionalGroupDefinitions functionalGroups, ref SortedList<string, double[]>
             cellEnvironment, SortedList<string, double> globalDiagnostics)
         {
             // Set the seed for the random number generator from the system time
@@ -836,8 +820,6 @@ namespace Madingley
 
                         // Increment the variable tracking the total number of stocks in the model
                         globalDiagnostics["NumberOfStocksInModel"]++;
-
-
                     }
                     else if (FunctionalGroupsToUse.Contains(FunctionalGroup))
                     {
@@ -849,19 +831,12 @@ namespace Madingley
 
                         // Increment the variable tracking the total number of stocks in the model
                         globalDiagnostics["NumberOfStocksInModel"]++;
-
                     }
                     else
                     {
                     }
-
                 }
-
             }
-
-
-
-
         }
 
 #if true

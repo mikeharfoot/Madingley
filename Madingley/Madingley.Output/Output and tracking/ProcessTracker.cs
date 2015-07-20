@@ -22,15 +22,15 @@ namespace Madingley
             get { return _TrackProcesses; }
             set { _TrackProcesses = value; }
         }
-        
+
         /// <summary>
         /// Instance of the reproduction tracker within the process tracker
         /// </summary>
-        private ReproductionTracker  _TrackReproduction;
+        private ReproductionTracker _TrackReproduction;
         /// <summary>
         /// Get and set the reproduction tracker
         /// </summary>
-        public ReproductionTracker  TrackReproduction
+        public ReproductionTracker TrackReproduction
         {
             get { return _TrackReproduction; }
             set { _TrackReproduction = value; }
@@ -39,11 +39,11 @@ namespace Madingley
         /// <summary>
         /// Instance of predation tracker
         /// </summary>
-        private PredationTracker  _TrackPredation;
+        private PredationTracker _TrackPredation;
         /// <summary>
         /// Get and set the predation tracker
         /// </summary>
-        public PredationTracker  TrackPredation
+        public PredationTracker TrackPredation
         {
             get { return _TrackPredation; }
             set { _TrackPredation = value; }
@@ -113,8 +113,6 @@ namespace Madingley
             get { return _TrackMetabolism; }
             set { _TrackMetabolism = value; }
         }
-       
-
 
         /// <summary>
         /// Constructor for process tracker: Initialises the trackers for individual processes
@@ -137,11 +135,11 @@ namespace Madingley
         /// <param name="latCellSize">The size of grid cells in the latitudinal direction</param>
         /// <param name="lonCellSize">The size of grid cells in the longitudinal direction</param>
         public ProcessTracker(uint numTimesteps,
-            float[] lats, float[] lons, 
+            float[] lats, float[] lons,
             List<uint[]> cellIndices,
-            SortedList<string,string> Filenames, 
-            Boolean trackProcesses, 
-            FunctionalGroupDefinitions cohortDefinitions, 
+            SortedList<string, string> Filenames,
+            Boolean trackProcesses,
+            FunctionalGroupDefinitions cohortDefinitions,
             double missingValue,
             string outputFileSuffix,
             string outputPath, MassBinsHandler trackerMassBins,
@@ -167,7 +165,7 @@ namespace Madingley
                 // Initialise the predation and herbivory trackers only for runs with specific locations
                 if (specificLocations == true)
                 {
-                    _TrackPredation = new PredationTracker( numTimesteps, cellIndices, Filenames["PredationFlowsOutput"], cohortDefinitions,
+                    _TrackPredation = new PredationTracker(numTimesteps, cellIndices, Filenames["PredationFlowsOutput"], cohortDefinitions,
                         missingValue, outputFileSuffix, outputPath, trackerMassBins, cellIndex);
                 }
             }
@@ -184,11 +182,11 @@ namespace Madingley
         /// <param name="functionalGroup">The functional group that the parent and offspring cohorts belong to</param>
         /// <param name="parentCohortIDs">All cohort IDs associated with the acting parent cohort</param>
         /// <param name="offspringCohortID">The cohort ID that has been assigned to the produced offspring cohort</param>
-        public void RecordNewCohort(uint latIndex, uint lonIndex, uint timestep, double offspringCohortAbundance, 
+        public void RecordNewCohort(uint latIndex, uint lonIndex, uint timestep, double offspringCohortAbundance,
             double parentCohortAdultMass, int functionalGroup, List<uint> parentCohortIDs, uint offspringCohortID)
         {
-            _TrackReproduction.RecordNewCohort(latIndex, lonIndex, timestep, offspringCohortAbundance, parentCohortAdultMass, 
-                functionalGroup,parentCohortIDs,offspringCohortID);
+            _TrackReproduction.RecordNewCohort(latIndex, lonIndex, timestep, offspringCohortAbundance, parentCohortAdultMass,
+                functionalGroup, parentCohortIDs, offspringCohortID);
         }
 
         /// <summary>
@@ -203,7 +201,7 @@ namespace Madingley
         /// <param name="functionalGroup">The functional group of the cohort reaching maturity</param>
         public void TrackMaturity(uint latIndex, uint lonIndex, uint timestep, uint birthTimestep, double juvenileMass, double adultMass, int functionalGroup)
         {
-            _TrackReproduction.TrackMaturity(latIndex,lonIndex,timestep,birthTimestep,juvenileMass,adultMass,functionalGroup);
+            _TrackReproduction.TrackMaturity(latIndex, lonIndex, timestep, birthTimestep, juvenileMass, adultMass, functionalGroup);
         }
 
         /// <summary>
@@ -237,8 +235,8 @@ namespace Madingley
         /// <param name="predatorBodyMass">The body mass of the predator doing the eating</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
-        public void TrackHerbivoryTrophicFlow(uint latIndex, uint lonIndex, int toFunctionalGroup, 
-            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass, 
+        public void TrackHerbivoryTrophicFlow(uint latIndex, uint lonIndex, int toFunctionalGroup,
+            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass,
             MadingleyModelInitialisation initialisation, Boolean marineCell)
         {
             _TrackEating.RecordHerbivoryTrophicFlow(latIndex, lonIndex, toFunctionalGroup, cohortFunctionalGroupDefinitions, massEaten, predatorBodyMass, initialisation, marineCell);
@@ -263,7 +261,7 @@ namespace Madingley
         /// <param name="numLons">The number of grid cells, longitudinally, in the simulation</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="marineCell">Whether the current cell is a marine cell</param>
-        public void WriteTimeStepTrophicFlows(uint currentTimeStep,uint numLats,uint numLons, MadingleyModelInitialisation initialisation, 
+        public void WriteTimeStepTrophicFlows(uint currentTimeStep, uint numLats, uint numLons, MadingleyModelInitialisation initialisation,
             Boolean marineCell)
         {
             _TrackEating.WriteTrophicFlows(currentTimeStep, numLats, numLons, initialisation, marineCell);
@@ -281,10 +279,10 @@ namespace Madingley
         /// <param name="metabolism">The mass lost to indivduals in the cohort through metabolism</param>
         /// <param name="predation">The mass gained by individuals in the cohort through predation</param>
         /// <param name="herbivory">The mass gained by individuals in the cohort through herbivory</param>
-        public void TrackTimestepGrowth(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, 
+        public void TrackTimestepGrowth(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass,
             int functionalGroup, double netGrowth, double metabolism, double predation, double herbivory)
         {
-            _TrackGrowth.RecordGrowth(latIndex, lonIndex, timeStep, currentBodyMass, functionalGroup, netGrowth, metabolism, predation,herbivory);
+            _TrackGrowth.RecordGrowth(latIndex, lonIndex, timeStep, currentBodyMass, functionalGroup, netGrowth, metabolism, predation, herbivory);
         }
 
         /// <summary>
@@ -343,8 +341,8 @@ namespace Madingley
         /// <param name="cohortID">The ID of the cohort suffering mortality</param>
         /// <param name="numberDied">The number of individuals dying in this mortality event</param>
         /// <param name="mortalitySource">The type of mortality causing the individuals to die</param>
-        public void RecordMortality(uint latIndex, uint lonIndex, uint birthTimeStep, uint timeStep, double currentMass, double adultMass, uint functionalGroup, uint cohortID, 
-            double numberDied,string mortalitySource)
+        public void RecordMortality(uint latIndex, uint lonIndex, uint birthTimeStep, uint timeStep, double currentMass, double adultMass, uint functionalGroup, uint cohortID,
+            double numberDied, string mortalitySource)
         {
             _TrackMortality.RecordMortality(latIndex, lonIndex, birthTimeStep,
                 timeStep, currentMass, adultMass, functionalGroup, cohortID, numberDied, mortalitySource);
@@ -367,7 +365,7 @@ namespace Madingley
         /// <param name="currentTimeStep">THe current time step</param>
         /// <param name="merged">Whether the cohort becoming extinct has ever been merged</param>
         /// <param name="cohortIDs">The IDs of all cohorts that have contributed individuals to the cohort going extinct</param>
-        public void RecordExtinction(uint latIndex, uint lonIndex,uint currentTimeStep,bool merged,List<uint>cohortIDs)
+        public void RecordExtinction(uint latIndex, uint lonIndex, uint currentTimeStep, bool merged, List<uint> cohortIDs)
         {
             _TrackExtinction.RecordExtinction(latIndex, lonIndex, currentTimeStep, merged, cohortIDs);
         }
@@ -382,17 +380,16 @@ namespace Madingley
         /// <param name="functionalGroup">The functional group index of the acting cohort</param>
         /// <param name="temperature">The ambient temperature in the grid cell</param>
         /// <param name="metabolicLoss">The mass lost by individuals through metabolism</param>
-        public void TrackTimestepMetabolism(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass, 
+        public void TrackTimestepMetabolism(uint latIndex, uint lonIndex, uint timeStep, double currentBodyMass,
             int functionalGroup, double temperature, double metabolicLoss)
         {
             _TrackMetabolism.RecordMetabolism(latIndex, lonIndex, timeStep, currentBodyMass, functionalGroup, temperature, metabolicLoss);
         }
 
-
         /// <summary>
         /// Close all tracker streams
         /// </summary>
-		public void CloseStreams(Boolean SpecificLocations)
+        public void CloseStreams(Boolean SpecificLocations)
         {
             //_TrackNPP.CloseStreams();
             if (SpecificLocations == true)

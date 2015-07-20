@@ -11,8 +11,8 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of background mortality, i.e. mortality from disease, accidents and other random events
     /// </summary>
-    public partial class BackgroundMortality: IMortalityImplementation
-    {   
+    public partial class BackgroundMortality : IMortalityImplementation
+    {
         /// <summary>
         /// The time units associated with this background mortality implementation and its parameters
         /// </summary>
@@ -32,14 +32,12 @@ namespace Madingley
         /// </summary>
         public double MortalityRate { get { return _MortalityRate; } }
 
-
         public void InitialiseParametersBackgroundMortality()
         {
             _TimeUnitImplementation =
                 EcologicalParameters.TimeUnits[(int)EcologicalParameters.Parameters["Mortality.Background.TimeUnitImplementation"]];
             _MortalityRate = EcologicalParameters.Parameters["Mortality.Background.MortalityRate"];
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -51,7 +49,7 @@ namespace Madingley
             sw.WriteLine("Background Mortality\tTimeUnitImplementation\t" + Convert.ToString(_TimeUnitImplementation));
             sw.WriteLine("Background Mortality\tMortalityRate\t" + Convert.ToString(_MortalityRate));
         }
-        
+
         /// <summary>
         /// Calculate the rate of individuals in a cohort that die from background mortality in a model time step
         /// </summary>
@@ -61,7 +59,7 @@ namespace Madingley
         /// <param name="deltas">The sorted list to track changes in biomass and abundance of the acting cohort in this grid cell</param>
         /// <param name="currentTimestep">The current model time step</param>
         /// <returns>The rate of individuals in the cohort that die from background mortality</returns>
-        public double CalculateMortalityRate(GridCellCohortHandler gridCellCohorts, int[] actingCohort, 
+        public double CalculateMortalityRate(GridCellCohortHandler gridCellCohorts, int[] actingCohort,
             double bodyMassIncludingChangeThisTimeStep, Dictionary<string, Dictionary<string, double>> deltas, uint currentTimestep)
         {
             // Convert from mortality rate per mortality formulation time step to mortality rate per model time step

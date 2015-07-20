@@ -39,7 +39,6 @@ namespace Madingley
         /// </summary>
         public double DispersalSpeedBodyMassExponent { get { return _DispersalSpeedBodyMassExponent; } }
 
-
         public void InitialiseParametersDiffusiveDispersal()
         {
             _TimeUnitImplementation =
@@ -47,7 +46,6 @@ namespace Madingley
             _DispersalSpeedBodyMassScalar = EcologicalParameters.Parameters["Dispersal.Diffusive.DispersalSpeedBodyMassScalar"];
             _DispersalSpeedBodyMassExponent = EcologicalParameters.Parameters["Dispersal.Diffusive.DispersalSpeedBodyMassExponent"];
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -60,7 +58,7 @@ namespace Madingley
             sw.WriteLine("Diffusive Dispersal\tDispersalSpeedBodyMassScalar_per_g\t" + Convert.ToString(_DispersalSpeedBodyMassScalar));
             sw.WriteLine("Diffusive Dispersal\tDispersalSpeedBodyMassExponent\t" + Convert.ToString(_DispersalSpeedBodyMassExponent));
         }
-        
+
         /// <summary>
         /// Calculates the average diffusive dispersal speed of individuals in a cohort given their body mass
         /// </summary>
@@ -68,7 +66,7 @@ namespace Madingley
         /// <returns>The average dispersal speed, in km per month</returns>
         private double CalculateDispersalSpeed(double bodyMass)
         {
-                return _DispersalSpeedBodyMassScalar * Math.Pow(bodyMass,_DispersalSpeedBodyMassExponent);
+            return _DispersalSpeedBodyMassScalar * Math.Pow(bodyMass, _DispersalSpeedBodyMassExponent);
         }
 
         /// <summary>
@@ -99,7 +97,7 @@ namespace Madingley
             // Calculate the u and v components given the dispersal speed
             double uSpeed = dispersalSpeed * Math.Cos(RandomDirection);
             double vSpeed = dispersalSpeed * Math.Sin(RandomDirection);
-            
+
             // Calculate the area of the grid cell that is now outside in the diagonal direction
             double AreaOutsideBoth = Math.Abs(uSpeed * vSpeed);
 

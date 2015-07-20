@@ -22,15 +22,15 @@ namespace Madingley
             get { return _TrackCrossCellProcesses; }
             set { _TrackCrossCellProcesses = value; }
         }
-        
+
         /// <summary>
         /// Instance of the dispersal tracker within the cross-cell tracker
         /// </summary>
-        private DispersalTracker  _TrackDispersal;
+        private DispersalTracker _TrackDispersal;
         /// <summary>
         /// Get and set the reproduction tracker
         /// </summary>
-        public DispersalTracker  TrackDispersal
+        public DispersalTracker TrackDispersal
         {
             get { return _TrackDispersal; }
             set { _TrackDispersal = value; }

@@ -19,7 +19,7 @@ namespace Madingley
         /// A vector of stopwatch objects for timing the ecological processes
         /// </summary>
         public StopWatch[] s2;
-               
+
         /// <summary>
         /// A sorted list of formulations of metabolism
         /// </summary>
@@ -28,8 +28,8 @@ namespace Madingley
         /// Get the sorted list of metabolism formulations
         /// </summary>
         public SortedList<string, IEcologicalProcessWithinGridCell> MetabolismFormulations
-	    {
-		    get { return _MetabolismFormulations;}
+        {
+            get { return _MetabolismFormulations; }
         }
 
         /// <summary>
@@ -40,10 +40,10 @@ namespace Madingley
         /// Get the sorted list of eating formulations
         /// </summary>
         public SortedList<string, IEcologicalProcessWithinGridCell> EatingFormulations
-	    {
-		    get { return _EatingFormulations;}
+        {
+            get { return _EatingFormulations; }
         }
-	
+
         /// <summary>
         /// A sorted list of formulations of mortality
         /// </summary>
@@ -52,10 +52,10 @@ namespace Madingley
         /// Get the sorted list of mortality formulations
         /// </summary>
         public SortedList<string, IEcologicalProcessWithinGridCell> MortalityFormulations
-	    {
-		    get { return _MortalityFormulations;}
+        {
+            get { return _MortalityFormulations; }
         }
-       
+
         /// <summary>
         /// A sorted list of formulations of reproduction
         /// </summary>
@@ -64,15 +64,14 @@ namespace Madingley
         /// Get the sorted list of reproduction formulations
         /// </summary>
         public SortedList<string, IEcologicalProcessWithinGridCell> Reproductions
-	    {
-		    get { return _ReproductionFormulations;}
+        {
+            get { return _ReproductionFormulations; }
         }
 
         /// <summary>
         /// An instance of apply ecology
         /// </summary>
         ApplyEcology ApplyEcologicalProcessResults;
-
 
         # endregion
 
@@ -107,8 +106,6 @@ namespace Madingley
 
             // Initialise apply ecology
             ApplyEcologicalProcessResults = new ApplyEcology();
-
-
         }
 
         /// <summary>
@@ -128,10 +125,10 @@ namespace Madingley
         /// <param name="outputDetail">The level of output detail being used for this model run</param>
         /// <param name="currentMonth">The current model month</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void RunWithinCellEcology(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort, 
-            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions 
-            madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentTimestep, ProcessTracker trackProcesses, 
-            ref ThreadLockedParallelVariables partial, Boolean specificLocations,string outputDetail, uint currentMonth, 
+        public void RunWithinCellEcology(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort,
+            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions
+            madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentTimestep, ProcessTracker trackProcesses,
+            ref ThreadLockedParallelVariables partial, Boolean specificLocations, string outputDetail, uint currentMonth,
             MadingleyModelInitialisation initialisation)
         {
 
@@ -140,19 +137,16 @@ namespace Madingley
                 deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, trackProcesses, ref partial,
                 specificLocations, outputDetail, currentMonth, initialisation);
 
-            
             // RUN METABOLISM - THIS TIME TAKE THE METABOLIC LOSS TAKING INTO ACCOUNT WHAT HAS BEEN INGESTED THROUGH EATING
             _MetabolismFormulations["Basic metabolism"].RunEcologicalProcess(gridCellCohorts, gridCellStocks, actingCohort,
                 cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, trackProcesses, ref partial,
                 specificLocations, outputDetail, currentMonth, initialisation);
-              
-           
+
             // RUN REPRODUCTION - TAKING INTO ACCOUNT NET BIOMASS CHANGES RESULTING FROM EATING AND METABOLISING
             _ReproductionFormulations["Basic reproduction"].RunEcologicalProcess(gridCellCohorts, gridCellStocks, actingCohort,
                 cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, trackProcesses, ref partial,
                 specificLocations, outputDetail, currentMonth, initialisation);
-            
-              
+
             // RUN MORTALITY - TAKING INTO ACCOUNT NET BIOMASS CHANGES RESULTING FROM EATING, METABOLISM AND REPRODUCTION
             _MortalityFormulations["Basic mortality"].RunEcologicalProcess(gridCellCohorts, gridCellStocks, actingCohort,
                 cellEnvironment, deltas, madingleyCohortDefinitions, madingleyStockDefinitions, currentTimestep, trackProcesses, ref partial,
@@ -171,8 +165,8 @@ namespace Madingley
         /// <param name="madingleyStockDefinitions">The definitions for stock functional groups in the model</param>
         /// <param name="currentTimestep">The current model time step</param>
         /// <param name="tracker">A process tracker</param>
-        public void UpdateEcology(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort, 
-            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions 
+        public void UpdateEcology(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort,
+            SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas, FunctionalGroupDefinitions
             madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentTimestep, ProcessTracker tracker)
         {
             // Apply the results of within-cell ecological processes

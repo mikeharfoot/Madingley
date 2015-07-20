@@ -10,7 +10,7 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of dispersal
     /// </summary>
-    public partial class ResponsiveDispersal : CommonDispersalMethods , IDispersalImplementation
+    public partial class ResponsiveDispersal : CommonDispersalMethods, IDispersalImplementation
     {
         /// <summary>
         /// The time units associated with this implementation of dispersal
@@ -49,7 +49,6 @@ namespace Madingley
         /// </summary>
         public double DispersalSpeedBodyMassScalar { get { return _DispersalSpeedBodyMassScalar; } }
 
-
         /// <summary>
         /// Body-mass exponent of the relationship between disperal speed and individual body mass
         /// </summary>
@@ -69,7 +68,6 @@ namespace Madingley
             return _DispersalSpeedBodyMassScalar * Math.Pow(bodyMass, _DispersalSpeedBodyMassExponent);
         }
 
-
         public void InitialiseParametersResponsiveDispersal()
         {
             _TimeUnitImplementation =
@@ -79,7 +77,6 @@ namespace Madingley
             _DispersalSpeedBodyMassScalar = EcologicalParameters.Parameters["Dispersal.Responsive.DispersalSpeedBodyMassScalar"];
             _DispersalSpeedBodyMassExponent = EcologicalParameters.Parameters["Dispersal.Responsive.DispersalSpeedBodyMassExponent"];
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -126,14 +123,14 @@ namespace Madingley
                     if (CohortDispersed > 0)
                     {
                         uint[] DestinationCell = CellToDisperseTo(gridForDispersal, latIndex, lonIndex, DispersalArray, DispersalArray[0], DispersalArray[4], DispersalArray[5], ref ExitDirection, ref EntryDirection);
-                        
+
                         // Update the delta array of cells to disperse to, if the cohort moves
                         if (DestinationCell[0] < 999999)
                         {
                             // Update the delta array of cohorts
                             gridForDispersal.DeltaFunctionalGroupDispersalArray[latIndex, lonIndex].Add((uint)functionalGroup);
                             gridForDispersal.DeltaCohortNumberDispersalArray[latIndex, lonIndex].Add((uint)cohortNumber);
-                        
+
                             // Update the delta array of cells to disperse to
                             gridForDispersal.DeltaCellToDisperseToArray[latIndex, lonIndex].Add(DestinationCell);
 
@@ -208,9 +205,9 @@ namespace Madingley
 
                 // Cohort tries to disperse
                 double[] DispersalArray = CalculateDispersalProbability(gridForDispersal, latIndex, lonIndex, CalculateDispersalSpeed(cohortToDisperse.AdultMass));
-                
+
                 double CohortDispersed = CheckForDispersal(DispersalArray[0]);
-                
+
                 if (CohortDispersed > 0)
                 {
                     uint[] DestinationCell = CellToDisperseTo(gridForDispersal, latIndex, lonIndex, DispersalArray, DispersalArray[0], DispersalArray[4], DispersalArray[5], ref ExitDirection, ref EntryDirection);
@@ -293,8 +290,5 @@ namespace Madingley
 
             return NewArray;
         }
-
-  
-
     }
 }

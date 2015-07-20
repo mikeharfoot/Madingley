@@ -21,7 +21,7 @@ namespace Madingley
         /// <summary>
         /// List of mortality events for each cohort (keyed by cohort ID)
         /// </summary>
-        private SortedList<string,List<string>> MortalityList;
+        private SortedList<string, List<string>> MortalityList;
 
         /// <summary>
         /// An instance of the simple random number generator
@@ -54,7 +54,7 @@ namespace Madingley
                 MortalityWriter.WriteLine("Latitude\tLongitude\tbirth_step\ttime_step\tcurrent mass\tadult mass\tfunctional group\tcohort id\tnumber died\tmortality source");
             }
 
-            MortalityList = new SortedList<string,List<string>>();
+            MortalityList = new SortedList<string, List<string>>();
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Madingley
         /// <param name="numberDied">The number of individuals </param>
         /// <param name="mortalitySource"></param>
         public void RecordMortality(uint latIndex, uint lonIndex,
-            uint birthStep, uint timestep, double currentMass,double adultMass, uint functionalGroup, 
+            uint birthStep, uint timestep, double currentMass, double adultMass, uint functionalGroup,
             uint cohortID, double numberDied, string mortalitySource)
         {
             // Write the time step and the abundance of the new cohort to the output file for diagnostic purposes
@@ -129,7 +129,7 @@ namespace Madingley
         /// <param name="cohortID">The ID of the cohort becoming extinct</param>
         public void OutputMortalityProfile(uint cohortID)
         {
-            
+
             string CohortIDString = Convert.ToString(cohortID);
 
             if (MortalityList.ContainsKey(CohortIDString))

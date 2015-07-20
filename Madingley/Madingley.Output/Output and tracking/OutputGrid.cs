@@ -11,11 +11,8 @@ using Microsoft.Research.Science.Data.Imperative;
 
 using Timing;
 
-
 namespace Madingley
 {
-
-
     class OutputGrid
     {
         /// <summary>
@@ -117,7 +114,7 @@ namespace Madingley
         private double[,] FrostDays;
 
         private double[,] FracEvergreen;
-        
+
         /// <summary>
         /// The time steps in this model simulation
         /// </summary>
@@ -170,7 +167,6 @@ namespace Madingley
             else
                 Debug.Fail("Specified output detail level is not valid, must be 'low', 'medium' or 'high'");
 
-
             // Get whether to track marine specifics
             OutputMetrics = modelInitialisation.OutputMetrics;
 
@@ -210,7 +206,7 @@ namespace Madingley
 #endif
 
         public void SetupOutputs(ModelGrid ecosystemModelGrid, string outputFilesSuffix, uint numTimeSteps,
-            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions 
+            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions
             stockFunctionalGroupDefinitions)
         {
             // Create an SDS object to hold grid outputs
@@ -287,7 +283,6 @@ namespace Madingley
                     BiomassDensityGrid.Add(TraitValue, temp);
                     DataConverter.AddVariable(GridOutput, TraitValue + "biomass density", 3, GeographicalDimensions, 0, outLats, outLons, TimeSteps);
                 }
-
 
                 if (OutputMetrics)
                 {
@@ -379,7 +374,7 @@ namespace Madingley
             }
 
             // Define the stock traits that will be used to separate outputs
-            StockTraits = new string[2] { "Heterotroph/Autotroph" ,"Leaf strategy"};
+            StockTraits = new string[2] { "Heterotroph/Autotroph", "Leaf strategy" };
 
             // Re-initialise the sorted dictionary to hold all unique trait values
             StockTraitValues = new SortedDictionary<string, string[]>();
@@ -429,14 +424,13 @@ namespace Madingley
                 BiomassDensityGrid[Key] = ecosystemModelGrid.GetStateVariableGridLogDensityPerSqKm("Biomass", "NA", CohortTraitIndices[Key], cellIndices, "cohort", initialisation);
                 AbundanceDensityGrid[Key] = ecosystemModelGrid.GetStateVariableGridLogDensityPerSqKm("Abundance", "NA", CohortTraitIndices[Key], cellIndices, "cohort", initialisation);
             }
-            
+
             Keys = StockTraitIndices.Keys.ToArray();
             foreach (string Key in Keys)
             {
                 BiomassDensityGrid[Key] = ecosystemModelGrid.GetStateVariableGridLogDensityPerSqKm("Biomass", "NA", StockTraitIndices[Key], cellIndices, "stock", initialisation);
             }
 
-            
             // Temporary outputs to check plant model
 
             Realm = ecosystemModelGrid.GetEnviroGrid("Realm", 0);
@@ -479,10 +473,7 @@ namespace Madingley
                     MetricsGrid["Geometric Mean Bodymass"][latIndex, lonIndex] = Metrics.CalculateGeometricCommunityMeanBodyMass(ecosystemModelGrid, cellIndices, i);
                 }
             }
-            
-
         }
-
         public void InitialOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions
             stockFunctionalGroupDefinitions, List<uint[]> cellIndices, MadingleyModelInitialisation initialisation)
         {
@@ -499,12 +490,11 @@ namespace Madingley
             }
 
             // Add the grid of total biomass in cells to the file dataset
-            DataConverter.Array2DToSDS3D(LogBiomassDensityGridCohorts, "Biomass density", new string[] { "Latitude", "Longitude", "Time step" }, 0, 
+            DataConverter.Array2DToSDS3D(LogBiomassDensityGridCohorts, "Biomass density", new string[] { "Latitude", "Longitude", "Time step" }, 0,
                 ecosystemModelGrid.GlobalMissingValue, GridOutput);
 
-            DataConverter.Array2DToSDS3D(LogAbundanceDensityGridCohorts, "Abundance density", new string[] { "Latitude", "Longitude", "Time step" }, 0, 
+            DataConverter.Array2DToSDS3D(LogAbundanceDensityGridCohorts, "Abundance density", new string[] { "Latitude", "Longitude", "Time step" }, 0,
                 ecosystemModelGrid.GlobalMissingValue, GridOutput);
-
 
             // Temporary outputs to check plant model
             DataConverter.Array2DToSDS3D(Realm, "Realm", new string[] { "Latitude", "Longitude", "Time step" },
@@ -519,19 +509,16 @@ namespace Madingley
                 // Add the biomass grids for individual trait combinations to the file dataset
                 foreach (var Key in BiomassDensityGrid.Keys)
                 {
-                    DataConverter.Array2DToSDS3D(BiomassDensityGrid[Key], Key + "biomass density", new string[]
-                    { "Latitude", "Longitude", "Time step" }, 0, ecosystemModelGrid.GlobalMissingValue, GridOutput);
-
-
+                    DataConverter.Array2DToSDS3D(BiomassDensityGrid[Key], Key + "biomass density", new string[] { "Latitude", "Longitude", "Time step" }, 0, ecosystemModelGrid.GlobalMissingValue, GridOutput);
                 }
 
                 // Add the abundance density grid
                 foreach (var Key in AbundanceDensityGrid.Keys)
                 {
-                    
-                    DataConverter.Array2DToSDS3D(AbundanceDensityGrid[Key], Key + "abundance density", 
-                        new string[] { "Latitude", "Longitude", "Time step" }, 
-                        0, 
+
+                    DataConverter.Array2DToSDS3D(AbundanceDensityGrid[Key], Key + "abundance density",
+                        new string[] { "Latitude", "Longitude", "Time step" },
+                        0,
                         ecosystemModelGrid.GlobalMissingValue,
                         GridOutput);
                 }
@@ -550,10 +537,8 @@ namespace Madingley
                 }
 
             }
-           
-        }
 
-        
+        }
         public void TimeStepOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions
             stockFunctionalGroupDefinitions, List<uint[]> cellIndices, uint currentTimeStep, MadingleyModelInitialisation initialisation)
         {
@@ -571,7 +556,7 @@ namespace Madingley
 
             // Add the grid of total biomass in cells to the file dataset
             DataConverter.Array2DToSDS3D(LogBiomassDensityGridCohorts, "Biomass density", new string[] { "Latitude", "Longitude", "Time step" },
-                (int)currentTimeStep+1, 0, GridOutput);
+                (int)currentTimeStep + 1, 0, GridOutput);
 
             // Add the grid of total abudance in cells to the file dataset
             DataConverter.Array2DToSDS3D(LogAbundanceDensityGridCohorts, "Abundance density", new string[] { "Latitude", "Longitude", "Time step" },
@@ -587,21 +572,16 @@ namespace Madingley
             DataConverter.Array2DToSDS3D(HANPP, "HANPP", new string[] { "Latitude", "Longitude", "Time step" },
                 (int)currentTimeStep + 1, ecosystemModelGrid.GlobalMissingValue, GridOutput);
 
-
-
             if ((ModelOutputDetail == OutputDetailLevel.Medium) || (ModelOutputDetail == OutputDetailLevel.High))
             {
                 foreach (var TraitValue in BiomassDensityGrid.Keys)
                 {
                     // Add the biomass grids for individual trait combinations to the file dataset
-                    DataConverter.Array2DToSDS3D(BiomassDensityGrid[TraitValue], TraitValue + "biomass density", new string[] 
-                    { "Latitude", "Longitude", "Time step" }, (int)currentTimeStep+1, ecosystemModelGrid.GlobalMissingValue, GridOutput);
-
+                    DataConverter.Array2DToSDS3D(BiomassDensityGrid[TraitValue], TraitValue + "biomass density", new string[] { "Latitude", "Longitude", "Time step" }, (int)currentTimeStep + 1, ecosystemModelGrid.GlobalMissingValue, GridOutput);
                 }
 
                 foreach (var Key in AbundanceDensityGrid.Keys)
                 {
-                    
                     DataConverter.Array2DToSDS3D(AbundanceDensityGrid[Key], Key + "abundance density",
                         new string[] { "Latitude", "Longitude", "Time step" },
                         (int)currentTimeStep + 1,
@@ -622,8 +602,6 @@ namespace Madingley
                                                 GridOutput);
                 }
             }
-
-
         }
 
         public void FinalOutputs()

@@ -10,7 +10,7 @@ namespace Madingley
     /// <summary>
     /// A revised version of the herbivory process, written November 2011
     /// </summary>
-    public partial class RevisedHerbivory: IEatingImplementation
+    public partial class RevisedHerbivory : IEatingImplementation
     {
         /// <summary>
         /// Holds the thread-local variables to track numbers of extinctions and productions of cohorts
@@ -41,7 +41,7 @@ namespace Madingley
         /// Get or set the proportion of time that a herbivore cohort devotes to eating behaviours
         /// </summary>
         public double ProportionTimeEating
-        { 
+        {
             get { return _ProportionOfTimeEating; }
             set { _ProportionOfTimeEating = value; }
         }
@@ -109,10 +109,10 @@ namespace Madingley
         /// <summary>
         /// Get and set the area of the grid cell
         /// </summary>
-        public double CellArea 
-        { 
-            get { return _CellArea; } 
-            set { _CellArea = value; } 
+        public double CellArea
+        {
+            get { return _CellArea; }
+            set { _CellArea = value; }
         }
 
         /// <summary>
@@ -149,11 +149,11 @@ namespace Madingley
 
             // Calculate the scalar to convert from the time step units used by this implementation of herbivory to the global model time step units
             _DeltaT = Utilities.ConvertTimeUnits(globalModelTimeStepUnit, _TimeUnitImplementation);
-                        
+
             // Store the specified cell area in this instance of this herbivory implementation
             _CellArea = cellArea;
             _CellAreaHectares = cellArea * 100;
-            
+
         }
 
         /// <summary>
@@ -168,7 +168,7 @@ namespace Madingley
         public void InitializeEatingPerTimeStep(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions)
         {
             // Get the functional group indices of all autotroph stocks
-            _FunctionalGroupIndicesToEat = madingleyStockDefinitions.GetFunctionalGroupIndex("Heterotroph/Autotroph", "Autotroph", false);          
+            _FunctionalGroupIndicesToEat = madingleyStockDefinitions.GetFunctionalGroupIndex("Heterotroph/Autotroph", "Autotroph", false);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Madingley
 
             // Get the individual body mass of the acting cohort
             _BodyMassHerbivore = gridCellCohorts[actingCohort].IndividualBodyMass;
-            
+
             // Set the total number of units to handle all potential biomass eaten to zero
             _TimeUnitsToHandlePotentialFoodItems = 0.0;
 
@@ -209,7 +209,7 @@ namespace Madingley
                 for (int i = 0; i < gridCellStocks[FunctionalGroup].Count; i++)
                 {
                     // Get the mass from this stock that is available for eating (assumes only 10% is edible)
-                    EdibleMass = gridCellStocks[FunctionalGroup][i].TotalBiomass* 0.1;
+                    EdibleMass = gridCellStocks[FunctionalGroup][i].TotalBiomass * 0.1;
 
                     // Calculate the potential biomass eaten from this stock by the acting cohort
                     _PotentialBiomassesEaten[FunctionalGroup][i] = CalculatePotentialBiomassEatenTerrestrial(EdibleMass, _BodyMassHerbivore);
@@ -217,12 +217,11 @@ namespace Madingley
                     // Add the time required to handle the potential biomass eaten from this stock to the cumulative total for all stocks
                     _TimeUnitsToHandlePotentialFoodItems += _PotentialBiomassesEaten[FunctionalGroup][i] *
                         CalculateHandlingTimeTerrestrial(_BodyMassHerbivore);
-                    
+
                 }
             }
 
         }
-
 
         /// <summary>
         /// Calculate the potential biomass that could be gained through herbivory on each grid cell autotroph stock
@@ -332,37 +331,27 @@ namespace Madingley
                     {
                         trackProcesses.TrackHerbivoryTrophicFlow((uint)cellEnvironment["LatIndex"][0], (uint)cellEnvironment["LonIndex"][0],
                             gridCellCohorts[actingCohort].FunctionalGroupIndex, madingleyCohortDefinitions, _BiomassesEaten[FunctionalGroup][i], _BodyMassHerbivore, initialisation, cellEnvironment["Realm"][0] == 2.0);
-
                     }
-
 
                     // Check that the biomass eaten is not a negative value
                     // Commented out for purposes of speed
                     //Debug.Assert(_BiomassesEaten[FunctionalGroup][i] >= 0,
                     //    "Herbivory negative for this herbivore cohort" + actingCohort);
-                    
+
                     // Add the biomass eaten and assimilated by an individual to the delta biomass for the acting cohort
                     deltas["biomass"]["herbivory"] += _BiomassesEaten[FunctionalGroup][i] * AssimilationEfficiency / gridCellCohorts[actingCohort].CohortAbundance;
 
                     // Move the biomass eaten but not assimilated by an individual into the organic matter pool
                     deltas["organicpool"]["herbivory"] += _BiomassesEaten[FunctionalGroup][i] * (1 - AssimilationEfficiency);
-                
                 }
-                
+
                 // Check that the delta biomass from eating for the acting cohort is not negative
                 // Commented out for the purposes of speed
                 //Debug.Assert(deltas["biomass"]["herbivory"] >= 0, "Delta biomass from herbviory is negative");
-                
+
                 // Calculate the total biomass eaten by the acting (herbivore) cohort
                 _TotalBiomassEatenByCohort = deltas["biomass"]["herbivory"] * gridCellCohorts[actingCohort].CohortAbundance;
-
-                
-
             }
         }
-
-
     }
-
-
 }

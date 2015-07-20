@@ -15,12 +15,12 @@ namespace Madingley
         /// <summary>
         /// An array to hold gridded NPP values
         /// </summary>
-        double[,,] NPP;
+        double[, ,] NPP;
 
         /// <summary>
         /// An array to hold gridded NPP values
         /// </summary>
-        double[,,] HANPP;
+        double[, ,] HANPP;
 
         /// <summary>
         /// An instance of the class to convert data between arrays and SDS objects
@@ -58,7 +58,7 @@ namespace Madingley
         /// <param name="latCellSize">The latitudinal cell size of the grid to output</param>
         /// <param name="lonCellSize">The longitudinal cell size of the grid to output</param>
         /// <param name="numTimeSteps">The number of time steps to output NPP data for</param>
-        public GlobalNPPTracker(string outputPath,int numLats, int numLons, float[] lats, float[] lons, float latCellSize,float lonCellSize, 
+        public GlobalNPPTracker(string outputPath, int numLats, int numLons, float[] lats, float[] lons, float latCellSize, float lonCellSize,
             int numTimeSteps, int numStocks)
         {
             _NumLats = numLats;
@@ -77,8 +77,6 @@ namespace Madingley
 
             // Create vector to hold the values of the time dimension
             float[] TimeSteps = new float[numTimeSteps];
-
-
 
             // Fill other values from 0 (this will hold outputs during the model run)
             for (int i = 0; i < numTimeSteps; i++)
@@ -101,15 +99,14 @@ namespace Madingley
                 outLons[jj] = lons[jj] + (lonCellSize / 2);
             }
 
-
             // Add output variables that are dimensioned geographically and temporally to grid output file
             string[] GeographicalDimensions = { "Latitude", "Longitude", "Time step" };
             for (int ii = 0; ii < numStocks; ii++)
             {
                 DataConverter.AddVariable(NPPOutput, "NPP_" + ii.ToString(), 3, GeographicalDimensions, -9999.0, outLats, outLons, TimeSteps);
-                DataConverter.AddVariable(HANPPOutput, "HANPP_"+ii.ToString(), 3, GeographicalDimensions, -9999.0, outLats, outLons, TimeSteps);
+                DataConverter.AddVariable(HANPPOutput, "HANPP_" + ii.ToString(), 3, GeographicalDimensions, -9999.0, outLats, outLons, TimeSteps);
             }
-            
+
             NPP = new double[numLats, numLons, numStocks];
             HANPP = new double[numLats, numLons, numStocks];
 
@@ -123,7 +120,7 @@ namespace Madingley
                         HANPP[ii, jj, kk] = -9999.0;
                     }
                 }
-                
+
             }
 
             this.FileName = outputPath + "NPPOutput.nc";
@@ -135,7 +132,7 @@ namespace Madingley
         /// <param name="latIndex">The latitude index of the grid cell</param>
         /// <param name="lonIndex">The longitude index of the grid cell</param>
         /// <param name="val">The NPP value to be recorded</param>
-        public void RecordNPPValue(uint latIndex,uint lonIndex, uint stock, double val)
+        public void RecordNPPValue(uint latIndex, uint lonIndex, uint stock, double val)
         {
             NPP[latIndex, lonIndex, stock] = val;
         }
@@ -155,7 +152,7 @@ namespace Madingley
         /// Add the filled NPP grid the memory dataset ready to be written to file
         /// </summary>
         /// <param name="t">The current time step</param>
-        public void StoreNPPGrid(uint t,uint stock)
+        public void StoreNPPGrid(uint t, uint stock)
         {
             double[,] NPPout;
 
@@ -168,21 +165,18 @@ namespace Madingley
                 }
             }
 
-            DataConverter.Array2DToSDS3D(NPPout, "NPP_"+stock.ToString(), new string[] { "Latitude", "Longitude", "Time step" },
+            DataConverter.Array2DToSDS3D(NPPout, "NPP_" + stock.ToString(), new string[] { "Latitude", "Longitude", "Time step" },
                                         (int)t, 0, NPPOutput);
-
 
             for (int ii = 0; ii < _NumLats; ii++)
             {
                 for (int jj = 0; jj < _NumLons; jj++)
                 {
-                    
+
                     NPP[ii, jj, stock] = -9999.0;
                 }
-
             }
         }
-
 
         /// <summary>
         /// Add the filled NPP grid the memory dataset ready to be written to file
@@ -203,7 +197,6 @@ namespace Madingley
 
             DataConverter.Array2DToSDS3D(HANPPout, "HANPP_" + stock.ToString(), new string[] { "Latitude", "Longitude", "Time step" },
                                         (int)t, 0, HANPPOutput);
-
 
             for (int ii = 0; ii < _NumLats; ii++)
             {

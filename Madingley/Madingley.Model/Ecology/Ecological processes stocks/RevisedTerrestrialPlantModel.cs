@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -12,8 +11,6 @@ namespace Madingley
     /// </summary>
     public class RevisedTerrestrialPlantModel
     {
-
-
         /// <summary>
         /// The maximum poossible NPP (kg C per m2 per year)
         /// </summary>
@@ -184,7 +181,6 @@ namespace Madingley
         /// </summary>
         private double m2Tokm2Conversion;
 
-
         #region Methods
 
         /// <summary>
@@ -239,7 +235,6 @@ namespace Madingley
             // mass of leaf dry matter per g leaf wet matter = 0.213 g g-1 (from Kattge et al. (2011), TRY- A global database of plant traits, Global Change Biology)
             MassLeafDryMatterPerMassLeafWetMatter = EcologicalParameters.Parameters["RevisedTerrestrialPlantModel.MassLeafDryMatterPerMassLeafWetMatter"];
 
-
             m2Tokm2Conversion = 1000000.0;
         }
 
@@ -286,10 +281,7 @@ namespace Madingley
             sw.WriteLine("Terrestrial Plant Model\tMinReturnInterval\t" + Convert.ToString(MinReturnInterval));
             sw.WriteLine("Terrestrial Plant Model\tCarbonToLeafDryMatterScalar\t" + Convert.ToString(MassCarbonPerMassLeafDryMatter));
             sw.WriteLine("Terrestrial Plant Model\tLeafDryMatterToLeafWetMatterScalar\t" + Convert.ToString(MassLeafDryMatterPerMassLeafWetMatter));
-
-
         }
-
 
         /// <summary>
         /// Estimate the mass of leaves in a specified stock in the specified grid cell at equilibrium, given current environmental conditions
@@ -310,7 +302,6 @@ namespace Madingley
 
             // Calculate NPP using the Miami model
             double NPP = this.CalculateMiamiNPP(MeanTemp, TotalPrecip);
-
 
             // Calculate fractional allocation to structural tissue
             double FracStruct = this.CalculateFracStruct(NPP);
@@ -334,7 +325,6 @@ namespace Madingley
             // Calculate fine root mortality rate
             double FRootMort = this.CalculateFineRootMortalityRate(MeanTemp);
 
-            
             // Calculate the structural mortality rate
             double StMort = this.CalculateStructuralMortality(TotalAET);
 
@@ -385,11 +375,9 @@ namespace Madingley
         /// <param name="outputDetail">The level of detail to use in model outputs</param>
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
         public double UpdateLeafStock(SortedList<string, double[]> cellEnvironment, GridCellStockHandler gridCellStocks, int[] actingStock,
-            uint currentTimeStep, bool deciduous, string GlobalModelTimeStepUnit, ProcessTracker tracker, GlobalProcessTracker globalTracker, 
+            uint currentTimeStep, bool deciduous, string GlobalModelTimeStepUnit, ProcessTracker tracker, GlobalProcessTracker globalTracker,
             uint currentMonth, string outputDetail, bool specificLocations)
         {
-
-
             // ESTIMATE ANNUAL LEAF CARBON FIXATION ASSUMING ENVIRONMENT THROUGHOUT THE YEAR IS THE SAME AS IN THIS MONTH
 
             // Calculate annual NPP
@@ -400,7 +388,6 @@ namespace Madingley
 
             // Estimate monthly NPP based on seasonality layer
             NPP *= cellEnvironment["Seasonality"][currentMonth];
-
 
             // Calculate leaf mortality rates
             double AnnualLeafMortRate;
@@ -458,7 +445,7 @@ namespace Madingley
             {
                 NPP *= FracEvergreen;
             }
-          
+
             // Calculate the fire mortality rate
             double FireMortRate = this.CalculateFireMortalityRate(NPP, cellEnvironment["Fraction Year Fire"][0]);
 
@@ -474,13 +461,9 @@ namespace Madingley
             // Convert from the monthly time step used for this process to the global model time step unit
             WetMatterIncrement *= Utilities.ConvertTimeUnits(GlobalModelTimeStepUnit, "month");
 
-
-
-
             // Add the leaf wet matter to the acting stock
             //gridCellStocks[actingStock].TotalBiomass += Math.Max(-gridCellStocks[actingStock].TotalBiomass, WetMatterIncrement);
             double NPPWetMatter = Math.Max(-gridCellStocks[actingStock].TotalBiomass, WetMatterIncrement);
-
 
             // If the processer tracker is enabled and output detail is high and the model is being run for specific locations, then track the biomass gained through primary production
             if (tracker.TrackProcesses && (outputDetail == "high") && specificLocations)
@@ -492,9 +475,9 @@ namespace Madingley
 
             if (globalTracker.TrackProcesses)
             {
-                globalTracker.RecordNPP((uint)cellEnvironment["LatIndex"][0], (uint)cellEnvironment["LonIndex"][0],(uint)actingStock[0],
-                    this.ConvertToLeafWetMass(NPP, cellEnvironment["Cell Area"][0]) * 
-                    Utilities.ConvertTimeUnits(GlobalModelTimeStepUnit, "month")/cellEnvironment["Cell Area"][0]);
+                globalTracker.RecordNPP((uint)cellEnvironment["LatIndex"][0], (uint)cellEnvironment["LonIndex"][0], (uint)actingStock[0],
+                    this.ConvertToLeafWetMass(NPP, cellEnvironment["Cell Area"][0]) *
+                    Utilities.ConvertTimeUnits(GlobalModelTimeStepUnit, "month") / cellEnvironment["Cell Area"][0]);
             }
             // Calculate fractional leaf mortality
             double LeafMortFrac = 1 - Math.Exp(-TimeStepLeafMortRate);
@@ -504,7 +487,7 @@ namespace Madingley
             NPPWetMatter *= (1 - LeafMortFrac);
 
             return (NPPWetMatter);
-            
+
         }
 
         /// <summary>
@@ -711,17 +694,8 @@ namespace Madingley
 
             // Convert from g carbon to kg carbon
             return gCarbonPerM2 / 1000;
-
-
-
-
-
         }
 
         #endregion
-
-
-
-
     }
 }

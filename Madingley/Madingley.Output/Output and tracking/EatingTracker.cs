@@ -19,7 +19,7 @@ namespace Madingley
         /// Array to hold flows of mass among trophic levels. Order is:
         /// Lat, Lon, From (group), To (group)
         /// </summary>
-        private double[,,,] TrophicMassFlows;
+        private double[, , ,] TrophicMassFlows;
 
         /// <summary>
         /// Set up the tracker for outputing properties of the eating process
@@ -32,7 +32,7 @@ namespace Madingley
         /// <param name="cellIndex">The index of the current cell within the list of all grid cells in this simulation</param>
         /// <param name="initialisation">The instance of the MadingleyModelInitialisation class for this simulation</param>
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
-        public EatingTracker(uint numLats, uint numLons, string trophicFlowsFilename, string outputFilesSuffix, string outputPath, 
+        public EatingTracker(uint numLats, uint numLons, string trophicFlowsFilename, string outputFilesSuffix, string outputPath,
             int cellIndex, MadingleyModelInitialisation initialisation, Boolean MarineCell)
         {
             this.FileName = outputPath + trophicFlowsFilename + outputFilesSuffix + "_Cell" + cellIndex + ".txt";
@@ -64,7 +64,7 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
         public void RecordPredationTrophicFlow(uint latIndex, uint lonIndex, int fromFunctionalGroup, int toFunctionalGroup,
-            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass, double preyBodyMass, 
+            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass, double preyBodyMass,
             MadingleyModelInitialisation initialisation, Boolean MarineCell)
         {
             int fromIndex = 0;
@@ -91,7 +91,7 @@ namespace Madingley
                                                 break;
                                             default:
                                                 fromIndex = 1;
-                                                break;    
+                                                break;
                                         }
                                         break;
                                     default:
@@ -99,7 +99,7 @@ namespace Madingley
                                             fromIndex = 5;
                                         else
                                             fromIndex = 1;
-                                    break;
+                                        break;
                                 }
                                 break;
                         }
@@ -121,7 +121,7 @@ namespace Madingley
                                                 break;
                                             default:
                                                 fromIndex = 2;
-                                                break;    
+                                                break;
                                         }
                                         break;
                                     default:
@@ -129,7 +129,7 @@ namespace Madingley
                                             fromIndex = 5;
                                         else
                                             fromIndex = 2;
-                                    break;
+                                        break;
                                 }
                                 break;
                         }
@@ -151,7 +151,7 @@ namespace Madingley
                                                 break;
                                             default:
                                                 fromIndex = 3;
-                                                break;    
+                                                break;
                                         }
                                         break;
                                     default:
@@ -159,7 +159,7 @@ namespace Madingley
                                             fromIndex = 5;
                                         else
                                             fromIndex = 3;
-                                    break;
+                                        break;
                                 }
                                 break;
                         }
@@ -173,7 +173,7 @@ namespace Madingley
                 switch (cohortFunctionalGroupDefinitions.GetTraitNames("nutrition source", toFunctionalGroup))
                 {
                     case "omnivore":
-    switch (cohortFunctionalGroupDefinitions.GetTraitNames("mobility", toFunctionalGroup))
+                        switch (cohortFunctionalGroupDefinitions.GetTraitNames("mobility", toFunctionalGroup))
                         {
                             case "planktonic":
                                 toIndex = 4;
@@ -189,7 +189,7 @@ namespace Madingley
                                                 break;
                                             default:
                                                 toIndex = 2;
-                                                break;    
+                                                break;
                                         }
                                         break;
                                     default:
@@ -197,13 +197,13 @@ namespace Madingley
                                             toIndex = 5;
                                         else
                                             toIndex = 2;
-                                    break;
+                                        break;
                                 }
                                 break;
                         }
                         break;
                     case "carnivore":
-    switch (cohortFunctionalGroupDefinitions.GetTraitNames("mobility", toFunctionalGroup))
+                        switch (cohortFunctionalGroupDefinitions.GetTraitNames("mobility", toFunctionalGroup))
                         {
                             case "planktonic":
                                 toIndex = 4;
@@ -219,7 +219,7 @@ namespace Madingley
                                                 break;
                                             default:
                                                 toIndex = 3;
-                                                break;    
+                                                break;
                                         }
                                         break;
                                     default:
@@ -227,7 +227,7 @@ namespace Madingley
                                             toIndex = 5;
                                         else
                                             toIndex = 3;
-                                    break;
+                                        break;
                                 }
                                 break;
                         }
@@ -291,7 +291,7 @@ namespace Madingley
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
         public void RecordHerbivoryTrophicFlow(uint latIndex, uint lonIndex, int toFunctionalGroup, FunctionalGroupDefinitions
-            cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass, MadingleyModelInitialisation initialisation, 
+            cohortFunctionalGroupDefinitions, double massEaten, double predatorBodyMass, MadingleyModelInitialisation initialisation,
             Boolean MarineCell)
         {
             // For herbivory the trophic level index that mass flows from is 0
@@ -413,7 +413,7 @@ namespace Madingley
         /// <param name="numLons">The longitudinal dimension of the model grid in number of cells</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
         /// <param name="MarineCell">Whether the current cell is a marine cell</param>
-        public void WriteTrophicFlows(uint currentTimeStep,uint numLats,uint numLons, MadingleyModelInitialisation initialisation, 
+        public void WriteTrophicFlows(uint currentTimeStep, uint numLats, uint numLons, MadingleyModelInitialisation initialisation,
             Boolean MarineCell)
         {
             using (var TrophicFlowsWriter = File.AppendText(this.FileName))
@@ -442,9 +442,6 @@ namespace Madingley
                 TrophicMassFlows = new double[numLats, numLons, 7, 7];
             else
                 TrophicMassFlows = new double[numLats, numLons, 4, 4];
-
-
-            
         }
     }
 }

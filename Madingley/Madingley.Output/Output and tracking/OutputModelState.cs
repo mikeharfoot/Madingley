@@ -128,7 +128,6 @@ namespace Madingley
             }
         }
 
-
         public void OutputCurrentModelState(ModelGrid currentModelGrid, FunctionalGroupDefinitions functionalGroupHandler, List<uint[]> cellIndices, uint currentTimestep, int maximumNumberOfCohorts, string filename)
         {
 
@@ -197,7 +196,6 @@ namespace Madingley
             //Define the stock properties for output
             string[] StockProperties = new string[] { "IndividualBodyMass", "TotalBiomass" };
 
-
             //define the dimensions for cohort outputs
             dims = new string[] { "Latitude", "Longitude", "Stock Functional Group", "Stock" };
 
@@ -218,8 +216,6 @@ namespace Madingley
             //Close this data set
             StateOutput.Dispose();
         }
-
-
         private double[, , ,] CalculateCurrentCohortState(ModelGrid currentModelState, string variableName, int numLats, int numLons, int numFG, int numCohorts, List<uint[]> cellList)
         {
             //Calculate the cohort state

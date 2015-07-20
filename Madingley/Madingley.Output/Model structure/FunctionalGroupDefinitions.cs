@@ -7,7 +7,6 @@ using Microsoft.Research.Science.Data;
 using Microsoft.Research.Science.Data.CSV;
 using Microsoft.Research.Science.Data.Imperative;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -27,11 +26,11 @@ namespace Madingley
         /// <summary>
         /// A sorted list of all of the properties of functional groups and their values
         /// </summary>
-        private SortedList<string,double[]> _FunctionalGroupProperties;
+        private SortedList<string, double[]> _FunctionalGroupProperties;
         /// <summary>
         /// Get and set the sorted list of all of the properties of functional groups and their values
         /// </summary>
-        public SortedList<string,double[]> FunctionalGroupProperties
+        public SortedList<string, double[]> FunctionalGroupProperties
         {
             get { return _FunctionalGroupProperties; }
             set { _FunctionalGroupProperties = value; }
@@ -50,7 +49,7 @@ namespace Madingley
         /// Get the list of the indices of all functional groups in the model
         /// </summary>
         public int[] AllFunctionalGroupsIndex { get { return _AllFunctionalGroupsIndex; } }
-        
+
         /// <summary>
         /// Return the value of a biological parameter for a given parameter and functional group
         /// </summary>
@@ -100,12 +99,11 @@ namespace Madingley
 
             foreach (var key in temp.Keys)
             {
-                if(!TraitValues.Contains(key)) TraitValues.Add(key);
+                if (!TraitValues.Contains(key)) TraitValues.Add(key);
             }
 
             return TraitValues.ToArray();
         }
-
 
         /// <summary>
         /// Returns a string of Trait Names associated with the specified search trait for all functional group index value
@@ -125,7 +123,7 @@ namespace Madingley
         /// <returns>The value of the specified trait for the specified functional group</returns>
         public string GetTraitNames(string searchTrait, int functionalGroupIndex)
         {
-             return TraitLookupFromIndex[searchTrait.ToLower()].GetValue(functionalGroupIndex).ToString();   
+            return TraitLookupFromIndex[searchTrait.ToLower()].GetValue(functionalGroupIndex).ToString();
         }
 
         /// <summary>
@@ -155,8 +153,6 @@ namespace Madingley
             return TraitNames;
         }
 
-
-
         /// <summary>
         /// Get the functional group indices that have specified values of specified traits
         /// </summary>
@@ -171,15 +167,15 @@ namespace Madingley
 
             // List to hold the functional group indices for each trait-trait value pair
             List<int[]> IndexList = new List<int[]>();
-            
+
             int[] TempIndexList;
-            
+
             //Sorted dictionary to hold the trait value index list sorted dictionary from the lookup table
-			SortedDictionary<string, int[]> TraitIndexList;
+            SortedDictionary<string, int[]> TraitIndexList;
 
             //Loop over the number of trait name and trait value pairs
             for (int nn = 0; nn < searchTraits.Length; nn++)
-			{ 
+            {
                 //Check if the trait name is in the lookup table and if so pull out the <trait value, index vector> sorted dictionary for it
                 if (IndexLookupFromTrait.TryGetValue(searchTraits[nn].ToLower(), out TraitIndexList))
                 {
@@ -200,7 +196,7 @@ namespace Madingley
                 {
                     Debug.Fail("Trait to search for not found in lookup tables");
                 }
-			}
+            }
 
             //If we are only searching for one traitname and trait value pair then return the index vector
             if (searchTraits.Length == 1)
@@ -248,7 +244,7 @@ namespace Madingley
         /// <returns>Int array containing functional group indices corresponding to the given search conditions</returns>
         public int[] GetFunctionalGroupIndex(string searchTraits, string searchTraitValues, Boolean intersection)
         {
-            
+
             //List to hold the index vectors for each trait trait value pair
             int[] IndexList;
 

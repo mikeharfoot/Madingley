@@ -12,7 +12,6 @@ using Microsoft.Research.Science.Data.CSV;
 using Microsoft.Research.Science.Data.Imperative;
 using Microsoft.Research.Science.Data.Utilities;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -56,7 +55,6 @@ namespace Madingley
             get { return _Longitude; }
         }
 
-
 #if true
         /// <summary>
         /// Constructor for a grid cell; creates cell and reads in environmental data
@@ -71,7 +69,7 @@ namespace Madingley
         /// <param name="missingValue">The missing value to be applied to all data in the grid cell</param>
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
         public GridCell(float latitude, uint latIndex, float longitude, uint lonIndex, float latCellSize, float lonCellSize,
-            SortedList<string, EnviroData> dataLayers, double missingValue, 
+            SortedList<string, EnviroData> dataLayers, double missingValue,
             bool specificLocations)
 #else
         /// <summary>
@@ -107,7 +105,6 @@ namespace Madingley
             _Latitude = latitude;
             _Longitude = longitude;
 
-
             // Initialise list of environmental data layer values
             _CellEnvironment = new SortedList<string, double[]>();
 
@@ -118,7 +115,6 @@ namespace Madingley
             tempVector = new double[1];
             tempVector[0] = longitude;
             _CellEnvironment.Add("Longitude", tempVector);
-
 
             // Add an organic matter pool to the cell environment to track organic biomass not held by animals or plants with an initial value of 0
             tempVector = new double[1];
@@ -145,7 +141,6 @@ namespace Madingley
             tempVector[0] = lonIndex;
             _CellEnvironment.Add("LonIndex", tempVector);
 
-
             // Add the missing value of data in the grid cell to the cell environment
             tempVector = new double[1];
             tempVector[0] = missingValue;
@@ -163,7 +158,7 @@ namespace Madingley
                 for (int hh = 0; hh < dataLayers[LayerName].NumTimes; hh++)
                 {
                     // Add the value of the environmental variable at this time interval to the temporary vector
-                    tempVector[hh] = dataLayers[LayerName].GetValue(_Latitude, _Longitude, (uint)hh, out EnviroMissingValue,latCellSize,lonCellSize);
+                    tempVector[hh] = dataLayers[LayerName].GetValue(_Latitude, _Longitude, (uint)hh, out EnviroMissingValue, latCellSize, lonCellSize);
                     // If the environmental variable is a missing value, then change the value to equal the standard missing value for this cell
                     if (EnviroMissingValue)
                         tempVector[hh] = missingValue;
@@ -171,7 +166,6 @@ namespace Madingley
                 // Add the values of the environmental variables to the cell environment, with the name of the variable as the key
                 _CellEnvironment.Add(LayerName, tempVector);
             }
-
 
             if (_CellEnvironment.ContainsKey("LandSeaMask"))
             {
@@ -188,7 +182,7 @@ namespace Madingley
                         _CellEnvironment.Add("DiurnalTemperatureRange", _CellEnvironment["OceanDTR"]);
                         if (_CellEnvironment.ContainsKey("Temperature"))
                         {
-                            if(_CellEnvironment.ContainsKey("SST"))
+                            if (_CellEnvironment.ContainsKey("SST"))
                             {
                                 _CellEnvironment["Temperature"] = _CellEnvironment["SST"];
                             }
@@ -260,7 +254,7 @@ namespace Madingley
 
             // Calculate the fraction of the year that experiences frost
             double[] NDF = new double[1];
-            NDF[0] = CVC.GetNDF(_CellEnvironment["FrostDays"], _CellEnvironment["Temperature"],_CellEnvironment["Missing Value"][0]);
+            NDF[0] = CVC.GetNDF(_CellEnvironment["FrostDays"], _CellEnvironment["Temperature"], _CellEnvironment["Missing Value"][0]);
             _CellEnvironment.Add("Fraction Year Frost", NDF);
 
             double[] frostMonthly = new double[12];
@@ -337,8 +331,6 @@ namespace Madingley
             return ContainsData;
         }
 
-
-
         /// <summary>
         /// Checks if any non-missing value data exists in the vector data
         /// </summary>
@@ -383,7 +375,7 @@ namespace Madingley
                 // If there is no NPP value then asign a uniform flat seasonality
                 for (int i = 0; i < 12; i++)
                 {
-                    NPPSeasonalityValues[i] = 1.0/12.0;
+                    NPPSeasonalityValues[i] = 1.0 / 12.0;
                 }
 
             }
@@ -407,7 +399,4 @@ namespace Madingley
             return NPPSeasonalityValues;
         }
     }
-
-
 }
-

@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
-
 namespace Madingley
 {
     public class InputModelState
@@ -43,7 +41,6 @@ namespace Madingley
             get { return _InputState; }
             set { _InputState = value; }
         }
-        
 
 #if true
         public InputModelState(
@@ -55,7 +52,5 @@ namespace Madingley
             this._InputState = true;
         }
 #endif
-
-
     }
 }

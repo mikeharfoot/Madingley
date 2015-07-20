@@ -10,7 +10,7 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of senescence mortality
     /// </summary>
-    public partial class SenescenceMortality: IMortalityImplementation
+    public partial class SenescenceMortality : IMortalityImplementation
     {
         # region Define properties and fields
 
@@ -33,7 +33,6 @@ namespace Madingley
         public double MortalityRate { get { return _MortalityRate; } }
 
         # endregion
-
 
         public void InitialiseParametersSenescenceMortality()
         {
@@ -62,23 +61,23 @@ namespace Madingley
         /// <param name="deltas">The sorted list to track changes in biomass and abundance of the acting cohort in this grid cell</param>
         /// <param name="currentTimestep">The current model time step</param>
         /// <returns>The rate of individuals in the cohort that die from senescence mortality</returns>
-        public double CalculateMortalityRate(GridCellCohortHandler gridCellCohorts, int[] actingCohort, 
+        public double CalculateMortalityRate(GridCellCohortHandler gridCellCohorts, int[] actingCohort,
             double bodyMassIncludingChangeThisTimeStep, Dictionary<string, Dictionary<string, double>> deltas, uint currentTimestep)
         {
             // Calculate the age (in model time steps) that the cohort reached maturity
             double TimeToMaturity = gridCellCohorts[actingCohort].MaturityTimeStep - gridCellCohorts[actingCohort].BirthTimeStep;
-            
+
             // Calculate how many model time steps since the cohort reached maturity
             double AgePostMaturity = currentTimestep - gridCellCohorts[actingCohort].MaturityTimeStep;
-            
+
             // Calculate the time since maturity as a fraction of the time that it took the cohort to reach maturity
-            double FractionalAgePostMaturity = AgePostMaturity/(TimeToMaturity+1);
+            double FractionalAgePostMaturity = AgePostMaturity / (TimeToMaturity + 1);
 
             // Calculate the mortality rate per mortality formulation time step as a function of the exponential of the previous fraction
             double AgeRelatedMortalityRate = _MortalityRate * Math.Exp(FractionalAgePostMaturity);
 
             // Convert the mortality rate from formulation time step units to model time step units
             return AgeRelatedMortalityRate * DeltaT;
-        }        
+        }
     }
 }

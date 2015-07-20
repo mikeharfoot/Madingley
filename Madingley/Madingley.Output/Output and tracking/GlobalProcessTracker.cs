@@ -75,7 +75,7 @@ namespace Madingley
 
             if (_TrackProcesses)
             {
-                _TrackNPP = new GlobalNPPTracker(outputPath, lats.Length, lons.Length, lats, lons, latCellSize, lonCellSize, (int)numTimesteps,stockDefinitions.GetNumberOfFunctionalGroups());
+                _TrackNPP = new GlobalNPPTracker(outputPath, lats.Length, lons.Length, lats, lons, latCellSize, lonCellSize, (int)numTimesteps, stockDefinitions.GetNumberOfFunctionalGroups());
 
             }
         }
@@ -97,7 +97,7 @@ namespace Madingley
         /// <param name="t">The current time step</param>
         public void StoreNPPGrid(uint t, uint stock)
         {
-            _TrackNPP.StoreNPPGrid(t,stock);
+            _TrackNPP.StoreNPPGrid(t, stock);
         }
 
         /// <summary>

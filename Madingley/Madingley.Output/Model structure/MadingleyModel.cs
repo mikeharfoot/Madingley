@@ -13,7 +13,7 @@ using Microsoft.Research.Science.Data;
 using System.IO;
 
 namespace Madingley
-{   
+{
 #if true
     using Madingley.Output;
 #endif
@@ -23,8 +23,6 @@ namespace Madingley
     /// </summary>
     public class MadingleyModel
     {
-        
-
         /// <summary>
         /// An instance of the cohort functional group definitions for this model
         /// </summary>
@@ -64,12 +62,12 @@ namespace Madingley
         /// The right-most longitude for the model grid
         /// </summary>
         private float RightmostLongitude;
-        
+
         /// <summary>
         /// The size of the grid cells in degrees
         /// </summary>
         private float CellSize;
-       
+
         /// <summary>
         /// The number of time steps in the model run
         /// </summary>
@@ -80,12 +78,11 @@ namespace Madingley
         /// </summary>
         private List<uint> OutputModelStateTimestep;
 
-
         /// <summary>
         /// The current time step
         /// </summary>
         public uint CurrentTimeStep;
-        
+
         /// <summary>
         /// The current month: 1=Jan; 2=Feb; 3=Mar etc.
         /// </summary>
@@ -114,7 +111,6 @@ namespace Madingley
         /// Pairs of longitude and latitude indices for all active cells in the model grid
         /// </summary>
         private List<uint[]> _CellList;
-      
 
         /// <summary>
         /// A list of global diagnostics for this model run
@@ -130,7 +126,7 @@ namespace Madingley
         /// Whether the model will be run for specific locations, instead of for the whole model grid
         /// </summary>
         public Boolean SpecificLocations;
-        
+
         /// <summary>
         /// An instance of StopWatch to time individual time steps
         /// </summary>
@@ -182,7 +178,7 @@ namespace Madingley
         /// A sorted list of strings from the initialisation file
         /// </summary>
         SortedList<string, string> InitialisationFileStrings = new SortedList<string, string>();
-     
+
         /// <summary>
         /// Variable to track the number of cohorts that have dispersed. Doesn't need to be thread-local because all threads have converged prior to running cross-grid-cell processes
         /// </summary>
@@ -232,7 +228,6 @@ namespace Madingley
             AssignModelRunProperties(initialisation, scenarioParameters, scenarioIndex, outputFilesSuffix);
 #endif
 
-
             // Set up the model grid
 #if true
             this._CellList = initialisation.CellList.ToList();
@@ -266,12 +261,12 @@ namespace Madingley
                 EcosystemModelGrid.GlobalMissingValue,
                 outputFilesSuffix,
                 initialisation.OutputPath, initialisation.ModelMassBins,
-                SpecificLocations, i, initialisation, 
+                SpecificLocations, i, initialisation,
                 EcosystemModelGrid.GetEnviroLayer("Realm", 0, _CellList[i][0], _CellList[i][1], out varExists) == 2.0,
                 EcosystemModelGrid.LatCellSize,
                 EcosystemModelGrid.LonCellSize);
             }
-            
+
             // Set up a cross cell process tracker
             TrackCrossCellProcesses = new CrossCellProcessTracker(initialisation.TrackCrossCellProcesses, "DispersalData", initialisation.OutputPath, outputFilesSuffix);
 
@@ -361,85 +356,78 @@ namespace Madingley
                 }
             }
 
-                 if (TrackGlobalProcesses.TrackProcesses)
-                 {
-                     for (uint ii = 0; ii < StockFunctionalGroupDefinitions.GetNumberOfFunctionalGroups(); ii++)
-                     {
-                         TrackGlobalProcesses.StoreNPPGrid(hh, ii);
-                         TrackGlobalProcesses.StoreHANPPGrid(hh, ii);
-                     }
-                 }
+            if (TrackGlobalProcesses.TrackProcesses)
+            {
+                for (uint ii = 0; ii < StockFunctionalGroupDefinitions.GetNumberOfFunctionalGroups(); ii++)
+                {
+                    TrackGlobalProcesses.StoreNPPGrid(hh, ii);
+                    TrackGlobalProcesses.StoreHANPPGrid(hh, ii);
+                }
+            }
 #endif
-                 OutputTimer.Start();
+            OutputTimer.Start();
 
-                 // Write the global outputs for this time step
-                 GlobalOutputs.TimeStepOutputs(EcosystemModelGrid, CurrentTimeStep, CurrentMonth, TimeStepTimer,CohortFunctionalGroupDefinitions,
-                     StockFunctionalGroupDefinitions,_CellList,GlobalDiagnosticVariables, initialisation);
+            // Write the global outputs for this time step
+            GlobalOutputs.TimeStepOutputs(EcosystemModelGrid, CurrentTimeStep, CurrentMonth, TimeStepTimer, CohortFunctionalGroupDefinitions,
+                StockFunctionalGroupDefinitions, _CellList, GlobalDiagnosticVariables, initialisation);
 
-                 OutputTimer.Stop();
-                 Console.WriteLine("Global Outputs took: {0}", OutputTimer.GetElapsedTimeSecs());
+            OutputTimer.Stop();
+            Console.WriteLine("Global Outputs took: {0}", OutputTimer.GetElapsedTimeSecs());
 
+            OutputTimer.Start();
 
-                 OutputTimer.Start();
+            if (SpecificLocations)
+            {
+                // Loop over grid cells and write (a) time step outputs, and (b) trophic flow data (if process tracking is on)
+                for (int i = 0; i < _CellList.Count; i++)
+                {
+                    // Write out the grid cell outputs for this time step
+                    CellOutputs[i].TimeStepOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions,
+                        _CellList, i, GlobalDiagnosticVariables, TimeStepTimer, NumTimeSteps, CurrentTimeStep, initialisation, CurrentMonth, EcosystemModelGrid.GetEnviroLayer("Realm", 0, _CellList[i][0], _CellList[i][1], out varExists) == 2.0);
 
-                 if (SpecificLocations)
-                 {
-                     // Loop over grid cells and write (a) time step outputs, and (b) trophic flow data (if process tracking is on)
-                     for (int i = 0; i < _CellList.Count; i++)
-                     {
-                         // Write out the grid cell outputs for this time step
-                         CellOutputs[i].TimeStepOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions,
-                             _CellList, i, GlobalDiagnosticVariables, TimeStepTimer, NumTimeSteps, CurrentTimeStep, initialisation, CurrentMonth, EcosystemModelGrid.GetEnviroLayer("Realm", 0, _CellList[i][0], _CellList[i][1], out varExists) == 2.0);
-                         
-                         // Write out trophic flow data for this time step
-                         if(ProcessTrackers[i].TrackProcesses) ProcessTrackers[i].WriteTimeStepTrophicFlows(CurrentTimeStep, EcosystemModelGrid.NumLatCells, EcosystemModelGrid.NumLonCells, initialisation,
-                             EcosystemModelGrid.GetEnviroLayer("Realm", 0, _CellList[i][0], _CellList[i][1], out varExists) == 2.0);
-                 
-                     }
-                 }
-                 else
-                 {
-                     // Write out grid outputs for this time step
-                     GridOutputs.TimeStepOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions, _CellList,
-                         CurrentTimeStep, initialisation);
-                 }
+                    // Write out trophic flow data for this time step
+                    if (ProcessTrackers[i].TrackProcesses) ProcessTrackers[i].WriteTimeStepTrophicFlows(CurrentTimeStep, EcosystemModelGrid.NumLatCells, EcosystemModelGrid.NumLonCells, initialisation,
+                         EcosystemModelGrid.GetEnviroLayer("Realm", 0, _CellList[i][0], _CellList[i][1], out varExists) == 2.0);
 
+                }
+            }
+            else
+            {
+                // Write out grid outputs for this time step
+                GridOutputs.TimeStepOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions, _CellList,
+                    CurrentTimeStep, initialisation);
+            }
 
-                 OutputTimer.Stop();
-                 Console.WriteLine("Cell/Grid Outputs took: {0}", OutputTimer.GetElapsedTimeSecs());
+            OutputTimer.Stop();
+            Console.WriteLine("Cell/Grid Outputs took: {0}", OutputTimer.GetElapsedTimeSecs());
 
-                 // Write the results of dispersal to the console
-                 Console.ForegroundColor = ConsoleColor.Green;
-                 Console.WriteLine("Number of cohorts that dispersed this time step: {0}\n", Dispersals);
-                 Console.ForegroundColor = ConsoleColor.White;
-                 Dispersals = 0;
+            // Write the results of dispersal to the console
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("Number of cohorts that dispersed this time step: {0}\n", Dispersals);
+            Console.ForegroundColor = ConsoleColor.White;
+            Dispersals = 0;
 
+            if (OutputModelStateTimestep.Contains(hh))
+            {
+                OutputTimer.Start();
+                Console.WriteLine("Outputting model state");
 
-                 if (OutputModelStateTimestep.Contains(hh))
-                 {
-                     OutputTimer.Start();
-                     Console.WriteLine("Outputting model state");
+                //Writing to text based output
+                WriteModelState.OutputCurrentModelState(EcosystemModelGrid, _CellList, hh);
+                WriteModelState.OutputCurrentModelState(EcosystemModelGrid, CohortFunctionalGroupDefinitions, _CellList, CurrentTimeStep, initialisation.MaxNumberOfCohorts, "ModelState");
 
-                     //Writing to text based output
-                     WriteModelState.OutputCurrentModelState( EcosystemModelGrid, _CellList, hh);
-                     WriteModelState.OutputCurrentModelState(EcosystemModelGrid,CohortFunctionalGroupDefinitions, _CellList, CurrentTimeStep, initialisation.MaxNumberOfCohorts,"ModelState");
-                     
+                OutputTimer.Stop();
+                // Write the results of dispersal to the console
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine("Writing model state took: {0}", OutputTimer.GetElapsedTimeSecs());
+                Console.ForegroundColor = ConsoleColor.White;
 
-                     OutputTimer.Stop();
-                     // Write the results of dispersal to the console
-                     Console.ForegroundColor = ConsoleColor.Green;
-                     Console.WriteLine("Writing model state took: {0}", OutputTimer.GetElapsedTimeSecs());
-                     Console.ForegroundColor = ConsoleColor.White;
+                /*ReadModelState = new InputModelState(
+                    initialisation.OutputPath,
+                    "ModelState0");*/
 
-                     /*ReadModelState = new InputModelState(
-                         initialisation.OutputPath,
-                         "ModelState0");*/
-
-                 }
-
-
-
-             }
+            }
+        }
 
 #if true
         public Object EndYear(int year)
@@ -487,13 +475,13 @@ namespace Madingley
             // Temporary
             Boolean varExists;
 #endif
-             if (TrackGlobalProcesses.TrackProcesses) TrackGlobalProcesses.CloseNPPFile();
+            if (TrackGlobalProcesses.TrackProcesses) TrackGlobalProcesses.CloseNPPFile();
 
             // Loop over cells and close process trackers
-             for (int i = 0; i < _CellList.Count; i++)
-             {
-                 if (ProcessTrackers[i].TrackProcesses) ProcessTrackers[i].CloseStreams(SpecificLocations);
-             }
+            for (int i = 0; i < _CellList.Count; i++)
+            {
+                if (ProcessTrackers[i].TrackProcesses) ProcessTrackers[i].CloseStreams(SpecificLocations);
+            }
 
             // Write the final global outputs
             GlobalOutputs.FinalOutputs();
@@ -512,8 +500,6 @@ namespace Madingley
                 // Write the final grid outputs
                 GridOutputs.FinalOutputs();
             }
-
-            
         }
 
 #if true
@@ -589,7 +575,7 @@ namespace Madingley
                     }
                 }
 #endif
-            
+
             }
             else
             {
@@ -603,8 +589,6 @@ namespace Madingley
                 }
 #endif
             }
-
-            
         }
 
 #if true
@@ -632,7 +616,7 @@ namespace Madingley
 #if true
                 EcosystemModelGrid = new ModelGrid(BottomLatitude, LeftmostLongitude, TopLatitude, RightmostLongitude,
                     CellSize, CellSize, _CellList, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions,
-                    GlobalDiagnosticVariables, initialisation.TrackProcesses, SpecificLocations,RunGridCellsInParallel);
+                    GlobalDiagnosticVariables, initialisation.TrackProcesses, SpecificLocations, RunGridCellsInParallel);
 #else
                 EcosystemModelGrid = new ModelGrid(BottomLatitude, LeftmostLongitude, TopLatitude, RightmostLongitude,
                     CellSize, CellSize, _CellList, EnviroStack, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions,
@@ -689,7 +673,7 @@ namespace Madingley
             GlobalOutputs.SetupOutputs(NumTimeSteps, EcosystemModelGrid, OutputFilesSuffix);
 
             // Create initial global outputs
-            GlobalOutputs.InitialOutputs(EcosystemModelGrid,CohortFunctionalGroupDefinitions,StockFunctionalGroupDefinitions,_CellList,
+            GlobalOutputs.InitialOutputs(EcosystemModelGrid, CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions, _CellList,
                 GlobalDiagnosticVariables, initialisation);
 
             // Temporary
@@ -711,7 +695,7 @@ namespace Madingley
             else
             {
                 // Set up grid outputs
-                GridOutputs.SetupOutputs(EcosystemModelGrid, OutputFilesSuffix, NumTimeSteps, 
+                GridOutputs.SetupOutputs(EcosystemModelGrid, OutputFilesSuffix, NumTimeSteps,
                     CohortFunctionalGroupDefinitions, StockFunctionalGroupDefinitions);
 
                 // Create initial grid outputs

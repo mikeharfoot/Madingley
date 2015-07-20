@@ -165,7 +165,7 @@ namespace Madingley.Output
             return cs.Select(c => ConvertGridCell(c)).ToArray();
         }
 
-        private static void CopyDictionaryValue<T>(uint[,,] target, int ii, int jj, int kk, IDictionary<T, int> source, T key)
+        private static void CopyDictionaryValue<T>(uint[, ,] target, int ii, int jj, int kk, IDictionary<T, int> source, T key)
         {
             int value;
 

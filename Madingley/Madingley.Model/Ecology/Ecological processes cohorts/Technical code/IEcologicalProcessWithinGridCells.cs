@@ -28,12 +28,12 @@ namespace Madingley
         /// <param name="outputDetail">The level of output detail used for this model simulation</param>
         /// <param name="currentMonth">The current model month</param>
         /// <param name="initialisation">The instance of the MadingleyModelInitialisation class for this simulation</param>
-        void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts, 
-            GridCellStockHandler gridCellStocks, 
-            int[] actingCohort, SortedList<string, 
-            double[]> cellEnvironment, 
-            Dictionary<string,Dictionary<string, double>> deltas,
-            FunctionalGroupDefinitions madingleyCohortHandler, 
+        void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts,
+            GridCellStockHandler gridCellStocks,
+            int[] actingCohort, SortedList<string,
+            double[]> cellEnvironment,
+            Dictionary<string, Dictionary<string, double>> deltas,
+            FunctionalGroupDefinitions madingleyCohortHandler,
             FunctionalGroupDefinitions madingleyStockHandler,
             uint currentTimestep,
             ProcessTracker trackProcesses,
@@ -49,7 +49,5 @@ namespace Madingley
         /// <param name="madingleyStockDefinitions">The definitions for stock functional groups in the model</param>
         /// <param name="implementationKey">The name of the specific implementation of this process to initialize</param>
         void InitializeEcologicalProcess(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, string implementationKey);
-        
-
     }
 }

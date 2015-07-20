@@ -14,11 +14,11 @@ namespace Madingley
         /// Time units associated with the formulation of dispersal
         /// </summary>
         string TimeUnitImplementation { get; }
-        
+
         /// <summary>
         /// Scalar to convert from time units associated with dispersal to the global model time step unit
         /// </summary>
-        double DeltaT { get ; } 
+        double DeltaT { get; }
 
         /// <summary>
         /// Run the dispersal implementation

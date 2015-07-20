@@ -19,7 +19,7 @@ namespace Madingley
         /// <summary>
         /// Scalar to convert from time units associated with mortality to the global model time step unit
         /// </summary>
-        double DeltaT { get; } 
+        double DeltaT { get; }
 
         /// <summary>
         /// Calculate the proportion of individuals in a cohort that die through a particular type of mortality in a model time step

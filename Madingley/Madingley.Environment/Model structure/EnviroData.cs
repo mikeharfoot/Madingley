@@ -264,8 +264,6 @@ namespace Madingley
 
         }
 
-
-
         /// <summary>
         /// Overloaded constructor to fetch climate information from the cloud using FetchClimate for specific locations
         /// </summary>
@@ -333,7 +331,6 @@ namespace Madingley
                 ds.AddAxisCells("latitude", "degrees_north", _Lats[cellList[ii].Item1], _Lats[cellList[ii].Item1] + cellSize, cellSize);
 
                 double[, ,] temp = null;
-
 
                 //Fetch for the required data
                 switch (dataName.ToLower())
@@ -409,7 +406,6 @@ namespace Madingley
             ds.Dispose();
 
         }
-
 
         /// <summary>
         /// Constructor for EnviroData
@@ -867,7 +863,6 @@ namespace Madingley
                     }
                 }
 
-
                 //If haven't found the ClosestLowerLatIndex then this is because the grid cell starts at or beyond the lower limit of the highest enviro grid
                 //So set the ClosestLowerLatIndex equal to the last index
                 if (ClosestLowerLatIndex == -1)
@@ -883,8 +878,6 @@ namespace Madingley
                     // and set the ClosestUpperLatIndex equal to the the last index (the highest latitude cell)
                     ClosestUpperLatIndex = _Lats.Length - 1;
                 }
-
-
             }
             else
             {
@@ -912,7 +905,6 @@ namespace Madingley
                     }
                 }
 
-
                 //If haven't found the ClosestLowerLatIndex then this is because the grid cell extends to or beyond the lower limit of the enviro grid
                 //So set the ClosestUpperLatIndex equal to the index of the highest latitude
                 if (ClosestLowerLatIndex == -1)
@@ -930,9 +922,7 @@ namespace Madingley
                     // and set the ClosestUpperLatIndex equal to the the last index (the highest latitude cell)
                     ClosestUpperLatIndex = _Lats.Length - 1;
                 }
-
             }
-
 
             // Adjust to correct for potential problems with ESRI ASCII grids starting latitudes at -90 and going upwards,
             // instead of netCDFs, which do the inverse
@@ -943,7 +933,6 @@ namespace Madingley
 
             //Calculate the number of EnviroData cells that are overlapped by the requested model grid cell
             int NumOverlappedLatCells = Math.Abs(ClosestUpperLatIndex - ClosestLowerLatIndex) + 1;
-
 
             // Temporary variable for finding the shortest distance between the leftmost longitude of requested model grid cell and the longitude of cells in the environmental variable
             double shortestLeftmostLonDistance = double.MaxValue;
@@ -975,7 +964,6 @@ namespace Madingley
                 }
             }
 
-
             //Calculate the number of EnviroData cells that are overlapped by the requested model grid cell
             int NumOverlappedLonCells = Math.Abs(closestRightmostLonIndex - closestLeftmostLonIndex) + 1;
 
@@ -996,7 +984,6 @@ namespace Madingley
             double OverlapLonSize;
             //Variable to hold the latitudinal overlap size
             double OverlapLatSize;
-
 
             if (invertedLat)
             {
@@ -1022,7 +1009,6 @@ namespace Madingley
                         //The upper lat for this band of envirodata cells is the top of the current enviro data cells
                         CellTopLatOverlap = _Lats[ii] + LatStep;
                     }
-
 
                     for (int jj = closestLeftmostLonIndex; jj <= closestRightmostLonIndex; jj++)
                     {
@@ -1081,7 +1067,6 @@ namespace Madingley
                         //The upper lat for this band of envirodata cells is the top of the current enviro data cells
                         CellTopLatOverlap = _Lats[ii] + LatStep;
                     }
-
 
                     for (int jj = closestLeftmostLonIndex; jj <= closestRightmostLonIndex; jj++)
                     {
@@ -1166,7 +1151,6 @@ namespace Madingley
             //Return the weighted average
             return WeightedValue;
         }
-
 
         /// <summary>
         /// Reads in two-dimensional environmental data from a NetCDF and stores them in the array of values within this instance of EnviroData

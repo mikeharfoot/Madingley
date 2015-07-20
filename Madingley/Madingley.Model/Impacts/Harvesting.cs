@@ -17,7 +17,6 @@ namespace Madingley
         InputCatchData FisheriesCatch;
         ApplyFishingCatches[,] ApplyCatches;
 
-
         /// <summary>
         /// Constructor for harvesting class
         /// </summary>
@@ -47,8 +46,6 @@ namespace Madingley
                 //If this is marine cell
                 if (cellEnvironment["Realm"][0] == 2.0)
                 {
-
-
                     if (harvestingScenario.ParamString == "no")
                     {
                         // Do not apply any harvesting
@@ -147,8 +144,6 @@ namespace Madingley
                         }
                         else if (currentTimestep > (burninSteps + impactSteps))
                         {
-
-
                             // Calculate the target biomass for harvesting based on the number of time steps that have elapsed since the spin-up
                             double TargetBiomass = (Math.Min(50000, ((-(totalSteps - currentTimestep) / 12.0) * harvestingScenario.ParamDouble1)));
 

@@ -58,13 +58,13 @@ namespace Madingley
             double Flattening = 1 - Math.Cos(DegreesToRadians(AngularEccentricity));
 
             // Temporary value to save computations
-            double TempVal = Math.Pow((EquatorialRadius * Math.Cos(latitudeRad)),2) + Math.Pow((PolarRadius * Math.Sin(latitudeRad)),2);
+            double TempVal = Math.Pow((EquatorialRadius * Math.Cos(latitudeRad)), 2) + Math.Pow((PolarRadius * Math.Sin(latitudeRad)), 2);
 
             // Meridional radius of curvature
-            double MPhi = Math.Pow(EquatorialRadius * PolarRadius,2) / Math.Pow(TempVal,1.5);
-            
+            double MPhi = Math.Pow(EquatorialRadius * PolarRadius, 2) / Math.Pow(TempVal, 1.5);
+
             // Normal radius of curvature
-            double NPhi = Math.Pow(EquatorialRadius,2) / Math.Sqrt(TempVal);
+            double NPhi = Math.Pow(EquatorialRadius, 2) / Math.Sqrt(TempVal);
 
             // Length of latitude (km)
             double LatitudeLength = Math.PI / 180 * MPhi / 1000;

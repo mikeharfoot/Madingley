@@ -57,7 +57,5 @@ namespace Madingley
             _IndividualBodyMass = individualMass;
             _TotalBiomass = initialTotalBiomass;
         }
-        
-
     }
 }

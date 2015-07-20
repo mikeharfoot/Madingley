@@ -26,7 +26,6 @@ namespace Madingley
             set { _MassFlows = value; }
         }
 
-
         /// <summary>
         /// Vector of mass bins to be used in the predation tracker
         /// </summary>
@@ -37,22 +36,19 @@ namespace Madingley
         /// </summary>
         private int _NumMassBins;
 
-
         /// <summary>
         /// Missing data value to be used in the mass flows output
         /// </summary>
         private double _MissingValue;
-    	/// <summary>
+        /// <summary>
         /// Get and set the missing data value to be used in the mass flows output
-    	/// </summary>
-        public double MissingValue {get { return _MissingValue;} set { _MissingValue = value;} }
-	
+        /// </summary>
+        public double MissingValue { get { return _MissingValue; } set { _MissingValue = value; } }
 
         /// <summary>
         /// Dataset to output the Massflows data
         /// </summary>
         private DataSet MassFlowsDataSet;
-
 
         /// <summary>
         /// An instance of the class to convert data between arrays and SDS objects
@@ -77,9 +73,9 @@ namespace Madingley
         /// <param name="trackerMassBins">The mass bin handler containing the mass bins to be used for predation tracking</param>
         /// <param name="cellIndex">The index of the current cell in the list of all cells to run the model for</param>
         public PredationTracker(uint numTimeSteps,
-            List<uint[]> cellIndices, 
-            string massFlowsFilename, 
-            FunctionalGroupDefinitions cohortDefinitions, 
+            List<uint[]> cellIndices,
+            string massFlowsFilename,
+            FunctionalGroupDefinitions cohortDefinitions,
             double missingValue,
             string outputFileSuffix,
             string outputPath, MassBinsHandler trackerMassBins, int cellIndex)
@@ -93,12 +89,12 @@ namespace Madingley
 
             // Initialise the array to hold data on mass flows between mass bins
             _MassFlows = new double[_NumMassBins, _NumMassBins];
-            
+
             // Define the model time steps to be used in the output file
             float[] TimeSteps = new float[numTimeSteps];
             for (int i = 1; i <= numTimeSteps; i++)
             {
-                TimeSteps[i-1] = i;
+                TimeSteps[i - 1] = i;
             }
 
             // Initialise the data converter
@@ -114,7 +110,7 @@ namespace Madingley
             string[] dimensions = { "Predator mass bin", "Prey mass bin", "Time steps" };
 
             // Add the mass flow variable to the predation tracker
-            DataConverter.AddVariable(MassFlowsDataSet, "Log mass (g)", 3, dimensions, _MissingValue, _MassBins, _MassBins, TimeSteps);    
+            DataConverter.AddVariable(MassFlowsDataSet, "Log mass (g)", 3, dimensions, _MissingValue, _MassBins, _MassBins, TimeSteps);
         }
 
         /// <summary>
@@ -126,7 +122,7 @@ namespace Madingley
         /// <param name="massFlow">The amount of mass consumed in the predation event</param>
         public void RecordFlow(uint timestep, double preyBiomass, double predatorBiomass, double massFlow)
         {
-            
+
             // Find the appropriate mass bin for the cohort
             int PredatorMassBin = 0;
             do
@@ -141,7 +137,7 @@ namespace Madingley
                 PreyMassBin++;
             } while (PreyMassBin < (_MassBins.Length - 1) && preyBiomass > _MassBins[PreyMassBin]);
 
-            _MassFlows[PredatorMassBin,PreyMassBin] += massFlow;
+            _MassFlows[PredatorMassBin, PreyMassBin] += massFlow;
 
         }
 
@@ -175,7 +171,6 @@ namespace Madingley
         {
             _MassFlows = new double[_NumMassBins, _NumMassBins];
         }
-
 
         /// <summary>
         /// Close the predation tracker

@@ -16,7 +16,7 @@ namespace Madingley
         /// The available implementations of the reproduction process
         /// </summary>
         private SortedList<string, IReproductionImplementation> Implementations;
-                
+
         /// <summary>
         /// Constructor for Reproduction: fills the list of available implementations of reproduction
         /// </summary>
@@ -24,7 +24,7 @@ namespace Madingley
         {
             // Initialize the list of reproduction implementations
             Implementations = new SortedList<string, IReproductionImplementation>();
-            
+
             // Add the basic reproduction implementation to the list of implementations
             ReproductionBasic ReproductionImplementation = new ReproductionBasic(globalModelTimeStepUnit, drawRandomly);
             Implementations.Add("reproduction basic", ReproductionImplementation);
@@ -60,15 +60,15 @@ namespace Madingley
         /// <param name="outputDetail">The level of output detail being used for this model run</param>
         /// <param name="currentMonth">The current model month</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, 
-            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string,Dictionary<string,double>> deltas , 
+        public void RunEcologicalProcess(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks,
+            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> deltas,
             FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions,
             uint currentTimeStep, ProcessTracker processTracker, ref ThreadLockedParallelVariables partial,
             Boolean specificLocations, string outputDetail, uint currentMonth, MadingleyModelInitialisation initialisation)
         {
 
-                    // Holds the reproductive strategy of a cohort
-        bool _Iteroparous = madingleyCohortDefinitions.GetTraitNames("reproductive strategy", actingCohort[0])=="iteroparity";
+            // Holds the reproductive strategy of a cohort
+            bool _Iteroparous = madingleyCohortDefinitions.GetTraitNames("reproductive strategy", actingCohort[0]) == "iteroparity";
 
             // Assign mass to reproductive potential
             Implementations["reproduction basic"].RunReproductiveMassAssignment(gridCellCohorts, gridCellStocks, actingCohort, cellEnvironment, deltas,

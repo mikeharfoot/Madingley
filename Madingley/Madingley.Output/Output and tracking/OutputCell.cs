@@ -89,7 +89,6 @@ namespace Madingley
         /// </summary>
         private double TotalHeterotrophAbundanceDensity;
 
-
         /// <summary>
         /// Total NPP incoming from the marine model
         /// </summary>
@@ -114,7 +113,6 @@ namespace Madingley
         /// Total biomass densities of all cohorts within each combination of cohort traits
         /// </summary>
         private SortedList<string, double> TotalBiomassDensitiesMarineOut = new SortedList<string, double>();
-
 
         /// <summary>
         /// List of vectors of abundances in mass bins corresponding with each unique trait value
@@ -185,7 +183,6 @@ namespace Madingley
         public string OutputSuffix
         { get { return _OutputSuffix; } }
 
-
         /// <summary>
         /// The cohort traits to be considered in the outputs
         /// </summary>
@@ -255,7 +252,6 @@ namespace Madingley
         /// The size threshold for determining whether an organism is planktonic
         /// </summary>
         private double PlanktonSizeThreshold;
-
 
         /// <summary>
         /// Indicates whether to output metric information
@@ -362,7 +358,6 @@ namespace Madingley
                     + NumTimeSteps.ToString() + ","
                     + MaximumYValue.ToString() + "; LogScale:Y;  Stroke:#FF0000FF;Thickness:3; Title:\"Biomass Densities";
             }
-
 
             // Start viewing
             GridViewer.AsynchronousView(ref DataSetToViewLive, "");
@@ -622,7 +617,6 @@ namespace Madingley
             }
         }
 
-
         /// <summary>
         /// Sets up the outputs associated with all levels of output detail
         /// </summary>
@@ -722,7 +716,6 @@ namespace Madingley
             string[] MassBinDimensions = { "Time step", "Mass bin" };
             string[] DoubleMassBinDimensions = new string[] { "Adult Mass bin", "Juvenile Mass bin", "Time step" };
 
-
             if (OutputMetrics)
             {
                 DataConverter.AddVariable(MassBinsOutputMemory, "Trophic Index Distribution", 2, new string[] { "Time step", "Trophic Index Bins" }, ecosystemModelGrid.GlobalMissingValue, TimeSteps, Metrics.TrophicIndexBinValues);
@@ -773,7 +766,6 @@ namespace Madingley
                 }
             }
 
-
             // If there are some cohorts in the grid cell, then setup the tracked cohorts
             if (FoundCohorts)
             {
@@ -817,7 +809,6 @@ namespace Madingley
                     // Set up outputs for tracked cohorts
                     string[] TrackedCohortsDimensions = { "Time step", "Cohort ID" };
 
-
                     // Add output variables for the tracked cohorts output
                     DataConverter.AddVariable(TrackedCohortsOutputMemory, "Individual body mass", 2, TrackedCohortsDimensions,
                     ecosystemModelGrid.GlobalMissingValue, TimeSteps, OutTrackedCohortIDs);
@@ -833,7 +824,6 @@ namespace Madingley
                 TraitValueSearch = CalculateAllCombinations(CohortTraitValuesMarine[CohortTraits[0]], CohortTraitValuesMarine[CohortTraits[1]]);
             else
                 TraitValueSearch = CalculateAllCombinations(CohortTraitValues[CohortTraits[0]], CohortTraitValues[CohortTraits[1]]);
-
 
             // Add the functional group indices of these trait combinations to the list of indices of the trait values to consider, 
             // keyed with a concatenated version of the trait values
@@ -952,8 +942,6 @@ namespace Madingley
                 // Calculate high-level outputs
                 CalculateHighLevelOutputs(ecosystemModelGrid, cellIndices, cellNumber, marineCell);
             }
-
-
         }
 
         /// <summary>
@@ -1010,15 +998,12 @@ namespace Madingley
                 }
             }
 
-
-
             // Add the total biomass of all cohorts to the total living biomass variable
             TotalLivingBiomass += ecosystemModelGrid.GetStateVariable("Biomass", "NA", cohortFunctionalGroupDefinitions.AllFunctionalGroupsIndex,
                 cellIndices[cellIndex][0], cellIndices[cellIndex][1], "cohort", initialisation);
             TotalLivingBiomassDensity = ecosystemModelGrid.GetStateVariableDensity("Biomass", "NA", cohortFunctionalGroupDefinitions.AllFunctionalGroupsIndex, cellIndices[cellIndex][0], cellIndices[cellIndex][1], "cohort", initialisation) / 1000.0;
             TotalHeterotrophAbundanceDensity = ecosystemModelGrid.GetStateVariableDensity("Abundance", "NA", cohortFunctionalGroupDefinitions.AllFunctionalGroupsIndex, cellIndices[cellIndex][0], cellIndices[cellIndex][1], "cohort", initialisation);
             TotalHeterotrophBiomassDensity = TotalLivingBiomassDensity;
-
 
             if (MarineCell)
             {
@@ -1049,7 +1034,6 @@ namespace Madingley
             TotalLivingBiomass += ecosystemModelGrid.GetStateVariable("Biomass", "NA", stockFunctionalGroupDefinitions.AllFunctionalGroupsIndex,
                 cellIndices[cellIndex][0], cellIndices[cellIndex][1], "stock", initialisation);
             TotalLivingBiomassDensity += ecosystemModelGrid.GetStateVariableDensity("Biomass", "NA", stockFunctionalGroupDefinitions.AllFunctionalGroupsIndex, cellIndices[cellIndex][0], cellIndices[cellIndex][1], "stock", initialisation) / 1000.0;
-
 
             if (TrackMarineSpecifics && MarineCell)
             {
@@ -1103,8 +1087,6 @@ namespace Madingley
                     }
                 }
             }
-
-
         }
 
         /// <summary>
@@ -1207,13 +1189,8 @@ namespace Madingley
                         DataConverter.ValueToSDS1D(TotalBiomassDensitiesOut[TraitValue], TraitValue + " biomass", "Time step", ecosystemModelGrid.GlobalMissingValue, DataSetToViewLive, 0);
                     }
                 }
-
-
-
             }
         }
-
-
 
         /// <summary>
         /// Generates the initial file outputs
@@ -1242,8 +1219,6 @@ namespace Madingley
             // File outputs for medium and high detail levels
             if ((ModelOutputDetail == OutputDetailLevel.Medium) || (ModelOutputDetail == OutputDetailLevel.High))
             {
-
-
                 if (MarineCell)
                 {
                     foreach (string TraitValue in CohortTraitIndicesMarine.Keys)
@@ -1372,7 +1347,6 @@ namespace Madingley
                             MassBinsOutputMemory);
                     }
 
-
                     // Write outputs for tracking individual cohorts
 
                     // Loop over tracked cohorts
@@ -1385,13 +1359,8 @@ namespace Madingley
                         DataConverter.ValueToSDS2D(TrackedCohortAbundances[i], "Number of individuals", TrackedCohortDimensions,
                             ecosystemModelGrid.GlobalMissingValue, TrackedCohortsOutputMemory, 0, i);
                     }
-
-
-
                 }
-
             }
-
         }
 
         /// <summary>
@@ -1512,8 +1481,6 @@ namespace Madingley
                     }
                 }
             }
-
-
         }
 
         /// <summary>
@@ -1640,19 +1607,15 @@ namespace Madingley
                         BasicOutputMemory, (int)currentTimeStep + 1);
                 }
 
-
                 if (currentTimeStep % 600 == 0 && currentTimeStep > 0)
                 {
                     BasicOutputMemory.Clone("msds:nc?file=" + _OutputPath + "BasicOutputs" + _OutputSuffix + ".nc&openMode=create");
                     Console.WriteLine("Cloning grid cell ouputs to file...\n");
                 }
 
-
-
                 // File outputs for high detail level
                 if (ModelOutputDetail == OutputDetailLevel.High)
                 {
-
                     if (OutputMetrics)
                     {
                         DataConverter.VectorToSDS2D(Metrics.CalculateTrophicDistribution(ecosystemModelGrid, cellIndices, cellIndex), "Trophic Index Distribution",
@@ -1697,16 +1660,9 @@ namespace Madingley
                         MassBinsOutputMemory.Clone("msds:nc?file=" + _OutputPath + "MassBinsOutputs" + _OutputSuffix + ".nc&openMode=create");
 
                         TrackedCohortsOutputMemory.Clone("msds:nc?file=" + _OutputPath + "TrackedCohortsOutputs" + _OutputSuffix + ".nc&openMode=create");
-
                     }
-
                 }
-
             }
-
-
-
-
         }
 
         /// <summary>
@@ -1837,7 +1793,6 @@ namespace Madingley
 
                                 // Add the cohort's biomass to the approriate mass bin
                                 WorkingBiomassInMassBins[mb - 1] += TempCohorts[FunctionalGroupIndex][cohort].CohortAbundance * TempCohorts[FunctionalGroupIndex][cohort].IndividualBodyMass;
-
 
                                 // Find the mass bin appropriate for this cohort's juvenile mass
                                 int j = 0;

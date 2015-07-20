@@ -18,7 +18,6 @@ namespace Madingley
         public SortedDictionary<string, int> TrophicLevel;
         public SortedDictionary<string, Boolean> DeepSea;
 
-
         string[] header;
         //Read allometries data
         LWAllometries Allometries;
@@ -29,7 +28,7 @@ namespace Madingley
 
             Allometries = new LWAllometries();
 
-            string[] RequiredFields = {"slmax","tl","setl","reef" ,"pelagic","demersal","deepsea","sea grass","mangrove"};     
+            string[] RequiredFields = { "slmax", "tl", "setl", "reef", "pelagic", "demersal", "deepsea", "sea grass", "mangrove" };
             string l;
             char[] comma = ",".ToCharArray();
 
@@ -56,9 +55,9 @@ namespace Madingley
                 l = r.ReadLine();
                 // Split fields by commas
                 f = l.Split(comma);
-                
+
                 //Add this taxon's trait data to the sorted dictionary
-                TraitData.Add(f[0],f.Skip(1).ToArray());
+                TraitData.Add(f[0], f.Skip(1).ToArray());
             }
 
             //Convert max body lengths to max body masses
@@ -69,7 +68,6 @@ namespace Madingley
             AssignDeepSea();
 
         }
-
 
         //Convert body lengths to body masses using LW allometries from fishbase:
         // Uses eqn BM = A*(L)^B
@@ -92,10 +90,10 @@ namespace Madingley
                 }
                 else
                 {
-                    parameters = new double[] {0.01,3};
+                    parameters = new double[] { 0.01, 3 };
                 }
                 double l = Convert.ToDouble(item.Value[TraitCol]);
-                MaxMasses.Add(item.Key,parameters[0]*Math.Pow(l,parameters[1]));
+                MaxMasses.Add(item.Key, parameters[0] * Math.Pow(l, parameters[1]));
             }
         }
 
@@ -113,11 +111,11 @@ namespace Madingley
             {
                 double tl = Convert.ToDouble(item.Value[TraitCol]);
 
-                if(tl == 2)
+                if (tl == 2)
                 {
-                   TrophicLevel.Add(item.Key,1);
+                    TrophicLevel.Add(item.Key, 1);
                 }
-                else if(tl > 2 && tl <= 3.5)
+                else if (tl > 2 && tl <= 3.5)
                 {
                     TrophicLevel.Add(item.Key, 2);
                 }
@@ -138,7 +136,7 @@ namespace Madingley
             for (int i = 0; i < header.Length; i++)
             {
                 if (header[i] == "demersal") TraitCol1 = i;
-                if(header[i] == "deepsea")  TraitCol2 = i;
+                if (header[i] == "deepsea") TraitCol2 = i;
             }
 
             foreach (var item in TraitData)
@@ -154,9 +152,9 @@ namespace Madingley
 
             int TraitCol = 0;
             for (int i = 0; i < header.Length; i++)
-			{
-			    if(header[i] == trait.ToLower()) TraitCol = i;
-			}
+            {
+                if (header[i] == trait.ToLower()) TraitCol = i;
+            }
 
             foreach (var item in TraitData.Values)
             {
@@ -164,19 +162,19 @@ namespace Madingley
                 if (t < min) min = t;
                 if (t > max) max = t;
             }
-            
-            double[] ret = {min,max};
+
+            double[] ret = { min, max };
 
             return (ret);
         }
 
-        public Tuple<double[],string[]> MassRange()
+        public Tuple<double[], string[]> MassRange()
         {
             double MinMass = double.MaxValue;
-            string MinSp="";
+            string MinSp = "";
             double MaxMass = 0;
-            string MaxSp="";
-            
+            string MaxSp = "";
+
             //Find the max and min species and their max lengths
             foreach (var t in MaxMasses)
             {
@@ -192,9 +190,7 @@ namespace Madingley
                 }
             }
 
-            return (new Tuple<double[],string[]> (new double[] {MinMass,MaxMass},new string[] {MinSp,MaxSp}));
+            return (new Tuple<double[], string[]>(new double[] { MinMass, MaxMass }, new string[] { MinSp, MaxSp }));
         }
-
-
     }
 }

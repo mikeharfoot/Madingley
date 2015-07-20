@@ -22,26 +22,25 @@ namespace Madingley
         /// </summary>
         public void UpdateAllCrossGridCellEcology(ModelGrid madingleyModelGrid, ref uint dispersalCounter, CrossCellProcessTracker trackCrossCellProcesses, uint currentTimeStep)
         {
-                // Create an array to hold the number of cohorts dispersing in each direction from each grid cell
-                uint[, ,] InboundCohorts = new uint[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1), 8];
+            // Create an array to hold the number of cohorts dispersing in each direction from each grid cell
+            uint[, ,] InboundCohorts = new uint[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1), 8];
 
-                // Create an array to hold the number of cohorts dispersing in each direction to each grid cell
-                uint[, ,] OutboundCohorts = new uint[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1), 8];
+            // Create an array to hold the number of cohorts dispersing in each direction to each grid cell
+            uint[, ,] OutboundCohorts = new uint[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1), 8];
 
-                // Create an list array to hold the weights of cohorts dispersing from grid cell. Dimensions are: num grid cells lon, num grid cells lat, num cohorts dispersing
-                List<double>[,] OutboundCohortWeights = new List<double>[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1)];
+            // Create an list array to hold the weights of cohorts dispersing from grid cell. Dimensions are: num grid cells lon, num grid cells lat, num cohorts dispersing
+            List<double>[,] OutboundCohortWeights = new List<double>[madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0), madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1)];
 
-                for (uint ii = 0; ii < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0); ii++)
+            for (uint ii = 0; ii < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0); ii++)
+            {
+                for (uint jj = 0; jj < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1); jj++)
                 {
-                    for (uint jj = 0; jj < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1); jj++)
-                    {
-                        OutboundCohortWeights[ii,jj] = new List<double>();
-                    }
+                    OutboundCohortWeights[ii, jj] = new List<double>();
                 }
-
+            }
 
             // Loop through the delta array that holds the grid cells of the cohorts that are flagged as needing to be moved
-            for (uint ii = 0; ii < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0) ; ii++)
+            for (uint ii = 0; ii < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0); ii++)
             {
                 for (uint jj = 0; jj < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(1); jj++)
                 {
@@ -52,12 +51,12 @@ namespace Madingley
                     // Otherwise, loop through the cohorts and change the pointers/references to them one-by-one
                     else
                     {
-   
+
                         for (int kk = 0; kk < madingleyModelGrid.DeltaFunctionalGroupDispersalArray[ii, jj].Count; kk++)
                         {
                             // Find out which grid cell it is going to
                             uint[] CellToDisperseTo = madingleyModelGrid.DeltaCellToDisperseToArray[ii, jj].ElementAt(kk);
-                            
+
                             // Functional group is identified by the first array
                             uint CohortToDisperseFG = madingleyModelGrid.DeltaFunctionalGroupDispersalArray[ii, jj].ElementAt(kk);
 
@@ -85,7 +84,6 @@ namespace Madingley
                 }
             }
 
-
             // Reset the delta arrays and remove the pointers to the cohorts in the original list
             for (uint ii = 0; ii < madingleyModelGrid.DeltaFunctionalGroupDispersalArray.GetLength(0); ii++)
             {
@@ -100,9 +98,9 @@ namespace Madingley
                     {
                         // Delete the cohorts from the original grid cell. Note that this needs to be done carefully to ensure that the correct ones 
                         // are deleted (lists shift about when an internal element is deleted.
-                        madingleyModelGrid.DeleteGridCellIndividualCohorts(ii, jj, madingleyModelGrid.DeltaFunctionalGroupDispersalArray[ii, jj], madingleyModelGrid.DeltaCohortNumberDispersalArray[ii,jj]);
+                        madingleyModelGrid.DeleteGridCellIndividualCohorts(ii, jj, madingleyModelGrid.DeltaFunctionalGroupDispersalArray[ii, jj], madingleyModelGrid.DeltaCohortNumberDispersalArray[ii, jj]);
 
-                         // Reset the lists in the delta dispersal arrays
+                        // Reset the lists in the delta dispersal arrays
                         madingleyModelGrid.DeltaFunctionalGroupDispersalArray[ii, jj] = new List<uint>();
                         madingleyModelGrid.DeltaCohortNumberDispersalArray[ii, jj] = new List<uint>();
 
@@ -124,14 +122,14 @@ namespace Madingley
         }
 
         // If we are tracking processes, this method writes out the relevant information
-        void WriteOutCrossGridCell(ModelGrid madingleyModelGrid, uint[] cellToDisperseTo, uint[, ,] inboundCohorts, uint[, ,] outboundCohorts, 
+        void WriteOutCrossGridCell(ModelGrid madingleyModelGrid, uint[] cellToDisperseTo, uint[, ,] inboundCohorts, uint[, ,] outboundCohorts,
             List<double>[,] outboundCohortWeights, uint xCellToDisperseFrom, uint yCellToDisperseFrom, uint cohortToDisperseFG, uint cohortToDisperseNum,
             uint exitDirection, uint entryDirection)
         {
             // Add the weight of the outbound cohort to the weights array
             outboundCohortWeights[xCellToDisperseFrom, yCellToDisperseFrom].Add(madingleyModelGrid.GetGridCellIndividualCohort(xCellToDisperseFrom, yCellToDisperseFrom,
                 (int)cohortToDisperseFG, (int)cohortToDisperseNum).IndividualBodyMass);
-            
+
             // Record the cohort as leaving the outbound cell
             outboundCohorts[xCellToDisperseFrom, yCellToDisperseFrom, exitDirection]++;
 

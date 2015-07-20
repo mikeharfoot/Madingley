@@ -105,7 +105,7 @@ namespace Madingley.Common
         /// <param name="cs">Method for comparing each T object.</param>
         public ArrayEqualityComparer(IEqualityComparer<T> cs)
         {
-            this.CS = cs; 
+            this.CS = cs;
         }
 
         /// <summary>

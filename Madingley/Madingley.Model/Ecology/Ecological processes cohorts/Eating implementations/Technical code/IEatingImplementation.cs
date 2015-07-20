@@ -13,12 +13,12 @@ namespace Madingley
         /// <summary>
         /// Time units associated with the formulation of eating
         /// </summary>
-        string TimeUnitImplementation { get ; }
-        
+        string TimeUnitImplementation { get; }
+
         /// <summary>
         /// Scalar to convert from time units associated with eating to the global model time step unit
         /// </summary>
-        double DeltaT { get ; } 
+        double DeltaT { get; }
 
         /// <summary>
         /// Assimilation efficiency of food mass into acting cohort mass
@@ -46,7 +46,7 @@ namespace Madingley
             get;
             set;
         }
-        
+
         /// <summary>
         /// List of functional group indices to act on
         /// </summary>
@@ -57,7 +57,7 @@ namespace Madingley
         /// The total biomass eaten by the acting cohort 
         /// </summary>
         double TotalBiomassEatenByCohort
-        { get; }       
+        { get; }
 
         /// <summary>
         /// Initialises eating implementation each time step
@@ -67,7 +67,7 @@ namespace Madingley
         /// <param name="madingleyCohortDefinitions">The definitions for cohorts in the model</param>
         /// <param name="madingleyStockDefinitions">The definitions for stocks in the model</param>
         void InitializeEatingPerTimeStep(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions);
-        
+
         /// <summary>
         /// Calculate the potential biomass that could be gained through eating for marine cells
         /// </summary>
@@ -77,8 +77,8 @@ namespace Madingley
         /// <param name="cellEnvironment">The environment in the current grid cell</param>
         /// <param name="madingleyCohortDefinitions">The definitions for cohorts in the model</param>
         /// <param name="madingleyStockDefinitions">The definitions for stocks in the model</param>
-        void GetEatingPotentialMarine(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort, 
-            SortedList<string, double[]> cellEnvironment, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions 
+        void GetEatingPotentialMarine(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort,
+            SortedList<string, double[]> cellEnvironment, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions
             madingleyStockDefinitions);
 
         /// <summary>
@@ -93,7 +93,6 @@ namespace Madingley
         void GetEatingPotentialTerrestrial(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, int[] actingCohort,
             SortedList<string, double[]> cellEnvironment, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions
             madingleyStockDefinitions);
-
 
         /// <summary>
         /// Calculate the actual biomass eaten from each cohort or sotck, apply changes from eating to the cohorts or stocks eaten, and update deltas for the acting cohort
@@ -110,11 +109,11 @@ namespace Madingley
         /// <param name="specificLocations">Whether the model is being run for specific locations</param>
         /// <param name="outputDetail">The level of output detail being used in this model run</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        void RunEating(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, 
-            int[] actingCohort, SortedList<string, double[]> cellEnvironment, 
-            Dictionary<string, Dictionary<string, double>> deltas, 
-            FunctionalGroupDefinitions madingleyCohortDefinitions, 
-            FunctionalGroupDefinitions madingleyStockDefinitions, 
+        void RunEating(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks,
+            int[] actingCohort, SortedList<string, double[]> cellEnvironment,
+            Dictionary<string, Dictionary<string, double>> deltas,
+            FunctionalGroupDefinitions madingleyCohortDefinitions,
+            FunctionalGroupDefinitions madingleyStockDefinitions,
             ProcessTracker trackProcesses, uint currentTimestep,
             Boolean specificLocations, string outputDetail, MadingleyModelInitialisation initialisation);
 

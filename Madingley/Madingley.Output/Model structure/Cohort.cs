@@ -11,7 +11,7 @@ namespace Madingley
     /// </summary>
     public class Cohort
     {
-        
+
         /// <summary>
         /// Time step when the cohort was generated
         /// </summary>
@@ -28,17 +28,16 @@ namespace Madingley
         /// <summary>
         /// Get and set the time step at which this cohort reached maturity
         /// </summary>
-        public uint MaturityTimeStep { get { return _MaturityTimeStep; }    set { _MaturityTimeStep = value; }}
+        public uint MaturityTimeStep { get { return _MaturityTimeStep; } set { _MaturityTimeStep = value; } }
 
         /// <summary>
         /// A list of all cohort IDs ever associated with individuals in this current cohort
         /// </summary>
-        private List<UInt32> _CohortID= new List<UInt32>();
+        private List<UInt32> _CohortID = new List<UInt32>();
         /// <summary>
         /// Get the list of all cohort IDs ever associated with individuals in this current cohort
         /// </summary>
-        public List<UInt32> CohortID {  get { return _CohortID; } }
-      
+        public List<UInt32> CohortID { get { return _CohortID; } }
 
         /// <summary>
         /// The mean juvenile mass of individuals in this cohort
@@ -96,7 +95,7 @@ namespace Madingley
             get { return _MaximumAchievedBodyMass; }
             set { _MaximumAchievedBodyMass = value; }
         }
-        
+
         /// <summary>
         /// The number of individuals in the cohort
         /// </summary>
@@ -157,7 +156,6 @@ namespace Madingley
             get { return _TrophicIndex; }
             set { _TrophicIndex = value; }
         }
-        
 
         /// <summary>
         /// The optimal prey body size for individuals in this cohort
@@ -166,9 +164,9 @@ namespace Madingley
         /// <summary>
         /// Get and set the optimal prey body size for individuals in this cohort
         /// </summary>
-        public double LogOptimalPreyBodySizeRatio 
+        public double LogOptimalPreyBodySizeRatio
         {
-            get { return _LogOptimalPreyBodySizeRatio ; }
+            get { return _LogOptimalPreyBodySizeRatio; }
             set { _LogOptimalPreyBodySizeRatio = value; }
         }
 

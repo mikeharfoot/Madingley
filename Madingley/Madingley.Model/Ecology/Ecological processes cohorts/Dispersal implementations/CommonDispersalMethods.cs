@@ -12,12 +12,10 @@ namespace Madingley
     /// </summary>
     public abstract class CommonDispersalMethods
     {
-
         /// <summary>
         /// An instance of the simple random number generator class
         /// </summary>
         private NonStaticSimpleRNG RandomNumberGenerator = new NonStaticSimpleRNG();
-
 
         /// <summary>
         /// Generate a random value to see if a cohort disperses
@@ -57,13 +55,10 @@ namespace Madingley
 
                     DestinationCell = madingleyGrid.CheckDispersalEast(latIndex, lonIndex);
 
-                        // Record entry and exit directions. Exit direction is only recorded the first time it happens during a (model) timestep, not each advection time step.
-                        if (exitDirection == 9999)
-                            exitDirection = 2;
-                        entryDirection = 6;
-
-
-
+                    // Record entry and exit directions. Exit direction is only recorded the first time it happens during a (model) timestep, not each advection time step.
+                    if (exitDirection == 9999)
+                        exitDirection = 2;
+                    entryDirection = 6;
                 }
                 else
                 {
@@ -74,7 +69,6 @@ namespace Madingley
                         exitDirection = 6;
                     entryDirection = 2;
                 }
-
             }
             else
             {

@@ -82,7 +82,6 @@ namespace Madingley
                 }
             }
 
-
             InternalData.Dispose();
 
             // Read in the definitions data
@@ -237,7 +236,6 @@ namespace Madingley
                 MethodUnits.Add(f[col++]);
             }
 
-
             for (int ii = 0; ii < MethodUnits.Count; ii++)
             {
                 e.Units.Add(LayerName[ii], MethodUnits[ii]);
@@ -302,15 +300,10 @@ namespace Madingley
                         {
                             EnviroStack.Add(LayerName[ii], new EnviroData(DatasetNames[ii], Resolutions[ii], e.BottomLatitude, e.LeftmostLongitude, e.TopLatitude, e.RightmostLongitude, e.CellSize, EnvironmentalDataSource.ANY));
                         }
-
                 }
             }
 
             return EnviroStack;
         }
-
     }
-
-
-
 }

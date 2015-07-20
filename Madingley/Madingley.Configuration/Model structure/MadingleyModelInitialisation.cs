@@ -147,7 +147,6 @@ namespace Madingley
                 }
             }
 
-
             InternalData.Dispose();
 
             // Read in the definitions data

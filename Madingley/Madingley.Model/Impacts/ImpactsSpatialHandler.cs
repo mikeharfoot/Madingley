@@ -7,7 +7,6 @@ namespace Madingley
 {
     public class ImpactsSpatialHandler
     {
-
         private List<uint> _SpecificImpactCellIndices;
 
         public List<uint> SpecificImpactCellIndices
@@ -64,21 +63,11 @@ namespace Madingley
         //                break;
         //        }
         //    }
-
-
-
-
-
         //}
-
 
         private void CalculateMaximallyDistributedImpactedCells(double fragmentProportion)
         {
-
-
-
         }
-
 
         /// <summary>
         /// Calculates the indices of impacted cells that give maximum division of the model grid for the given fragmentation proportion
@@ -114,7 +103,6 @@ namespace Madingley
 
             // Number of cells remaining to be allocated after the current slices are assigned
             int RemainingCells = NumberImpactedCells - (LatSlices * _NumLatCells) - (LonSlices * _NumLonCells) + Intersections;
-
 
             // Assign the index values for each latitudinal and longitudinal slice
             List<int> LatSliceIndices = new List<int>();
@@ -165,7 +153,7 @@ namespace Madingley
 
                     for (int i = 0; i < LatSlices; i++)
                     {
-                        LatSliceIndices.Add((int)Math.Floor((double)(_NumLatCells * (i + 1)/ (LatSlices + 1))) - 1);
+                        LatSliceIndices.Add((int)Math.Floor((double)(_NumLatCells * (i + 1) / (LatSlices + 1))) - 1);
                     }
 
                 }
@@ -192,17 +180,13 @@ namespace Madingley
                         RemainingCells -= RemainingCells;
                     }
 
-
                     LonSliceIndices = new List<int>();
                     for (int i = 0; i < LonSlices; i++)
                     {
                         LonSliceIndices.Add((int)Math.Floor((double)(_NumLonCells * (i + 1) / (LonSlices + 1))) - 1);
                     }
-
                 }
-
             }
-
 
             //Given those indices for slices calculate the list of impacted cell indices for use in the rest of the model
             int ImpactCellCounter = 0;
@@ -212,7 +196,6 @@ namespace Madingley
             {
                 for (int jj = 0; jj < _NumLonCells; jj++)
                 {
-
                     if (LatSliceIndices.Contains(jj) || LonSliceIndices.Contains(ii))
                     {
                         ImpactCellCounter += 1;
@@ -225,34 +208,22 @@ namespace Madingley
                         {
                             break;
                         }
-
                     }
                 }
-
             }
-
-
-
-
         }
-
-
 
         private void CalculateContinuousImpactedCells(double fragmentProportion)
         {
-
             _SpecificImpactCellIndices = new List<uint>();
 
             int NumberImpactedCells = (int)(NumCells * fragmentProportion);
 
-
             for (uint ii = 0; ii < NumberImpactedCells; ii++)
             {
-                _SpecificImpactCellIndices.Add(ii);  
+                _SpecificImpactCellIndices.Add(ii);
             }
-
         }
-
 
         private void CalculateRandomImpactedCells(double fragmentProportion)
         {

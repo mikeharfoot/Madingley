@@ -57,7 +57,6 @@ namespace Madingley
             _IndividualBodyMass = individualMass;
             _TotalBiomass = initialTotalBiomass;
         }
-        
 
 #if true
         public static void ToJson(Newtonsoft.Json.JsonWriter jsonWriter, Stock stock)

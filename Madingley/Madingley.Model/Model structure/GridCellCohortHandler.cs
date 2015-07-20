@@ -6,7 +6,6 @@ using System.Collections;
 
 using System.Diagnostics;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -19,7 +18,7 @@ namespace Madingley
         /// <summary>
         /// A list of cohorts in the grid cell
         /// </summary>
-        private List<Cohort> [] GridCellCohorts;
+        private List<Cohort>[] GridCellCohorts;
 
         /// <summary>
         /// Create a new list of cohorts for the grid cell
@@ -72,7 +71,7 @@ namespace Madingley
             set { GridCellCohorts[index[0]][index[1]] = value; }
         }
 
-         // Gets of sets a cohort within the array of lists of gridCellCohorts where the first element of the 2-element vector passed in is the array index and the second element is the list index
+        // Gets of sets a cohort within the array of lists of gridCellCohorts where the first element of the 2-element vector passed in is the array index and the second element is the list index
         /// <summary>
         /// Gets or sets a particular cohort within the grid cell cohorts
         /// </summary>
@@ -89,7 +88,6 @@ namespace Madingley
             }
         }
 
-        
         /// <summary>
         /// Get the functional group index a specified cohort
         /// </summary>
@@ -251,7 +249,7 @@ namespace Madingley
         public bool MoveNext()
         {
             position++;
-            return (position <  GridCellCohorts.Length);
+            return (position < GridCellCohorts.Length);
         }
 
         /// <summary>

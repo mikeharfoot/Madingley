@@ -22,7 +22,7 @@ namespace Timing
             get { return _AccumulatedTime; }
             set { _AccumulatedTime = value; }
         }
-        
+
         /// <summary>
         /// The start time of a given stopwatch run
         /// </summary>
@@ -61,10 +61,7 @@ namespace Timing
             // Update the time accumulated by this stopwatch instance
             this._AccumulatedTime += interval.TotalSeconds;
 
-        } 
-
-
-
+        }
 
         /// <summary>
         /// Get the non-cumulative elapsed time of a stopwatch run in milliseconds

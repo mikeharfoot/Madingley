@@ -12,8 +12,6 @@ namespace Madingley
     /// <remarks>Assumes that autotroph matter is appropriated evenly from different stocks in proportion to their biomass</remarks>
     public class HumanAutotrophMatterAppropriation
     {
-
-
         /// <summary>
         /// Constructor for human appropriation of autotroph matter
         /// </summary>
@@ -49,7 +47,6 @@ namespace Madingley
                 // Factor to convert NPP from units per m2 to units per km2
                 double m2Tokm2Conversion = 1000000.0;
 
-
                 if (humanNPPScenario.ParamString == "hanpp")
                 {
 
@@ -81,7 +78,6 @@ namespace Madingley
                             HANPP *= (gridCellStocks[actingStock].TotalBiomass / TotalAutotrophBiomass);
                         }
 
-
                         // Convert gC/m2/month to gC/km2/month
                         HANPP *= m2Tokm2Conversion;
 
@@ -93,7 +89,6 @@ namespace Madingley
 
                         // Convert from g dry matter to g wet matter
                         double WetMatterAppropriated = DryMatterAppropriated * 2;
-
 
                         //Calculate the rate of HANPP offtake
                         RemovalRate = Math.Min(1.0, WetMatterAppropriated / wetMatterNPP);
@@ -224,12 +219,9 @@ namespace Madingley
                 {
                     Debug.Fail("There is no method for the human extraction of NPP scenario specified");
                 }
-
             }
 
-            return(RemovalRate);
+            return (RemovalRate);
         }
-        
-
     }
 }

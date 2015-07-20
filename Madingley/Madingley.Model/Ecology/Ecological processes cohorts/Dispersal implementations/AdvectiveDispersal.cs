@@ -10,7 +10,7 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of dispersal
     /// </summary>
-    public partial class AdvectiveDispersal : CommonDispersalMethods , IDispersalImplementation
+    public partial class AdvectiveDispersal : CommonDispersalMethods, IDispersalImplementation
     {
         /// <summary>
         /// The horizontal diffusivity parameter (m^2/s)
@@ -20,7 +20,7 @@ namespace Madingley
         /// Get the horizontal diffusivity parameter (m^2/s)
         /// </summary>
         public double HorizontalDiffusivity { get { return _HorizontalDiffusivity; } }
-        
+
         /// <summary>
         /// The length of the time-step for advective dispersal, in hours
         /// </summary>
@@ -43,7 +43,7 @@ namespace Madingley
         /// Time unit scalar to apply to advective dispersal
         /// </summary>
         private double _AdvectionTimeStepsPerModelTimeStep;
-      
+
         /// <summary>
         /// Get the time unit scalar for advective dispersal
         /// </summary>
@@ -56,7 +56,7 @@ namespace Madingley
         /// <summary>
         /// Get the time units associated with this implementation of dispersal
         /// </summary>
-        public string TimeUnitImplementation { get { return _TimeUnitImplementation; } }    
+        public string TimeUnitImplementation { get { return _TimeUnitImplementation; } }
 
         /// <summary>
         /// Factor to convert velocity from m/s to km/month
@@ -65,14 +65,13 @@ namespace Madingley
 
         public void InitialiseParatemersAdvectiveDispersal()
         {
-            _TimeUnitImplementation = 
+            _TimeUnitImplementation =
                 EcologicalParameters.TimeUnits[(int)EcologicalParameters.Parameters["Dispersal.Advective.TimeUnitImplementation"]];
             _HorizontalDiffusivity = EcologicalParameters.Parameters["Dispersal.Advective.HorizontalDiffusivity"];
             _AdvectiveModelTimeStepLengthHours = (uint)EcologicalParameters.Parameters["Dispersal.Advective.AdvectiveModelTimeStepLengthHours"];
 
             _HorizontalDiffusivityKmSqPerADTimeStep = _HorizontalDiffusivity / (1000 * 1000) * 60 * 60 * _AdvectiveModelTimeStepLengthHours;
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -87,7 +86,6 @@ namespace Madingley
             sw.WriteLine("Advective Dispersal\tVelocityUnitConversion\t" + Convert.ToString(VelocityUnitConversion));
         }
 
-
         /// <summary>
         /// Convert dispersal speed from m per second to km per dispersal time step (currently 18h)
         /// </summary>
@@ -99,7 +97,7 @@ namespace Madingley
             // Also rescale based on the time step of the advective dispersal model - currently 18h
             return dispersalSpeed * VelocityUnitConversion / _AdvectionTimeStepsPerModelTimeStep;
         }
-        
+
         /// <summary>
         /// Calculates the probability of advective dispersal given the grid cell
         /// </summary>
@@ -118,36 +116,36 @@ namespace Madingley
         private double[] CalculateDispersalProbability(ModelGrid madingleyGrid, uint latIndex, uint lonIndex, uint currentMonth, double rescaleduSpeed, double rescaledvSpeed)
         {
 
-        // Distance travelled in u (longitudinal) direction
-         double uDistanceTravelled;
+            // Distance travelled in u (longitudinal) direction
+            double uDistanceTravelled;
 
-        // Distance travelled in v (latitudinal) direction
-         double vDistanceTravelled;
+            // Distance travelled in v (latitudinal) direction
+            double vDistanceTravelled;
 
-        // U and V components of the diffusive velocity
-        double[] DiffusiveUandVComponents = new double[2];
+            // U and V components of the diffusive velocity
+            double[] DiffusiveUandVComponents = new double[2];
 
-         // Length in km of a cell boundary latitudinally
-         double LatCellLength;
+            // Length in km of a cell boundary latitudinally
+            double LatCellLength;
 
-         // Length in km of a cell boundary longitudinally
-         double LonCellLength;
-         
-         // Area of the grid cell that is outside in the diagonal direction after dispersal, in kilometres squared
-         double AreaOutsideBoth;
+            // Length in km of a cell boundary longitudinally
+            double LonCellLength;
 
-         // Area of the grid cell that is  outside in the u (longitudinal) direction after dispersal, in kilometres squared
-         double AreaOutsideU;
+            // Area of the grid cell that is outside in the diagonal direction after dispersal, in kilometres squared
+            double AreaOutsideBoth;
 
-         // Area of the grid cell that is  outside in the v (latitudinal) direction after dispersal, in kilometres squared
-         double AreaOutsideV;
-            
-         // Cell area, in kilometres squared
-         double CellArea;
+            // Area of the grid cell that is  outside in the u (longitudinal) direction after dispersal, in kilometres squared
+            double AreaOutsideU;
 
-        // Probability of dispersal
-         double DispersalProbability;
-            
+            // Area of the grid cell that is  outside in the v (latitudinal) direction after dispersal, in kilometres squared
+            double AreaOutsideV;
+
+            // Cell area, in kilometres squared
+            double CellArea;
+
+            // Probability of dispersal
+            double DispersalProbability;
+
             // Calculate the diffusive movement speed, with a direction chosen at random
             DiffusiveUandVComponents = CalculateDiffusion();
 
@@ -171,19 +169,19 @@ namespace Madingley
 
             // We assume that the whole grid cell moves at the given velocity and calculate the area that is then outside the original grid cell location. 
             // This then becomes the probability of dispersal
-            
+
             // Calculate the area of the grid cell that is now outside in the diagonal direction. 
             AreaOutsideBoth = Math.Abs(uDistanceTravelled * vDistanceTravelled);
 
             // Calculate the area of the grid cell that is now outside in the u (longitudinal) direction (not including the diagonal)
             AreaOutsideU = Math.Abs(uDistanceTravelled * LatCellLength) - AreaOutsideBoth;
-            
+
             // Calculate the proportion of the grid cell that is outside in the v (latitudinal) direction (not including the diagonal)
             AreaOutsideV = Math.Abs(vDistanceTravelled * LonCellLength) - AreaOutsideBoth;
 
             // Get the cell area, in kilometres squared
             CellArea = madingleyGrid.GetCellEnvironment(latIndex, lonIndex)["Cell Area"][0];
-            
+
             // Convert areas to a probability
             DispersalProbability = (AreaOutsideU + AreaOutsideV + AreaOutsideBoth) / CellArea;
 
@@ -216,6 +214,6 @@ namespace Madingley
 
             return UandVOutputs;
         }
-           
+
     }
 }

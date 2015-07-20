@@ -8,7 +8,6 @@ namespace Madingley
     //Instantiate one of these for each grid cell
     class ApplyFishingCatches
     {
-
         List<Tuple<int[], double>>[] BinnedCohorts;
         double[] BinnedTotalModelBiomass;
         double[] DefecitCatch;
@@ -36,7 +35,7 @@ namespace Madingley
         {
             int mb = 0;
 
-            int[] FishFGs = cohortFGs.GetFunctionalGroupIndex("Endo/Ectotherm", "Ectotherm",false);
+            int[] FishFGs = cohortFGs.GetFunctionalGroupIndex("Endo/Ectotherm", "Ectotherm", false);
 
             for (int i = 0; i < BinnedCohorts.Length; i++)
             {
@@ -44,13 +43,13 @@ namespace Madingley
             }
 
             foreach (int fg in FishFGs)
-	        {
+            {
                 for (int i = 0; i < c[fg].Count(); i++)
                 {
                     //Find the mass bin for this cohort
-                    mb = fishCatch.MassBins.ToList().FindIndex(a => a >= c[fg,i].AdultMass);
+                    mb = fishCatch.MassBins.ToList().FindIndex(a => a >= c[fg, i].AdultMass);
                     if (mb < 0) mb = fishCatch.UnknownMassBinIndex - 1;
-                    
+
                     //Check if the current bodymass is greater than the proportion of the adult mass
                     if (c[fg, i].IndividualBodyMass >= c[fg, i].AdultMass * AdultMassProportionFished)
                     {
@@ -65,7 +64,6 @@ namespace Madingley
             }
         }
 
-
         public void ApplyCatches(GridCellCohortHandler c, InputCatchData fishCatch, int latIndex, int lonIndex)
         {
             //Hold the total catch in each mass bin for this cell
@@ -74,7 +72,7 @@ namespace Madingley
             //TO DO: make the time division flexible according to the model timestep
             for (int mb = 0; mb < BinnedCellCatch.Length; mb++)
             {
-                BinnedCellCatch[mb] = fishCatch.ModelGridCatch[latIndex, lonIndex, mb]/12.0;
+                BinnedCellCatch[mb] = fishCatch.ModelGridCatch[latIndex, lonIndex, mb] / 12.0;
 
                 if (BinnedCellCatch[mb] > 0)
                 {
@@ -96,7 +94,5 @@ namespace Madingley
             }
 
         }
-
-
     }
 }

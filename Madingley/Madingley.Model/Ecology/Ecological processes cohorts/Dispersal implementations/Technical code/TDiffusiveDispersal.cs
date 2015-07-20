@@ -11,7 +11,7 @@ namespace Madingley
     /// </summary>
     public partial class DiffusiveDispersal : IDispersalImplementation
     {
-               
+
         /// <summary>
         /// Scalar to convert from the time step units used by this formulation of dispersal to global model time step units
         /// </summary>
@@ -59,7 +59,7 @@ namespace Madingley
         /// <param name="actingCohortFunctionalGroup">The functional group index of the acting cohort</param>
         /// <param name="actingCohortNumber">The position of the cohort within the functional group in the array of grid cell cohorts</param>
         /// <param name="currentMonth">The current model month</param>
-        public void RunDispersal(uint[] cellIndices, ModelGrid gridForDispersal, Cohort cohortToDisperse, 
+        public void RunDispersal(uint[] cellIndices, ModelGrid gridForDispersal, Cohort cohortToDisperse,
             int actingCohortFunctionalGroup, int actingCohortNumber, uint currentMonth)
         {
             // Calculate dispersal speed for the cohort         
@@ -72,10 +72,10 @@ namespace Madingley
             uint ExitDirection = new uint();
             uint EntryDirection = new uint();
             ExitDirection = 9999;
-            
+
             // Get the probability of dispersal
             double[] DispersalArray = CalculateDispersalProbability(gridForDispersal, cellIndices[0], cellIndices[1], DispersalSpeed);
-            
+
             // Check to see if it does disperse
             CohortDispersed = CheckForDispersal(DispersalArray[0]);
 

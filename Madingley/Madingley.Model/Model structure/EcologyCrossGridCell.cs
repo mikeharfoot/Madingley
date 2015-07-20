@@ -19,7 +19,7 @@ namespace Madingley
         /// A vector of stopwatch objects for timing the ecological processes
         /// </summary>
         public StopWatch[] s2;
-               
+
         /// <summary>
         /// A sorted list of formulations of dispersal
         /// </summary>
@@ -28,15 +28,14 @@ namespace Madingley
         /// Get the sorted list of dispersal formulations
         /// </summary>
         public SortedList<string, IEcologicalProcessAcrossGridCells> DispersalFormulations
-	    {
+        {
             get { return _DispersalFormulations; }
         }
-	
+
         /// <summary>
         /// An instance of apply cross grid cell ecology
         /// </summary>
         ApplyCrossGridCellEcology ApplyCrossGridCellEcologicalProcessResults;
-
 
         # endregion
 
@@ -63,7 +62,7 @@ namespace Madingley
         public void RunCrossGridCellEcology(uint[] cellIndex, ModelGrid gridForDispersal, bool dispersalOnly, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, uint currentMonth)
         {
             // RUN DISPERSAL
-            _DispersalFormulations["Basic dispersal"].RunCrossGridCellEcologicalProcess(cellIndex, gridForDispersal, dispersalOnly, madingleyCohortDefinitions, madingleyStockDefinitions, currentMonth);       
+            _DispersalFormulations["Basic dispersal"].RunCrossGridCellEcologicalProcess(cellIndex, gridForDispersal, dispersalOnly, madingleyCohortDefinitions, madingleyStockDefinitions, currentMonth);
         }
 
         /// <summary>

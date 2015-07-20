@@ -33,7 +33,7 @@ namespace Madingley
             //If the wrong number of dimension names have been provided, then return error
             if (namesDimensions.Length != numDimensions)
                 Debug.Fail("Error: you have provided the wrong number of dimension names");
-            
+
             //Since this overload method deals with one-dimensional variables, return an error if this is not the case
             if (numDimensions != 1)
                 Debug.Fail("Error: you have provided data for the wrong number of dimensions");
@@ -53,7 +53,7 @@ namespace Madingley
                 {
                     SDSObject.AddVariable<float>(namesDimensions[0], dimension1Data, namesDimensions[0]);
                 }
-                
+
                 //If the variable is the same as one of the entered dimensions, then take no action, otherwise create the new variable and populate it with missing values
                 if (SDSObject.Variables.Contains(variableName))
                 {
@@ -68,14 +68,13 @@ namespace Madingley
                         tempOutData[ii] = missingValue;
                     }
 
-
                     //Add variable to SDS
                     var testOut = SDSObject.Add<double[]>(variableName, units, missingValue, tempOutData, namesDimensions);
 
                     //Metadata required by SDS
                     testOut.Metadata["DisplayName"] = variableName;
                     testOut.Metadata["MissingValue"] = missingValue;
-                    
+
                     //Commit changes
                     SDSObject.Commit();
 
@@ -98,7 +97,7 @@ namespace Madingley
             //If the wrong number of dimension names have been provided, then return error
             if (namesDimensions.Length != numDimensions)
                 Debug.Fail("Error: you have provided the wrong number of dimension names");
-            
+
             //Since this overload method deals with one-dimensional variables, return an error if this is not the case
             if (numDimensions != 1)
                 Debug.Fail("Error: you have provided data for the wrong number of dimensions");
@@ -133,7 +132,6 @@ namespace Madingley
                         tempOutData[ii] = missingValue;
                     }
 
-
                     //Add variable to SDS
                     var testOut = SDSObject.AddVariable<double>(variableName, tempOutData, namesDimensions);
 
@@ -143,12 +141,9 @@ namespace Madingley
 
                     //Commit changes
                     SDSObject.Commit();
-
                 }
             }
-
         }
-
 
         /// <summary>
         /// Adds a two-dimensional variable to the specified SDS object with floating point data for both dimensions
@@ -165,7 +160,7 @@ namespace Madingley
             //If the wrong number of dimension names have been provided, then return error
             if (namesDimensions.Length != numDimensions)
                 Debug.Fail("Error: you have provided the wrong number of dimension names");
-            
+
             //Since this overload method deals with two-dimensional variables, return an error if this is not the case
             if (numDimensions != 2)
                 Debug.Fail("Error: you have provided data for the wrong number of dimensions");
@@ -200,16 +195,15 @@ namespace Madingley
                 else
                 {
                     //Create array of missing values of the correct dimensions
-                    double[,] tempOutData = new double[dimension1Data.Length,dimension2Data.Length];
+                    double[,] tempOutData = new double[dimension1Data.Length, dimension2Data.Length];
 
                     for (int ii = 0; ii < dimension1Data.Length; ii++)
                     {
                         for (int jj = 0; jj < dimension2Data.Length; jj++)
                         {
-                            tempOutData[ii,jj] = missingValue;
+                            tempOutData[ii, jj] = missingValue;
                         }
                     }
-
 
                     //Add variable to SDS
                     var testOut = SDSObject.AddVariable<double>(variableName, tempOutData, namesDimensions);
@@ -220,10 +214,8 @@ namespace Madingley
 
                     //Commit changes
                     SDSObject.Commit();
-
                 }
             }
-
         }
 
         /// <summary>
@@ -242,7 +234,7 @@ namespace Madingley
             //If the wrong number of dimension names have been provided, then return error
             if (namesDimensions.Length != numDimensions)
                 Debug.Fail("Error: you have provided the wrong number of dimension names");
-            
+
             //Since this overload method deals with three-dimensional variables, return an error if this is not the case
             if (numDimensions != 3)
                 Debug.Fail("Error: you have provided data for the wrong number of dimensions");
@@ -297,7 +289,6 @@ namespace Madingley
                         }
                     }
 
-
                     //Add variable to SDS
                     var testOut = SDSObject.AddVariable<double>(variableName, tempOutData, namesDimensions);
 
@@ -305,13 +296,10 @@ namespace Madingley
                     testOut.Metadata["DisplayName"] = variableName;
                     testOut.Metadata["MissingValue"] = missingValue;
 
-
                     //Commit changes
                     SDSObject.Commit();
-
                 }
             }
-
         }
 
         /// <summary>
@@ -396,7 +384,6 @@ namespace Madingley
                         }
                     }
 
-
                     //Add variable to SDS
                     var testOut = SDSObject.AddVariable<double>(variableName, tempOutData, namesDimensions);
 
@@ -404,15 +391,11 @@ namespace Madingley
                     testOut.Metadata["DisplayName"] = variableName;
                     testOut.Metadata["MissingValue"] = missingValue;
 
-
                     //Commit changes
                     SDSObject.Commit();
-
                 }
             }
-
         }
-
 
         /// <summary>
         /// Adds a double value to an one-dimensional variable in an SDS object at the specified offset in the dimension
@@ -423,18 +406,18 @@ namespace Madingley
         /// <param name="missingValue">The value used for missing data</param>
         /// <param name="SDSObject">The SDS object to write to</param>
         /// <param name="dimensionOffset">The required offset in the dimension variable</param>
-        public void ValueToSDS1D(double dataToConvert, string outputVariableName, string dimensionName, double missingValue, 
+        public void ValueToSDS1D(double dataToConvert, string outputVariableName, string dimensionName, double missingValue,
             DataSet SDSObject, int dimensionOffset)
         {
             // Check that the dimension variables and the output variable have been defined already
-            Debug.Assert(SDSObject.Variables.Contains(dimensionName), 
+            Debug.Assert(SDSObject.Variables.Contains(dimensionName),
                 "Error: where an offset is included, dimension information must be defined before adding data");
-            Debug.Assert(SDSObject.Variables.Contains(outputVariableName), 
+            Debug.Assert(SDSObject.Variables.Contains(outputVariableName),
                 "Error: where an offset is included, the variable must be created before adding data");
 
             // Add the data to the SDS object
             SDSObject.PutData<double>(outputVariableName, dataToConvert, DataSet.ReduceDim(dimensionOffset));
-            
+
             // Commit the SDS object
             SDSObject.Commit();
 
@@ -498,7 +481,7 @@ namespace Madingley
             Debug.Assert(SDSObject.Variables.Contains(outputVariableName), "Error: where an offset is included, the variable must be created before adding data");
 
             // Add the data to the SDS object
-            SDSObject.PutData<double>(outputVariableName, dataToConvert, DataSet.ReduceDim(dimension1Offset), DataSet.ReduceDim(dimension2Offset),DataSet.ReduceDim(dimension3Offset));
+            SDSObject.PutData<double>(outputVariableName, dataToConvert, DataSet.ReduceDim(dimension1Offset), DataSet.ReduceDim(dimension2Offset), DataSet.ReduceDim(dimension3Offset));
 
             // Commit the changes
             SDSObject.Commit();
@@ -568,16 +551,16 @@ namespace Madingley
             {
                 Debug.Assert(SDSObject.Variables.Contains(dimensionName), "Error: where an offset is included, dimension information must be defined before adding data");
             }
-            
+
             // Check that the output variable has been defined already
             Debug.Assert(SDSObject.Variables.Contains(outputVariableName), "Error: where an offset is included, the variable must be created before adding data");
 
             // Add the data to the SDS object
             SDSObject.PutData<double[]>(outputVariableName, dataToConvert, DataSet.ReduceDim(dimension1Offset), DataSet.FromToEnd(0));
-            
+
             // Commit the SDS object
             SDSObject.Commit();
-           
+
         }
 
         /// <summary>
@@ -644,8 +627,8 @@ namespace Madingley
         /// <param name="SDSObject">The SDS object to write to</param>
         /// <param name="functionalGroupHandler">The functional group handler corresponding to cohorts or stocks</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void Array2DToSDS2D(ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, string gridVariableName, string traitValue, 
-            string variableType, string outputVariableName, DataSet SDSObject, FunctionalGroupDefinitions functionalGroupHandler, 
+        public void Array2DToSDS2D(ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, string gridVariableName, string traitValue,
+            string variableType, string outputVariableName, DataSet SDSObject, FunctionalGroupDefinitions functionalGroupHandler,
             MadingleyModelInitialisation initialisation)
         {
             // Get the missing value from the model grid
@@ -657,18 +640,18 @@ namespace Madingley
             // generate arrays to hold latitudes and longitudes
             float[] lats = new float[ecosystemModelGrid.NumLatCells];
             float[] lons = new float[ecosystemModelGrid.NumLonCells];
-            
+
             // Populate arrays of latitudes and longitudes, converting from bottom left cell references as used in the model grid
             // to cell centre references as required by SDS
             for (uint ii = 0; ii < ecosystemModelGrid.NumLatCells; ii++)
             {
                 lats[ii] = ecosystemModelGrid.Lats[ii] + (ecosystemModelGrid.LatCellSize / 2);
-                
+
             }
 
             for (uint jj = 0; jj < ecosystemModelGrid.NumLonCells; jj++)
             {
-                lons[jj] = ecosystemModelGrid.Lons[jj] + (ecosystemModelGrid.LonCellSize / 2);    
+                lons[jj] = ecosystemModelGrid.Lons[jj] + (ecosystemModelGrid.LonCellSize / 2);
             }
 
             // Get the required data from the model grid
@@ -711,9 +694,6 @@ namespace Madingley
                 // Commit changes to update data set
                 SDSObject.Commit();
             }
-
-           
-
         }
 
         /// <summary>
@@ -741,8 +721,6 @@ namespace Madingley
             SDSObject.PutData<double[,]>(newVariableName, dataToConvert, DataSet.FromToEnd(0), DataSet.FromToEnd(0), DataSet.ReduceDim(thirdDimensionOffset));
 
             SDSObject.Commit();
-
-
         }
     }
 }

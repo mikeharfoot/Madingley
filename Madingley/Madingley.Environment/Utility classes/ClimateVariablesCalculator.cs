@@ -116,7 +116,6 @@ namespace Madingley
             return OutputData;
         }
 
-
         /// <summary>
         /// Calculates the monthly potential evapotranspiration according to
         /// Malmstrom VH (1969) A new approach to the classification of climate. J Geog 68:351–357.
@@ -137,7 +136,6 @@ namespace Madingley
             return ((psa / ps0) * 25);
         }
 
-        
         /// <summary>
         /// Estimates the fraction of the year in which the temperature drops below zero at some time in the day
         /// according to the the CRU CL 2.0 gridded climate dataset (For details of this dataset see CRU2p0Dataset.txt)
@@ -182,17 +180,15 @@ namespace Madingley
                     }
                 }
 
-                    DataToReturn = NumMonthsFrost / 12; // convert to a fraction of a year
+                DataToReturn = NumMonthsFrost / 12; // convert to a fraction of a year
             }
             else
             {
                 ApproximateNDF(monthlyTemperature);
             }
 
-
             return DataToReturn;
         }
-        
 
         /// <summary>
         /// Calculates the number of days frost using an alternative algorithm to that in ClimateLookup

@@ -94,8 +94,6 @@ namespace Madingley
                 {
                     Debug.Fail("All functional group data must be prefixed by DEFINITTION OR PROPERTY");
                 }
-
-
             }
 
             var length = TraitLookupFromIndex.Max(p => p.Value.Length);

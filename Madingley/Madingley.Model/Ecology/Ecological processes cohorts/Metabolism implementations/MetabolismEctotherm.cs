@@ -120,10 +120,8 @@ namespace Madingley
             // Currently a very rough estimate based on calorific values of fat, protein and carbohydrate - assumes organism is metabolising mass of 1/4 protein, 1/4 carbohydrate and 1/2 fat 
             _EnergyScalar = EcologicalParameters.Parameters["Metabolism.EnergyScalar"];
 
-
             // Set the constant to convert temperature in degrees Celsius to Kelvin
             _TemperatureUnitsConvert = 273.0;
-
         }
 
         /// <summary>
@@ -144,11 +142,7 @@ namespace Madingley
             sw.WriteLine("Ectothermic Metabolism\tEnergyScalar_kJ_to_g\t" + Convert.ToString(_EnergyScalar));
             sw.WriteLine("Ectothermic Metabolism\tNormalizationConstantBMR\t" + Convert.ToString(_NormalizationConstantBMR));
             sw.WriteLine("Ectothermic Metabolism\tBasalMetabolismMassExponent\t" + Convert.ToString(_BasalMetabolismMassExponent));
-            
-            
-
         }
-
 
         /// <summary>
         /// Calculate metabolic loss in grams for an individual

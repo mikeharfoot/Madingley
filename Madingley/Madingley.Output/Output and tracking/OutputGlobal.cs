@@ -27,11 +27,11 @@ namespace Madingley
         /// A dataset to store the basic outputs to file
         /// </summary>
         private DataSet BasicOutput;
-        
+
         /// <summary>
         /// The time steps in this model simulation
         /// </summary>
-        private float[] TimeSteps; 
+        private float[] TimeSteps;
 
         /// <summary>
         /// The path to the output folder
@@ -149,7 +149,7 @@ namespace Madingley
         /// <param name="numTimeSteps">The number of time steps in the model run</param>
         /// <param name="ecosystemModelGrid">The model grid</param>
         /// <param name="outputFilesSuffix">The suffix to be applied to all output files</param>
-        public void SetupOutputs(uint numTimeSteps,ModelGrid ecosystemModelGrid, string outputFilesSuffix)
+        public void SetupOutputs(uint numTimeSteps, ModelGrid ecosystemModelGrid, string outputFilesSuffix)
         {
             Console.WriteLine("Setting up global outputs...\n");
 
@@ -195,7 +195,7 @@ namespace Madingley
         /// <param name="globalDiagnosticVariables">Global diagnostic variables</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
         public void CalculateOutputs(FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions
-            stockFunctionalGroupDefinitions, ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, SortedList<string,double>
+            stockFunctionalGroupDefinitions, ModelGrid ecosystemModelGrid, List<uint[]> cellIndices, SortedList<string, double>
             globalDiagnosticVariables, MadingleyModelInitialisation initialisation)
         {
             // Get all cohort functional group indices in the model
@@ -246,12 +246,12 @@ namespace Madingley
         /// <param name="cellIndices">The list of indices of active cells in the model grid</param>
         /// <param name="globalDiagnosticVariables">A list of global diagnostic variables</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void InitialOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, 
-            FunctionalGroupDefinitions stockFunctionalGroupDefinitions, List<uint[]> cellIndices, 
-            SortedList<string,double> globalDiagnosticVariables, MadingleyModelInitialisation initialisation)
+        public void InitialOutputs(ModelGrid ecosystemModelGrid, FunctionalGroupDefinitions cohortFunctionalGroupDefinitions,
+            FunctionalGroupDefinitions stockFunctionalGroupDefinitions, List<uint[]> cellIndices,
+            SortedList<string, double> globalDiagnosticVariables, MadingleyModelInitialisation initialisation)
         {
             // Calculate the output variables
-            CalculateOutputs(cohortFunctionalGroupDefinitions, stockFunctionalGroupDefinitions, ecosystemModelGrid, cellIndices, 
+            CalculateOutputs(cohortFunctionalGroupDefinitions, stockFunctionalGroupDefinitions, ecosystemModelGrid, cellIndices,
                 globalDiagnosticVariables, initialisation);
 
             // Generate the initial console outputs
@@ -334,9 +334,9 @@ namespace Madingley
         /// <param name="cellIndices">List of indices of active cells in the model grid</param>
         /// <param name="globalDiagnosticVariables">The global diagnostic variables for the model run</param>
         /// <param name="initialisation">The Madingley Model initialisation</param>
-        public void TimeStepOutputs(ModelGrid ecosystemModelGrid, uint currentTimeStep, uint currentMonth, StopWatch timeStepTimer, 
-            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions stockFunctionalGroupDefinitions, 
-            List<uint[]> cellIndices, SortedList<string,double> globalDiagnosticVariables, MadingleyModelInitialisation initialisation)
+        public void TimeStepOutputs(ModelGrid ecosystemModelGrid, uint currentTimeStep, uint currentMonth, StopWatch timeStepTimer,
+            FunctionalGroupDefinitions cohortFunctionalGroupDefinitions, FunctionalGroupDefinitions stockFunctionalGroupDefinitions,
+            List<uint[]> cellIndices, SortedList<string, double> globalDiagnosticVariables, MadingleyModelInitialisation initialisation)
         {
             // Calculate the output variables for this time step
             CalculateOutputs(cohortFunctionalGroupDefinitions, stockFunctionalGroupDefinitions, ecosystemModelGrid, cellIndices,

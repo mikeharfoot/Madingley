@@ -11,7 +11,7 @@ namespace Madingley
     /// </summary>
     public partial class AdvectiveDispersal : IDispersalImplementation
     {
-               
+
         /// <summary>
         /// Scalar to convert from the time step units used by this formulation of dispersal to global model time step units
         /// </summary>
@@ -45,7 +45,7 @@ namespace Madingley
 
             // Convert velocity from m/s to km/month. Note that if the _TimeUnitImplementation changes, this will also have to change.
             VelocityUnitConversion = 60 * 60 * 24 * Utilities.ConvertTimeUnits(globalModelTimeStepUnit, "day") * _DeltaT / 1000;
-       
+
             // Set the seed for the random number generator
             RandomNumberGenerator = new NonStaticSimpleRNG();
             if (DrawRandomly)
@@ -68,12 +68,12 @@ namespace Madingley
         /// <param name="actingCohortFunctionalGroup">The functional group index of the acting cohort</param>
         /// <param name="actingCohortNumber">The position of the acting cohort wihtin the functional group in the array of grid cell cohorts</param>
         /// <param name="currentMonth">The current model month</param>
-        public void RunDispersal(uint[] cellIndex, ModelGrid gridForDispersal, Cohort cohortToDisperse, int actingCohortFunctionalGroup, 
+        public void RunDispersal(uint[] cellIndex, ModelGrid gridForDispersal, Cohort cohortToDisperse, int actingCohortFunctionalGroup,
             int actingCohortNumber, uint currentMonth)
         {
             // An array to hold the dispersal information
             double[] DispersalArray = new double[6];
-            
+
             // A double to indicate whether or not the cohort has dispersed, and if it has dispersed, where to
             double CohortDispersed = 0;
 
@@ -90,11 +90,10 @@ namespace Madingley
             Debug.Assert(uAdvectiveSpeed != -9999);
 
             double vAdvectiveSpeed = gridForDispersal.GetEnviroLayer("vVel", currentMonth, PresentLocation[0], PresentLocation[1], out varExists);
-            Debug.Assert(vAdvectiveSpeed != -9999);         
+            Debug.Assert(vAdvectiveSpeed != -9999);
 
             uAdvectiveSpeed = RescaleDispersalSpeed(uAdvectiveSpeed);
             vAdvectiveSpeed = RescaleDispersalSpeed(vAdvectiveSpeed);
-
 
             // Loop through a number of times proportional to the rescaled dispersal
             for (int mm = 0; mm < _AdvectionTimeStepsPerModelTimeStep; mm++)
@@ -125,7 +124,6 @@ namespace Madingley
                 }
             }
 
-
             // Update the dipersal deltas for this cohort, if necessary
             if ((cellIndex[0] != PresentLocation[0]) || (cellIndex[1] != PresentLocation[1]))
             {
@@ -141,7 +139,7 @@ namespace Madingley
                 gridForDispersal.DeltaCellEntryDirection[cellIndex[0], cellIndex[1]].Add(EntryDirection);
             }
         }
-                
+
         #endregion
     }
 }

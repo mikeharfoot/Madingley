@@ -11,7 +11,6 @@ namespace Madingley
     /// </summary>
     public class Activity
     {
-
         /// <summary>
         /// The distance of the maximum critical temperature from the ambient temperature
         /// </summary>
@@ -89,18 +88,17 @@ namespace Madingley
         /// </summary>
         private void InitialiseActivityParameters()
         {
-             // Source: Deutsch et al (2008), Impacts of climate warming on terrestrial ecototherms across latitude, PNAS.
-             TerrestrialWarmingToleranceIntercept = EcologicalParameters.Parameters["Activity.Terrestrial.WarmingToleranceIntercept"];
-             TerrestrialWarmingToleranceSlope = EcologicalParameters.Parameters["Activity.Terrestrial.WarmingToleranceSlope"];
-             TerrestrialTSMIntercept = EcologicalParameters.Parameters["Activity.Terrestrial.TSMIntercept"];
-             TerrestrialTSMSlope = EcologicalParameters.Parameters["Activity.Terrestrial.TSMSlope"];
+            // Source: Deutsch et al (2008), Impacts of climate warming on terrestrial ecototherms across latitude, PNAS.
+            TerrestrialWarmingToleranceIntercept = EcologicalParameters.Parameters["Activity.Terrestrial.WarmingToleranceIntercept"];
+            TerrestrialWarmingToleranceSlope = EcologicalParameters.Parameters["Activity.Terrestrial.WarmingToleranceSlope"];
+            TerrestrialTSMIntercept = EcologicalParameters.Parameters["Activity.Terrestrial.TSMIntercept"];
+            TerrestrialTSMSlope = EcologicalParameters.Parameters["Activity.Terrestrial.TSMSlope"];
 
-
-             // Source: Sunday et al (2010), Global analysis of thermal tolerance and latitude in ectotherms, Proc R Soc B.
-             /*MarineUpperToleranceIntercept = 43.2;
-             MarineUpperToleranceSlope = -0.14;
-             MarineRangeIntercept = 31.2;
-             MarineRangeSlope = -0.13;*/
+            // Source: Sunday et al (2010), Global analysis of thermal tolerance and latitude in ectotherms, Proc R Soc B.
+            /*MarineUpperToleranceIntercept = 43.2;
+            MarineUpperToleranceSlope = -0.14;
+            MarineRangeIntercept = 31.2;
+            MarineRangeSlope = -0.13;*/
         }
 
         /// <summary>
@@ -133,7 +131,7 @@ namespace Madingley
         /// <param name="currentTimestep">Current timestep index</param>
         /// <param name="currentMonth">Current month</param>
         public void AssignProportionTimeActive(Cohort actingCohort, SortedList<string, double[]> cellEnvironment,
-            FunctionalGroupDefinitions madingleyCohortDefinitions,uint currentTimestep, uint currentMonth)
+            FunctionalGroupDefinitions madingleyCohortDefinitions, uint currentTimestep, uint currentMonth)
         {
             double Realm = cellEnvironment["Realm"][0];
 
@@ -164,7 +162,7 @@ namespace Madingley
                 }
 
             }
-            
+
         }
 
         /// <summary>
@@ -180,25 +178,21 @@ namespace Madingley
         /// <returns>The proportion of the timestep for which this cohort could be active</returns>
         private double CalculateProportionTimeSuitableTerrestrial(SortedList<string, double[]> cellEnvironment, uint currentMonth, Boolean endotherm)
         {
+            AmbientTemp = cellEnvironment["Temperature"][currentMonth];
+            DTR = cellEnvironment["DiurnalTemperatureRange"][currentMonth];
 
+            //Calculate the Warming tolerance and thermal safety margin given standard deviation of monthly temperature
+            WarmingTolerance = TerrestrialWarmingToleranceSlope * cellEnvironment["SDTemperature"][0] + TerrestrialWarmingToleranceIntercept;
+            ThermalSafetyMargin = TerrestrialTSMSlope * cellEnvironment["SDTemperature"][0] + TerrestrialTSMIntercept;
 
-                AmbientTemp = cellEnvironment["Temperature"][currentMonth];
-                DTR = cellEnvironment["DiurnalTemperatureRange"][currentMonth];
+            Topt = ThermalSafetyMargin + cellEnvironment["AnnualTemperature"][0];
+            CTmax = WarmingTolerance + cellEnvironment["AnnualTemperature"][0];
 
-                //Calculate the Warming tolerance and thermal safety margin given standard deviation of monthly temperature
-                WarmingTolerance = TerrestrialWarmingToleranceSlope * cellEnvironment["SDTemperature"][0] + TerrestrialWarmingToleranceIntercept;
-                ThermalSafetyMargin = TerrestrialTSMSlope * cellEnvironment["SDTemperature"][0] + TerrestrialTSMIntercept;
+            double PerformanceStandardDeviation = (CTmax - Topt) / 12;
 
-                Topt = ThermalSafetyMargin + cellEnvironment["AnnualTemperature"][0];
-                CTmax = WarmingTolerance + cellEnvironment["AnnualTemperature"][0];
+            CTmin = Topt - 4 * PerformanceStandardDeviation;
 
-
-                double PerformanceStandardDeviation = (CTmax - Topt) / 12;
-
-                CTmin = Topt - 4 * PerformanceStandardDeviation;
-
-                return ProportionDaySuitable();
-            
+            return ProportionDaySuitable();
         }
 
         /// <summary>
@@ -217,7 +211,6 @@ namespace Madingley
 
             return 1.0;
             /*double Latitude = Math.Abs(cellEnvironment["Latitude"][0]);
-
 
             CTmax = MarineUpperToleranceIntercept + (Latitude * MarineUpperToleranceSlope);
             CTmin = CTmax - (MarineRangeIntercept + (Latitude * MarineRangeSlope));
@@ -242,19 +235,17 @@ namespace Madingley
         {
             double ProportionOfDaySuitable;
 
-
             //Calculate the diurnal maximum in the current month
             double DTmax = AmbientTemp + (0.5 * DTR);
             double DTmin = AmbientTemp - (0.5 * DTR);
 
-            
             //Proportion of time for which ambient temperatures are greater than the critical upper temperature
             double POver;
             //Proportion of time for which ambient temperatures are below the critical lower temperature
             double PBelow;
             double temp;
 
-            if(CTmax - DTmax > 0.0)
+            if (CTmax - DTmax > 0.0)
             {
                 temp = 1.0;
             }
@@ -266,7 +257,7 @@ namespace Madingley
             {
                 temp = 2 * (CTmax - AmbientTemp) / DTR;
             }
-            POver = ((Math.PI / 2.0) - Math.Asin(temp))/Math.PI;
+            POver = ((Math.PI / 2.0) - Math.Asin(temp)) / Math.PI;
 
             if (CTmin - DTmax > 0.0)
             {
@@ -284,10 +275,7 @@ namespace Madingley
 
             ProportionOfDaySuitable = 1 - (POver + PBelow);
 
-            
-
             return ProportionOfDaySuitable;
         }
-
     }
 }

@@ -15,7 +15,7 @@ namespace Madingley
         /// The number of mass bins to be used for outputs
         /// </summary>
         public int NumMassBins = 50;
-        
+
         /// <summary>
         /// A vector containing the masses correpsonding to the mass bins
         /// </summary>

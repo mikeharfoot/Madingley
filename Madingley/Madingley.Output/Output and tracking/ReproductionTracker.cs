@@ -36,9 +36,9 @@ namespace Madingley
         /// <param name="outputPath">The path to write all output files to</param>
         /// <param name="cellIndex">The index of the current cell in the list of all cells to run the model for</param>
         public ReproductionTracker(uint numTimeSteps,
-            uint numLats, uint numLons, 
-            List<uint[]> cellIndices, 
-            string newCohortsFilename, 
+            uint numLats, uint numLons,
+            List<uint[]> cellIndices,
+            string newCohortsFilename,
             string maturityFilename,
             string outputFileSuffix,
             string outputPath, int cellIndex)
@@ -70,8 +70,8 @@ namespace Madingley
         /// <param name="functionalGroup">The functional group of the offspring cohort</param>
         /// <param name="parentCohortIDs">The cohort IDs associated with the parent cohort</param>
         /// <param name="offspringCohortID">The cohort ID used for the new offspring cohort</param>
-        public void RecordNewCohort(uint latIndex, uint lonIndex, uint timestep, double offspringCohortAbundance, double parentCohortAdultMass, 
-            int functionalGroup, List<uint> parentCohortIDs,uint offspringCohortID)
+        public void RecordNewCohort(uint latIndex, uint lonIndex, uint timestep, double offspringCohortAbundance, double parentCohortAdultMass,
+            int functionalGroup, List<uint> parentCohortIDs, uint offspringCohortID)
         {
             double[] NewCohortRecords = new double[3];
             NewCohortRecords[0] = offspringCohortAbundance;
@@ -122,8 +122,8 @@ namespace Madingley
             //_Maturity[latIndex, lonIndex,timestep].Add(MaturityRecords);
 
             // Write the time step and the abundance of the new cohort to the output file for diagnostic purposes
-            string newline = Convert.ToString(latIndex) +'\t'+ Convert.ToString(lonIndex)+'\t'+
-                Convert.ToString(timestep) + '\t' + Convert.ToString(birthTimestep) + '\t' + Convert.ToString(juvenileMass) + '\t'+
+            string newline = Convert.ToString(latIndex) + '\t' + Convert.ToString(lonIndex) + '\t' +
+                Convert.ToString(timestep) + '\t' + Convert.ToString(birthTimestep) + '\t' + Convert.ToString(juvenileMass) + '\t' +
                 Convert.ToString(adultMass) + '\t' + Convert.ToString(functionalGroup);
 
             using (var MaturityWriter = File.AppendText(this.MaturityFileName))

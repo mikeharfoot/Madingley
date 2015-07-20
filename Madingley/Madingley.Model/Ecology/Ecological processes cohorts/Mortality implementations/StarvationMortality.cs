@@ -11,7 +11,7 @@ namespace Madingley
     /// <summary>
     /// A formulation of the process of starvation mortality
     /// </summary>
-    public partial class StarvationMortality: IMortalityImplementation
+    public partial class StarvationMortality : IMortalityImplementation
     {
         #region Define properties and fields
 
@@ -32,7 +32,7 @@ namespace Madingley
         /// Get the inflection point of the curve describing the relationship between body mass and mortality rate
         /// </summary>
         public double LogisticInflectionPoint { get { return _LogisticInflectionPoint; } }
-        
+
         /// <summary>
         /// The steepness of the curve describing the relationship between body mass and mortality rate
         /// </summary>
@@ -53,7 +53,6 @@ namespace Madingley
 
         # endregion
 
-
         public void InitialiseParametersStarvationMortality()
         {
             _TimeUnitImplementation =
@@ -62,7 +61,6 @@ namespace Madingley
             _LogisticScalingParameter = EcologicalParameters.Parameters["Mortality.Starvation.LogisticScalingParameter"];
             _MaximumStarvationRate = EcologicalParameters.Parameters["Mortality.Starvation.MaximumStarvationRate"];
         }
-
 
         /// <summary>
         /// Write out the values of the parameters to an output file
@@ -76,7 +74,6 @@ namespace Madingley
             sw.WriteLine("Starvation Mortality\tMaximumStarvationRate\t" + Convert.ToString(_MaximumStarvationRate));
             sw.WriteLine("Starvation Mortality\tLogisticScalingParameter\t" + Convert.ToString(_LogisticScalingParameter));
         }
-
 
         /// <summary>
         /// Calculate the proportion of individuals in a cohort that die from starvation mortality each time step

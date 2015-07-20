@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 
-
 namespace Madingley
 {
     /// <summary>
@@ -90,7 +89,7 @@ namespace Madingley
         {
             throw new NotImplementedException();
         }
-        
+
         /// <summary>
         /// NOT CURRENTLY USED
         /// </summary>

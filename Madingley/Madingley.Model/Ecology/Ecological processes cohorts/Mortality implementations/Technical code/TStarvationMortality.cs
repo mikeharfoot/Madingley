@@ -5,13 +5,13 @@ using System.Text;
 using System.Diagnostics;
 
 namespace Madingley
-{    
+{
     /// <summary>
     /// A formulation of the process of starvation mortality
     /// </summary>
     public partial class StarvationMortality : IMortalityImplementation
     {
-        
+
         /// <summary>
         /// Scalar to convert from the time step units used by this mortality implementation to global model time step units
         /// </summary>

@@ -10,7 +10,7 @@ namespace Madingley
     /// </summary>
     public partial class SenescenceMortality : IMortalityImplementation
     {
-        
+
         /// <summary>
         /// Scalar to convert from the time step units used by this mortality implementation to global model time step units
         /// </summary>

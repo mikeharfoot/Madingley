@@ -11,7 +11,7 @@ namespace Madingley
     /// </summary>
     public partial class ResponsiveDispersal : IDispersalImplementation
     {
-                
+
         /// <summary>
         /// Scalar to convert from the time step units used by this formulation of dispersal to global model time step units
         /// </summary>
@@ -35,7 +35,7 @@ namespace Madingley
 
             // Calculate the scalar to convert from the time step units used by this implementation of dispersal to the global model time step units
             _DeltaT = Utilities.ConvertTimeUnits(globalModelTimeStepUnit, _TimeUnitImplementation);
-            
+
             // Set the seed for the random number generator
             RandomNumberGenerator = new NonStaticSimpleRNG();
             if (DrawRandomly)
@@ -57,7 +57,7 @@ namespace Madingley
         /// <param name="actingCohortFunctionalGroup">The functional group index of the acting cohort</param>
         /// <param name="actingCohortNumber">The position of the acting cohort within the functional group in the array of grid cell cohorts</param>
         /// <param name="currentMonth">The current model month</param>
-        public void RunDispersal(uint[] cellIndices, ModelGrid gridForDispersal, Cohort cohortToDisperse, 
+        public void RunDispersal(uint[] cellIndices, ModelGrid gridForDispersal, Cohort cohortToDisperse,
             int actingCohortFunctionalGroup, int actingCohortNumber, uint currentMonth)
         {
             // Starvation driven dispersal takes precedence over density driven dispersal (i.e. a cohort can't do both). Also, the delta 

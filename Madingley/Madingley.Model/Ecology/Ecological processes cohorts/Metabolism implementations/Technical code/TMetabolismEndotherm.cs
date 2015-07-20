@@ -13,7 +13,6 @@ namespace Madingley
     /// Assumes that endothermic organisms metabolise at 37degC, and that they can adapt physiologicaly to do this without extra costs</remarks>
     public partial class MetabolismEndotherm : IMetabolismImplementation
     {
-
         /// <summary>
         /// Scalar to convert from the time units used by this metabolism implementation to the global model time step units
         /// </summary>
@@ -21,13 +20,12 @@ namespace Madingley
         /// <summary>
         /// Get the scalar to convert from the time units used by this metabolism implementation to the global model time step units
         /// </summary>
-        public double DeltaT  { get  {  return _DeltaT;  } }
+        public double DeltaT { get { return _DeltaT; } }
 
         /// <summary>
         /// Constant to convert temperature in degrees Celsius to temperature in Kelvin
         /// </summary>
         private double _TemperatureUnitsConvert;
-        
 
         /// <summary>
         /// Constructor for metabolism: assigns all parameter values
@@ -39,7 +37,6 @@ namespace Madingley
 
             // Calculate the scalar to convert from the time step units used by this implementation of metabolism to the global  model time step units
             _DeltaT = Utilities.ConvertTimeUnits(globalModelTimeStepUnit, _TimeUnitImplementation);
-
         }
 
         /// <summary>
@@ -54,9 +51,9 @@ namespace Madingley
         /// <param name="madingleyStockDefinitions">The definitions for the stock functional groups in the model</param>
         /// <param name="currentTimestep">The current model time step</param>
         /// <param name="currentMonth">The current model month</param>
-        public void RunMetabolism(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks, 
-            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>> 
-            deltas, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions, 
+        public void RunMetabolism(GridCellCohortHandler gridCellCohorts, GridCellStockHandler gridCellStocks,
+            int[] actingCohort, SortedList<string, double[]> cellEnvironment, Dictionary<string, Dictionary<string, double>>
+            deltas, FunctionalGroupDefinitions madingleyCohortDefinitions, FunctionalGroupDefinitions madingleyStockDefinitions,
             uint currentTimestep, uint currentMonth)
         {
             // Calculate metabolic loss for an individual and add the value to the delta biomass for metabolism
@@ -64,7 +61,7 @@ namespace Madingley
                 cellEnvironment["Temperature"][currentMonth] + _TemperatureUnitsConvert) * _DeltaT;
 
             // If metabolic loss is greater than individual body mass after herbivory and predation, then set equal to individual body mass
-            deltas["biomass"]["metabolism"] = Math.Max(deltas["biomass"]["metabolism"],-(gridCellCohorts[actingCohort].IndividualBodyMass + deltas["biomass"]["predation"] + deltas["biomass"]["herbivory"]));
+            deltas["biomass"]["metabolism"] = Math.Max(deltas["biomass"]["metabolism"], -(gridCellCohorts[actingCohort].IndividualBodyMass + deltas["biomass"]["predation"] + deltas["biomass"]["herbivory"]));
 
             // Add total metabolic loss for all individuals in the cohort to delta biomass for metabolism in the respiratory CO2 pool
             deltas["respiratoryCO2pool"]["metabolism"] = -deltas["biomass"]["metabolism"] * gridCellCohorts[actingCohort].CohortAbundance;

@@ -59,7 +59,7 @@ namespace Madingley
             // Check that the user has not specified an SDS object of type memory
             if (sdsType == "Memory")
                 Debug.Fail("Error: you do not need to specify a file name for SDS objects of type 'memory'");
-            
+
             // Check that the output file does not already exist
             if (sdsType == "netCDF")
             {
@@ -72,7 +72,7 @@ namespace Madingley
             if (sdsType == "netCDF")
             {
                 // Create the URI for the SDS object to be created
-                string tempString = "msds:nc?file="+outputPath + sdsName + ".nc&openMode=create";
+                string tempString = "msds:nc?file=" + outputPath + sdsName + ".nc&openMode=create";
                 // Create an SDS object
                 DataSet internalSDS = DataSet.Open(tempString);
                 // Disable auto commit

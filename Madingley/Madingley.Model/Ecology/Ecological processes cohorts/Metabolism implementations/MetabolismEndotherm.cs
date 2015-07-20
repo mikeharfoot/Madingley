@@ -6,7 +6,6 @@ using System.IO;
 
 namespace Madingley
 {
-
     /// <summary>
     /// A formulation of the metabolism process for Endothermic organisms
     /// </summary>
@@ -15,7 +14,6 @@ namespace Madingley
     /// Assumes that endothermic organisms metabolise at 37degC, and that they can adapt physiologicaly to do this without extra costs</remarks>
     public partial class MetabolismEndotherm : IMetabolismImplementation
     {
-
         /// <summary>
         /// The time unit for this metabolism implementation and its parameters
         /// </summary>
@@ -55,9 +53,6 @@ namespace Madingley
         /// </summary>
         private double _EndothermBodyTemperature;
 
-
-        
-
         /// <summary>
         /// Initialises values for all ecological parameters for metabolism
         /// </summary>
@@ -81,15 +76,11 @@ namespace Madingley
             // Currently a very rough estimate based on calorific values of fat, protein and carbohydrate - assumes organism is metabolising mass of 1/4 protein, 1/4 carbohydrate and 1/2 fat 
             _EnergyScalar = EcologicalParameters.Parameters["Metabolism.EnergyScalar"];
 
-
             // Set the constant to convert temperature in degrees Celsius to Kelvin
             _TemperatureUnitsConvert = 273.0;
 
             // Assume all endotherms have a constant body temperature of 37degC
             _EndothermBodyTemperature = 37.0 + _TemperatureUnitsConvert;
-
-            
-
         }
 
         /// <summary>
@@ -109,10 +100,7 @@ namespace Madingley
             sw.WriteLine("Endothermic Metabolism\tBoltzmannConstant_eV_per_K\t" + Convert.ToString(_BoltzmannConstant));
             sw.WriteLine("Endothermic Metabolism\tEnergyScalar_kJ_to_g\t" + Convert.ToString(_EnergyScalar));
             sw.WriteLine("Endothermic Metabolism\tBodyTemperature_K\t" + Convert.ToString(_EndothermBodyTemperature));
-            
-
         }
-
 
         /// <summary>
         /// Calculate metabolic loss in grams for an individual
