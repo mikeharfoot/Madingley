@@ -24,11 +24,12 @@ Other changes include:
 External Libraries
 ------------------
 
-The Madingley Model consumes and produces netCDF files for geospatial data [http://www.unidata.ucar.edu/software/netcdf/](http://www.unidata.ucar.edu/software/netcdf/), and also standard CSV and TSV files.
-This solution includes a set of projects called **SDSLite** to manipulate these file types.
-It is a subset of **Scientific DataSet** [http://research.microsoft.com/en-us/projects/sds/](http://research.microsoft.com/en-us/projects/sds/) and [https://sds.codeplex.com/](https://sds.codeplex.com/)
+The Madingley Model consumes and produces netCDF files for geospatial data [http://www.unidata.ucar.edu/software/netcdf/](http://www.unidata.ucar.edu/software/netcdf/),
+and also standard CSV (comma-separated variables) and TSV (tab-separated variables) files.
+This solution includes a set of projects called **SDSLite** to manipulate these file types;
+it is a subset of **Scientific DataSet** [http://research.microsoft.com/en-us/projects/sds/](http://research.microsoft.com/en-us/projects/sds/) and [https://sds.codeplex.com/](https://sds.codeplex.com/).
 
-SDSLite requires a platform dependent library available from [http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html](http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
+SDSLite requires a platform dependent library available from [http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html](http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html).
 
 ### Windows
 
@@ -44,37 +45,31 @@ For Linux install pre-built netCDF-C libraries. For example on Ubuntu:
 
 ### MacOS
 
-TBD.
+Use homebrew [http://brew.sh/](http://brew.sh/) to install netcdf:
+
+  brew install netcdf
 
 Compilation
 -----------
 
 ### Windows
 
-Once the netCDF library is installed, Visual Studio should now be able to build the source files. The Community Edition of Visual Studio should be sufficient.
-The model requires two additional packages that NuGet is able to restore:
+Use Visual Studio to build the source files, the Community Edition of Visual Studio should be sufficient [https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx](https://www.visualstudio.com/en-us/products/visual-studio-community-vs.aspx).
+The model requires additional packages that are included in the packages directory, it is not necessary to use NuGet.
 
   * DynamicInterop.0.7.4 - to bind from C# to the netCDF library;
   * Newtonsoft.Json.7.0.1 - to store and load configuration, environment and run time state to and from json files;
   * NUnit.2.6.4 - for running the unit tests.
 
-Following the advice [http://docs.nuget.org/consume/package-restore](http://docs.nuget.org/consume/package-restore) it is sufficient to make sure that the following options are set in the Package Manager General
-settings in Visual Studio options:
-
-  * Visual Studio is configured to 'Allow NuGet to download missing packages'
-  * Visual Studio is configured to 'Automatically check for missing packages during build in Visual Studio'
-
-Building the solution will then automatically restore the needed packages and then compile the solution.
-
 ### Linux
 
 For Linux, MonoDevelop [http://www.monodevelop.com/](http://www.monodevelop.com/) is able to build the solution and it can run under Mono [http://www.mono-project.com/](http://www.mono-project.com/).
 See the installation instructions at [http://www.mono-project.com/docs/getting-started/install/linux/](http://www.mono-project.com/docs/getting-started/install/linux/).
-MonoDevelop will automatically restore the missing NuGet packages by default.
 
 ### MacOS
 
-For MacOS, Mono is also available - but unfortunately only in 32bit mode.
+For MacOS, Mono is also available - but unfortunately only in 32bit mode as a package. See here: [http://www.mono-project.com/docs/compiling-mono/mac/](http://www.mono-project.com/docs/compiling-mono/mac/).
+64bit mode is required to run the Madingley Model.
 
 Model Data
 ----------
