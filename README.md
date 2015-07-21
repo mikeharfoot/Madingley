@@ -1,7 +1,7 @@
 The Madingley Model
 ===================
 
-This is the source code and data for the Madingley Model [http://www.madingleymodel.org/](http://www.madingleymodel.org/).
+This is the data, configuration and source code for the Madingley Model [http://www.madingleymodel.org/](http://www.madingleymodel.org/).
 
 What's New
 ----------
@@ -21,12 +21,12 @@ Other changes include:
   * Some unit tests representing small studies, 1 or 4 cells for 1 or 10 years
   * Cross platform library for manipulating netCDF, CSV and TSV files
 
-Installation
-------------
+External Libraries
+------------------
 
-Input data comes from either the included netCDF files or **FetchClimate** [http://research.microsoft.com/en-us/projects/fetchclimate/](http://research.microsoft.com/en-us/projects/fetchclimate/) and model output is written to netCDF and TSV files.
-This solution includes a set of projects called **SDSLite** to manipulate these file types. It is a subset of **Scientific DataSet** [http://research.microsoft.com/en-us/projects/sds/](http://research.microsoft.com/en-us/projects/sds/) and
-[https://sds.codeplex.com/](https://sds.codeplex.com/)
+The Madingley Model consumes and produces netCDF files for geospatial data [http://www.unidata.ucar.edu/software/netcdf/](http://www.unidata.ucar.edu/software/netcdf/), and also standard CSV and TSV files.
+This solution includes a set of projects called **SDSLite** to manipulate these file types.
+It is a subset of **Scientific DataSet** [http://research.microsoft.com/en-us/projects/sds/](http://research.microsoft.com/en-us/projects/sds/) and [https://sds.codeplex.com/](https://sds.codeplex.com/)
 
 SDSLite requires a platform dependent library available from [http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html](http://www.unidata.ucar.edu/software/netcdf/docs/getting_and_building_netcdf.html)
 
@@ -46,18 +46,41 @@ For Linux install pre-built netCDF-C libraries. For example on Ubuntu:
 
 TBD.
 
-Running the Model
------------------
+Compilation
+-----------
 
-This solution contains sufficient configuration (in the "Model setup" folder) and data (in the "Data" folder) files to run the model, although it does require an internet connection to access FetchClimate to get additional climate data.
-It is set to run a single cell for one year. 
+### Windows
 
-The Madingley project is a simple command line application that loads the configuration, environment data, passes them to the model and stores the output. Select this project as the start-up project and run it to run the model.
+Once the netCDF library is installed, Visual Studio should now be able to build the source files. The Community Edition of Visual Studio should be sufficient.
+The model requires two additional packages that NuGet is able to restore:
 
-Configuring the Model
----------------------
+  * DynamicInterop.0.7.4 - to bind from C# to the netCDF library;
+  * Newtonsoft.Json.7.0.1 - to store and load configuration, environment and run time state to and from json files;
+  * NUnit.2.6.4 - for running the unit tests.
 
-This is done via the CSV files in "Model setup".
+Following the advice [http://docs.nuget.org/consume/package-restore](http://docs.nuget.org/consume/package-restore) it is sufficient to make sure that the following options are set in the Package Manager General
+settings in Visual Studio options:
+
+  * Visual Studio is configured to 'Allow NuGet to download missing packages'
+  * Visual Studio is configured to 'Automatically check for missing packages during build in Visual Studio'
+
+Building the solution will then automatically restore the needed packages and then compile the solution.
+
+### Linux
+
+### MacOS
+
+Model Data
+----------
+
+Input data comes from either static netCDF files or **FetchClimate** [http://research.microsoft.com/en-us/projects/fetchclimate/](http://research.microsoft.com/en-us/projects/fetchclimate/).
+Because the data is too large to be included in github directly, it is available as a zip file as part of the release. See the file Data/README_DATA.md for more details.
+An internet connection to access FetchClimate to get additional climate data.
+
+Model Configuration
+-------------------
+
+This solution contains sufficient configuration (in the "Model setup" folder) files to run the model, it is set to run a single cell for one year.
 
 ### FileLocationParameters.csv
 
@@ -281,3 +304,9 @@ Example:
 Latitude,Longitude
 48,3
 ```
+
+Running the Model
+-----------------
+
+The Madingley project is a simple command line application that loads the configuration, environment data, passes them to the model and stores the output.
+Select this project as the start-up project and run it to run the model.
