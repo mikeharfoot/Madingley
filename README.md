@@ -68,7 +68,13 @@ Building the solution will then automatically restore the needed packages and th
 
 ### Linux
 
+For Linux, MonoDevelop [http://www.monodevelop.com/](http://www.monodevelop.com/) is able to build the solution and it can run under Mono [http://www.mono-project.com/](http://www.mono-project.com/).
+See the installation instructions at [http://www.mono-project.com/docs/getting-started/install/linux/](http://www.mono-project.com/docs/getting-started/install/linux/).
+MonoDevelop will automatically restore the missing NuGet packages by default.
+
 ### MacOS
+
+For MacOS, Mono is also available - but unfortunately only in 32bit mode.
 
 Model Data
 ----------
