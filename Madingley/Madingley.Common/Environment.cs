@@ -55,6 +55,9 @@ namespace Madingley.Common
         /// </summary>
         public IList<IDictionary<string, double[]>> CellEnvironment { get; set; }
 
+        /// <summary>
+        /// List of file names loaded.
+        /// </summary>
         public List<string> FileNames { get; set; }
 
         /// <summary>
@@ -86,6 +89,7 @@ namespace Madingley.Common
         /// <param name="specificLocations">Have specific locations have been specified?</param>
         /// <param name="focusCells">Pairs of longitude and latitude indices for all active cells in the model grid.</param>
         /// <param name="cellEnvironment">For each active cell, a set of environmental data.</param>
+        /// <param name="fileNames">List of file names loaded.</param>
         public Environment(
             double cellSize,
             double bottomLatitude,

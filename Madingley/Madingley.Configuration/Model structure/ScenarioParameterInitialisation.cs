@@ -19,8 +19,7 @@ namespace Madingley
         /// <summary>
         /// Reads in scenario parameters from a specified file
         /// </summary>
-        /// <param name="scenarioParameterFile">The name of the scenario parameters file, which must be in the 'Model setup' directory</param>
-        /// <param name="inputPath">The path to folder which contains the inputs</param>
+        /// <param name="fileName">The name of the scenario parameters file, which must be in the 'Model setup' directory</param>
         public static IList<ScenarioParameters> Load(string fileName)
         {
             Console.WriteLine("Reading scenario parameters file...\n");

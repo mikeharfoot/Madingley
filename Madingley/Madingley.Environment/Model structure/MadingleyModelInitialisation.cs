@@ -120,10 +120,9 @@ namespace Madingley
         /// <summary>
         /// Read in the specified locations in which to run the model
         /// </summary>
-        /// <param name="specificLocationsFile">The name of the file with specific locations information</param>
-        /// <param name="outputPath">The path to the output folder in which to copy the specific locations file</param>
-        /// <param name="inputPath">Path to the input files</param>
-        public static void ReadSpecificLocations(Madingley.Common.Environment e, string fileName)
+        /// <param name="environment">Environment object</param>
+        /// <param name="fileName">The name of the file with specific locations information</param>
+        public static void ReadSpecificLocations(Madingley.Common.Environment environment, string fileName)
         {
             var CellList = new List<Tuple<int, int>>();
 
@@ -167,23 +166,22 @@ namespace Madingley
             for (int ii = 0; ii < LatitudeList.Count; ii++)
             {
                 // Get the longitude and latitude indices for the current grid cell
-                var latitudeIndex = (int)Math.Floor((LatitudeList.ElementAt(ii) - e.BottomLatitude) / e.CellSize);
-                var longitudeIndex = (int)Math.Floor((LongitudeList.ElementAt(ii) - e.LeftmostLongitude) / e.CellSize);
+                var latitudeIndex = (int)Math.Floor((LatitudeList.ElementAt(ii) - environment.BottomLatitude) / environment.CellSize);
+                var longitudeIndex = (int)Math.Floor((LongitudeList.ElementAt(ii) - environment.LeftmostLongitude) / environment.CellSize);
 
                 // Add these indices to the list of active cells
                 CellList.Add(Tuple.Create(latitudeIndex, longitudeIndex));
             }
 
-            e.FocusCells = CellList;
+            environment.FocusCells = CellList;
         }
 
         /// <summary>
         /// Reads the environmental layers listed in the specified file containing a list of environmental layers
         /// </summary>
-        /// <param name="environmentalLayerFile">The name of the file containing the list of environmental layers</param>
-        /// <param name="outputPath">Path to output files</param>
+        /// <param name="e">Environment object.</param>
+        /// <param name="inputEnvironmentalLayerFileName">The name of the file containing the list of environmental layers</param>
         /// <param name="environmentDataRoot">The path to folder which contains the data inputs</param>
-        /// <param name="inputPath">The path to folder which contains the model inputs</param>
         public static SortedList<string, EnviroData> ReadEnvironmentalLayers(Madingley.Common.Environment e, string inputEnvironmentalLayerFileName, string environmentDataRoot)
         {
             Console.WriteLine("Reading in environmental data:");

@@ -12,7 +12,7 @@ namespace Madingley
         /// <summary>
         /// Initializes the ecosystem model
         /// </summary>
-        /// <param name="initialisation">An instance of the model initialisation class</param> 
+        /// <param name="mmi">An instance of the model initialisation class</param> 
         public static void Load(Tuple<Madingley.Common.Environment, SortedList<string, EnviroData>> mmi)
         {
             var e = mmi.Item1;

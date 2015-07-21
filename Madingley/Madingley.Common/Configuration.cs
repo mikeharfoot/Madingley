@@ -120,6 +120,9 @@ namespace Madingley.Common
         /// </summary>
         public EcologicalParameters EcologicalParameters { get; set; }
 
+        /// <summary>
+        /// List of file names loaded.
+        /// </summary>
         public List<string> FileNames { get; set; }
 
         /// <summary>
@@ -177,6 +180,7 @@ namespace Madingley.Common
         /// <param name="scenarioIndex">Which ScenarioParameter to use?</param>
         /// <param name="simulation">Simulation number, only used for formatting output.</param>
         /// <param name="ecologicalParameters">EcologicalParameters to use.</param>
+        /// <param name="fileNames">List of file names loaded.</param>
         public Configuration(
             string globalModelTimeStepUnit,
             int numTimeSteps,

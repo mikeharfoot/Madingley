@@ -11,7 +11,7 @@ namespace Madingley.Test.Run
 {
     public class RunResume
     {
-        public static T RunPauseAndResumeMadingley<T>(Data data, int pauseIterations, Action<T> optionalHalfTest)
+        public static T RunPauseAndResumeMadingley<T>(Data data, int pauseIterations, int maxIterations, Action<T> optionalHalfTest)
         {
             var pathToModelSetup = "Model setup for test";
             var pathToData = "Data for test";
@@ -39,7 +39,7 @@ namespace Madingley.Test.Run
             return result.Item2;
         }
 
-        public static void CommonTestResumable(CommonTestType commonTestType, Func<Data, int, Action<MadingleyModelOutputDataSets>, MadingleyModelOutputDataSets> runner)
+        public static void CommonTestResumable(CommonTestType commonTestType, Func<Data, int, int, Action<MadingleyModelOutputDataSets>, MadingleyModelOutputDataSets> runner)
         {
             var data = Data.LookupCommonTestTypePaths(commonTestType, null);
 
@@ -50,7 +50,7 @@ namespace Madingley.Test.Run
 
             Action<MadingleyModelOutputDataSets> optionalHalfTest = halfResult => Madingley.Test.Run.Common.TestMadingleyModelOutputDataSets(commonTestType, pauseMonthsComplete, halfResult);
 
-            var result = runner.Invoke(data, pauseIterations, optionalHalfTest);
+            var result = runner.Invoke(data, pauseIterations, maxIterations, optionalHalfTest);
 
             Madingley.Test.Run.Common.TestMadingleyModelOutputDataSets(commonTestType, null, result);
         }

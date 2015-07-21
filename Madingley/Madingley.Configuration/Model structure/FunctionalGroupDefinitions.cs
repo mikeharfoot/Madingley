@@ -19,8 +19,6 @@ namespace Madingley
         /// Reads in the specified functional group definition file 
         /// </summary>
         /// <param name="fileName">The name of the functional group definition file to be read in</param>
-        /// <param name="outputPath">The path to the output folder, in which to copy the functional group definitions file</param>
-        /// <param name="inputPath">The path to folder which contains the inputs</param>
         public static FunctionalGroupDefinitions Load(string fileName)
         {
             // Construct the URI for the functional group definition file

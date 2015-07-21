@@ -53,7 +53,7 @@ namespace Madingley.Common
         /// <summary>
         /// Copy constructor
         /// </summary>
-        /// <param name="scenarioParameters">ScenarioParameters to copy</param>
+        /// <param name="scenarioParameter">ScenarioParameter to copy</param>
         public ScenarioParameter(ScenarioParameter scenarioParameter)
         {
             this.ParamString = scenarioParameter.ParamString;
