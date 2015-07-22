@@ -12,27 +12,25 @@ namespace Madingley
         {
             //Now read the parameter values into a dictionary
             var Parameters = new Dictionary<string, double>();
-            StreamReader r_env = new StreamReader(fileName);
 
-            string l;
-            char[] comma = ",".ToCharArray();
-
-            string[] f;
-
-            l = r_env.ReadLine();
-            while (!r_env.EndOfStream)
+            using (var reader = new StreamReader(fileName))
             {
-                l = r_env.ReadLine();
-                // Split fields by commas
-                f = l.Split(comma);
-                //First column is the parameter name
-                //2nd column is the parameter value
+                // Discard the header
+                var line = reader.ReadLine();
+                var headers = line.Split(new char[] { ',' });
 
-                // Lists of the different fields
-                Parameters.Add(f[0], Convert.ToDouble(f[1]));
+                while (!reader.EndOfStream)
+                {
+                    line = reader.ReadLine();
+                    // Split fields by commas
+                    var fields = line.Split(new char[] { ',' }, headers.Length);
+                    //First column is the parameter name
+                    //2nd column is the parameter value
+
+                    // Lists of the different fields
+                    Parameters.Add(fields[0], Convert.ToDouble(fields[1]));
+                }
             }
-
-            r_env.Close();
 
             return new Madingley.Common.EcologicalParameters(Parameters, TimeUnits);
         }

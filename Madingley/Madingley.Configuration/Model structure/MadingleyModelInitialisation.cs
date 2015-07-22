@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Research.Science.Data;
+using System.IO;
 
 namespace Madingley
 {
@@ -23,183 +23,179 @@ namespace Madingley
             var simulationInitialisationFileName = System.IO.Path.Combine(inputPath, simulationInitialisationFilename);
             var definitionsFileName = System.IO.Path.Combine(inputPath, definitionsFilename);
 
-            var SimulationFileString = "msds:csv?file=" + simulationInitialisationFileName + "&openMode=readOnly";
-            var DefinitionsFileString = "msds:csv?file=" + definitionsFileName + "&openMode=readOnly";
+            var configuration = new Madingley.Common.Configuration();
 
-            var i = new Madingley.Common.Configuration();
+            configuration.FileNames.Add(simulationInitialisationFileName);
+            configuration.FileNames.Add(definitionsFileName);
 
-            i.FileNames.Add(simulationInitialisationFileName);
-            i.FileNames.Add(definitionsFileName);
-
-            // Read in the simulation data
-            DataSet InternalData = DataSet.Open(SimulationFileString);
-
-            // Get the names of parameters in the initialization file
-            var VarParameters = InternalData.Variables[1].GetData();
-
-            // Get the values for the parameters
-            var VarValues = InternalData.Variables[0].GetData();
-
-            // Loop over the parameters
-            for (int row = 0; row < VarParameters.Length; row++)
+            using (var reader = new StreamReader(simulationInitialisationFileName))
             {
-                // Switch based on the name of the parameter, and write the value to the appropriate field
-                switch (VarParameters.GetValue(row).ToString().ToLower())
+                // Discard the header
+                var line = reader.ReadLine();
+                var headers = line.Split(new char[] { ',' }, 2);
+
+                while (!reader.EndOfStream)
                 {
-                    case "timestep units":
-                        i.GlobalModelTimeStepUnit = VarValues.GetValue(row).ToString();
-                        break;
-                    case "length of simulation (years)":
-                        i.NumTimeSteps = (int)Utilities.ConvertTimeUnits("year", i.GlobalModelTimeStepUnit) * Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "burn-in (years)":
-                        i.BurninTimeSteps = (int)Utilities.ConvertTimeUnits("year", i.GlobalModelTimeStepUnit) * Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "impact duration (years)":
-                        i.ImpactTimeSteps = (int)Utilities.ConvertTimeUnits("year", i.GlobalModelTimeStepUnit) * Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "recovery duration (years)":
-                        i.RecoveryTimeSteps = (int)Utilities.ConvertTimeUnits("year", i.GlobalModelTimeStepUnit) * Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "number timesteps":
-                        i.NumTimeSteps = Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "run cells in parallel":
-                        switch (VarValues.GetValue(row).ToString().ToLower())
-                        {
-                            case "yes":
-                                i.RunCellsInParallel = true;
-                                break;
-                            case "no":
-                                i.RunCellsInParallel = false;
-                                break;
-                        }
-                        break;
-                    case "run simulations in parallel":
-                        switch (VarValues.GetValue(row).ToString().ToLower())
-                        {
-                            case "yes":
-                                i.RunSimulationsInParallel = true;
-                                break;
-                            case "no":
-                                i.RunSimulationsInParallel = false;
-                                break;
-                        }
-                        break;
-                    case "run single realm":
-                        i.RunRealm = VarValues.GetValue(row).ToString().ToLower();
-                        break;
-                    case "draw randomly":
+                    line = reader.ReadLine();
+                    // Split fields by commas
+                    var fields = line.Split(new char[] { ',' }, 2);
 
-                        switch (VarValues.GetValue(row).ToString().ToLower())
-                        {
-                            case "yes":
-                                i.DrawRandomly = true;
-                                break;
-                            case "no":
-                                i.DrawRandomly = false;
-                                break;
-                        }
-                        break;
-                    case "extinction threshold":
-                        i.ExtinctionThreshold = Convert.ToDouble(VarValues.GetValue(row));
-                        break;
-                    case "maximum number of cohorts":
-                        i.MaxNumberOfCohorts = Convert.ToInt32(VarValues.GetValue(row));
-                        break;
-                    case "impact cell index":
-                        if (VarValues.GetValue(row).ToString() != "")
-                        {
-                            var impactCellIndices = new List<int>();
-
-                            string[] temp = VarValues.GetValue(row).ToString().Split(new char[] { ';' });
-                            foreach (string t in temp)
+                    // Switch based on the name of the parameter, and write the value to the appropriate field
+                    switch (fields[0].ToLower())
+                    {
+                        case "timestep units":
+                            configuration.GlobalModelTimeStepUnit = fields[1];
+                            break;
+                        case "length of simulation (years)":
+                            configuration.NumTimeSteps = (int)Utilities.ConvertTimeUnits("year", configuration.GlobalModelTimeStepUnit) * Convert.ToInt32(fields[1]);
+                            break;
+                        case "burn-in (years)":
+                            configuration.BurninTimeSteps = (int)Utilities.ConvertTimeUnits("year", configuration.GlobalModelTimeStepUnit) * Convert.ToInt32(fields[1]);
+                            break;
+                        case "impact duration (years)":
+                            configuration.ImpactTimeSteps = (int)Utilities.ConvertTimeUnits("year", configuration.GlobalModelTimeStepUnit) * Convert.ToInt32(fields[1]);
+                            break;
+                        case "recovery duration (years)":
+                            configuration.RecoveryTimeSteps = (int)Utilities.ConvertTimeUnits("year", configuration.GlobalModelTimeStepUnit) * Convert.ToInt32(fields[1]);
+                            break;
+                        case "number timesteps":
+                            configuration.NumTimeSteps = Convert.ToInt32(fields[1]);
+                            break;
+                        case "run cells in parallel":
+                            switch (fields[1].ToLower())
                             {
-                                if (t.Split(new char[] { '-' }).Length > 1)
-                                {
-                                    string[] range = t.Split(new char[] { '-' });
-                                    for (int ii = Convert.ToInt32(range[0]); ii <= Convert.ToInt32(range[1]); ii++)
-                                    {
-                                        impactCellIndices.Add(ii);
-                                    }
-                                }
-                                else
-                                {
-                                    impactCellIndices.Add(Convert.ToInt32(t));
-                                }
-
+                                case "yes":
+                                    configuration.RunCellsInParallel = true;
+                                    break;
+                                case "no":
+                                    configuration.RunCellsInParallel = false;
+                                    break;
                             }
+                            break;
+                        case "run simulations in parallel":
+                            switch (fields[1].ToLower())
+                            {
+                                case "yes":
+                                    configuration.RunSimulationsInParallel = true;
+                                    break;
+                                case "no":
+                                    configuration.RunSimulationsInParallel = false;
+                                    break;
+                            }
+                            break;
+                        case "run single realm":
+                            configuration.RunRealm = fields[1].ToLower();
+                            break;
+                        case "draw randomly":
 
-                            i.ImpactCellIndices = impactCellIndices;
-                        }
-                        break;
-                    case "dispersal only":
-                        if (VarValues.GetValue(row).ToString() == "yes")
-                            i.DispersalOnly = true;
-                        else i.DispersalOnly = false;
-                        break;
-                    case "dispersal only type":
-                        i.DispersalOnlyType = VarValues.GetValue(row).ToString();
-                        break;
-                    case "plankton size threshold":
-                        i.PlanktonDispersalThreshold = Convert.ToDouble(VarValues.GetValue(row));
-                        break;
+                            switch (fields[1].ToLower())
+                            {
+                                case "yes":
+                                    configuration.DrawRandomly = true;
+                                    break;
+                                case "no":
+                                    configuration.DrawRandomly = false;
+                                    break;
+                            }
+                            break;
+                        case "extinction threshold":
+                            configuration.ExtinctionThreshold = Convert.ToDouble(fields[1]);
+                            break;
+                        case "maximum number of cohorts":
+                            configuration.MaxNumberOfCohorts = Convert.ToInt32(fields[1]);
+                            break;
+                        case "impact cell index":
+                            if (fields[1] != "")
+                            {
+                                var impactCellIndices = new List<int>();
+
+                                string[] temp = fields[1].Split(new char[] { ';' });
+                                foreach (string t in temp)
+                                {
+                                    if (t.Split(new char[] { '-' }).Length > 1)
+                                    {
+                                        string[] range = t.Split(new char[] { '-' });
+                                        for (int ii = Convert.ToInt32(range[0]); ii <= Convert.ToInt32(range[1]); ii++)
+                                        {
+                                            impactCellIndices.Add(ii);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        impactCellIndices.Add(Convert.ToInt32(t));
+                                    }
+
+                                }
+
+                                configuration.ImpactCellIndices = impactCellIndices;
+                            }
+                            break;
+                        case "dispersal only":
+                            if (fields[1] == "yes")
+                                configuration.DispersalOnly = true;
+                            else configuration.DispersalOnly = false;
+                            break;
+                        case "dispersal only type":
+                            configuration.DispersalOnlyType = fields[1];
+                            break;
+                        case "plankton size threshold":
+                            configuration.PlanktonDispersalThreshold = Convert.ToDouble(fields[1]);
+                            break;
+                    }
                 }
             }
-
-            InternalData.Dispose();
 
             // Read in the definitions data
-            InternalData = DataSet.Open(DefinitionsFileString);
-
-            // Get the names of parameters in the initialization file
-            VarParameters = InternalData.Variables[1].GetData();
-
-            // Get the values for the parameters
-            VarValues = InternalData.Variables[0].GetData();
-
-            // Loop over the parameters
-            for (int row = 0; row < VarParameters.Length; row++)
+            using (var reader = new StreamReader(definitionsFileName))
             {
-                // Switch based on the name of the parameter, and write the value to the appropriate field
-                switch (VarParameters.GetValue(row).ToString().ToLower())
+                // Discard the header
+                var line = reader.ReadLine();
+                var headers = line.Split(new char[] { ',' }, 2);
+
+                while (!reader.EndOfStream)
                 {
-                    case "cohort functional group definitions file":
-                        {
-                            Console.WriteLine("Reading functional group definitions...\n");
-                            // Open a the specified csv file and set up the cohort functional group definitions
-                            var functionalDefinitionsFileName = VarValues.GetValue(row).ToString();
-                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
-                            i.FileNames.Add(fileName);
+                    line = reader.ReadLine();
+                    // Split fields by commas
+                    var fields = line.Split(new char[] { ',' }, 2);
 
-                            i.CohortFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
-                        }
-                        break;
-                    case "stock functional group definitions file":
-                        {
-                            // Open a the specified csv file and set up the stock functional group definitions
-                            var functionalDefinitionsFileName = VarValues.GetValue(row).ToString();
-                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
-                            i.FileNames.Add(fileName);
+                    // Switch based on the name of the parameter, and write the value to the appropriate field
+                    switch (fields[0].ToLower())
+                    {
+                        case "cohort functional group definitions file":
+                            {
+                                Console.WriteLine("Reading functional group definitions...\n");
+                                // Open a the specified csv file and set up the cohort functional group definitions
+                                var functionalDefinitionsFileName = fields[1];
+                                var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
+                                configuration.FileNames.Add(fileName);
 
-                            i.StockFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
-                        }
-                        break;
-                    case "ecological parameters file":
-                        {
-                            var parametersFileName = VarValues.GetValue(row).ToString();
-                            var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", parametersFileName);
-                            i.FileNames.Add(fileName);
+                                configuration.CohortFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
+                            }
+                            break;
+                        case "stock functional group definitions file":
+                            {
+                                // Open a the specified csv file and set up the stock functional group definitions
+                                var functionalDefinitionsFileName = fields[1];
+                                var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", functionalDefinitionsFileName);
+                                configuration.FileNames.Add(fileName);
 
-                            i.EcologicalParameters = EcologicalParameters.Load(fileName);
-                        }
-                        break;
+                                configuration.StockFunctionalGroupDefinitions = FunctionalGroupDefinitionsSerialization.Load(fileName);
+                            }
+                            break;
+                        case "ecological parameters file":
+                            {
+                                var parametersFileName = fields[1];
+                                var fileName = System.IO.Path.Combine(inputPath, "Ecological Definition Files", parametersFileName);
+                                configuration.FileNames.Add(fileName);
+
+                                configuration.EcologicalParameters = EcologicalParameters.Load(fileName);
+                            }
+                            break;
+                    }
                 }
             }
 
-            InternalData.Dispose();
-
-            return i;
+            return configuration;
         }
     }
 }

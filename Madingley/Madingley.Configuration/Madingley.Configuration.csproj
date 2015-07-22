@@ -53,10 +53,6 @@
       <Project>{3bde02d3-451b-4dbc-876a-aa8c1e8faacd}</Project>
       <Name>Madingley.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SDSlite\ScientificDataSet\ScientificDataSet.csproj">
-      <Project>{24d8613c-e1e9-4d7b-abaa-051eed4e5dbc}</Project>
-      <Name>ScientificDataSet</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,11 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using System.Diagnostics;
-
-using Microsoft.Research.Science.Data;
+using System.IO;
 
 using Madingley.Common;
 
@@ -24,105 +19,68 @@ namespace Madingley
         {
             Console.WriteLine("Reading scenario parameters file...\n");
 
-            // Construct file name
-            var FileString = "msds:csv?file=" + fileName + "&openMode=readOnly";
-
-            // Read in the data
-            DataSet InternalData = DataSet.Open(FileString);
-
-            // Get the number of scenarios to be run based on the number of lines in the first variable in the input file
-            var scenarioNumber = InternalData.Variables[0].GetData().Length;
-
-            // Intialise sorted lists for parameter combinations and simulations numbers
             var scenarioParameters = new List<ScenarioParameters>();
 
-            // Temporary vector to hold parameter information
-            string[] TempExtractionParameters = new string[scenarioNumber];
-
-            // Find the 'label'  and 'simulation number' columns in the scenarios file 
-            // and create a corresponding items in the sorted list
-            // First, check that the scenarios file contains columns called 'label' and 'simulation number'
-            Debug.Assert(InternalData.Variables.Contains("label"),
-                "The scenario file must contain a column called 'label'");
-            Debug.Assert(InternalData.Variables.Contains("simulation number"),
-                "The scenario file must contain a column called 'simulation number'");
-            // Get values from the columns called 'label' and 'simulation number'
-            var TempValues = InternalData.Variables["label"].GetData();
-            var TempValues2 = InternalData.Variables["simulation number"].GetData();
-            // Loop over scenarios and add labels to sorted list
-            for (int i = 0; i < scenarioNumber; i++)
+            // Read in the data
+            using (var reader = new StreamReader(fileName))
             {
-                scenarioParameters.Add(new ScenarioParameters(TempValues.GetValue(i).ToString(), Convert.ToInt32(TempValues2.GetValue(i).ToString()), new Dictionary<string, ScenarioParameter>()));
-            }
+                // Discard the header
+                var line = reader.ReadLine();
+                var headers = line.Split(',');
 
-            // Loop over columns in the scenarios file again, and populate the sorted list with
-            // scenario information
-            foreach (Variable v in InternalData.Variables)
-            {
-                //Get the name of the variable currently referenced in the dataset
-                string HeaderName = v.Name;
-                //Copy the values for this variable into an array
-                TempValues = v.GetData();
+                var labelIndex = Array.FindIndex(headers, item => item.ToLower() == "label");
+                var nppIndex = Array.FindIndex(headers, item => item.ToLower() == "npp");
+                var temperatureIndex = Array.FindIndex(headers, item => item.ToLower() == "temperature");
+                var harvestingIndex = Array.FindIndex(headers, item => item.ToLower() == "harvesting");
+                var simulationNumberIndex = Array.FindIndex(headers, item => item.ToLower() == "simulation number");
 
-                switch (HeaderName.ToLower())
+                while (!reader.EndOfStream)
                 {
-                    case "npp":
-                        // Loop over scenarios and extract the npp parameters for each
-                        for (int i = 0; i < scenarioNumber; i++)
-                        {
-                            string[] pair = TempValues.GetValue(i).ToString().Split(' ');
+                    var parameters = new Dictionary<string, ScenarioParameter>();
 
-                            if (pair.Length > 2)
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("npp", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
-                            }
-                            else
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("npp", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
-                            }
-                        }
-                        break;
-                    case "temperature":
-                        // Loop over scenarios and extract the temperature parameters for each
-                        for (int i = 0; i < scenarioNumber; i++)
-                        {
-                            string[] pair = TempValues.GetValue(i).ToString().Split(' ');
+                    line = reader.ReadLine();
+                    // Split fields by commas
+                    var fields = line.Split(new char[] { ',' }, headers.Length);
 
-                            if (pair.Length > 2)
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("temperature", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
-                            }
-                            else
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("temperature", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
-                            }
-                        }
-                        break;
-                    case "harvesting":
-                        // Loop over scenarios and exract the harvesting parameters for each
-                        for (int i = 0; i < scenarioNumber; i++)
-                        {
-                            string[] pair = TempValues.GetValue(i).ToString().Split(' ');
-                            if (pair.Length > 2)
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("harvesting", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
-                            }
-                            else
-                            {
-                                scenarioParameters.ElementAt(i).Parameters.Add("harvesting", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
-                            }
-                        }
-                        break;
-                    default:
-                        break;
+                    var pair = fields[nppIndex].Split(' ');
+
+                    if (pair.Length > 2)
+                    {
+                        parameters.Add("npp", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
+                    }
+                    else
+                    {
+                        parameters.Add("npp", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
+                    }
+
+                    pair = fields[temperatureIndex].Split(' ');
+
+                    if (pair.Length > 2)
+                    {
+                        parameters.Add("temperature", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
+                    }
+                    else
+                    {
+                        parameters.Add("temperature", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
+                    }
+
+                    pair = fields[harvestingIndex].Split(' ');
+                    if (pair.Length > 2)
+                    {
+                        parameters.Add("harvesting", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), Convert.ToDouble(pair[2])));
+                    }
+                    else
+                    {
+                        parameters.Add("harvesting", new ScenarioParameter(pair[0], Convert.ToDouble(pair[1]), -999));
+                    }
+
+                    var simulationNumber = Convert.ToInt32(fields[simulationNumberIndex]);
+
+                    scenarioParameters.Add(new ScenarioParameters(fields[labelIndex], simulationNumber, parameters));
                 }
-
             }
-
-            InternalData.Dispose();
 
             return scenarioParameters;
         }
-
     }
 }
