@@ -305,6 +305,12 @@ namespace Madingley
         }
 
 #if true
+        public void BeginTimestep(int timestep)
+        {
+            // Start the timer
+            TimeStepTimer.Start();
+        }
+
         public void EndTimestep(
             int currentTimestep,
             Madingley.Common.ModelState modelState)
@@ -321,7 +327,7 @@ namespace Madingley
             IList<Madingley.Common.GridCellDispersal> dispersalData,
             uint numberOfDispersals)
         {
-            if (dispersalData.Count() > 0)
+            if (dispersalData.Count() > 0 && this.TrackCrossCellProcesses.TrackCrossCellProcesses)
             {
                 Converters.CopyCrossCellProcessTrackerData(
                     this.TrackCrossCellProcesses,
@@ -450,7 +456,7 @@ namespace Madingley
             {
                 cellDataSets = new DataSet[] { };
                 gridDataSet = this.GridOutputs.Clone();
-                nppDataSet = this.TrackGlobalProcesses.TrackNPP.Clone();
+                nppDataSet = this.TrackGlobalProcesses.TrackProcesses ? this.TrackGlobalProcesses.TrackNPP.Clone() : null;
             }
 
             var crossCellProcessOutputs =

@@ -65,6 +65,11 @@ namespace Madingley.Output
                 modelState);
         }
 
+        public void BeginTimestep(int timestep)
+        {
+            this.model.BeginTimestep(timestep);
+        }
+
         public void EndTimestep(
             int currentTimestep,
             Madingley.Common.ModelState modelState)

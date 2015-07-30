@@ -518,6 +518,8 @@ namespace Madingley
 
 #if true
                 DebugPrintModelJson("state", hh);
+
+                output.BeginTimestep((int)hh);
 #endif
 
                 // Start the timer

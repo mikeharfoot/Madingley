@@ -24,6 +24,12 @@ namespace Madingley.Common
         IEnumerable<ICrossCellProcessTracker> CrossCellProcessTracker { get; }
 
         /// <summary>
+        /// Called when a time step begins.
+        /// </summary>
+        /// <param name="timestep"></param>
+        void BeginTimestep(int timestep);
+
+        /// <summary>
         /// Called when a time step is complete, there may still be updates to CrossCellProcessTrackers.
         /// </summary>
         /// <param name="timestep"></param>

@@ -22,20 +22,22 @@ namespace Madingley
             var modelSetupRoot = "../../../Model setup";
             var environmentDataRoot = "../../../Data/Original";
 
+            var beginTime = DateTime.Now;
+
             var configuration = Madingley.Configuration.Loader.Load(modelSetupRoot);
             var environment = Madingley.Environment.Loader.Load(environmentDataRoot, modelSetupRoot);
 
-            // Declare and start a timer
-            var startTime = DateTime.Now;
+            var modelTime = DateTime.Now;
 
             Madingley.Model.RunTraditional(configuration, environment, Madingley.Output.Factory.Create);
 
-            // Stop the timer and write out the time taken to run this simulation
-            var stopTime = DateTime.Now;
-            var interval = stopTime - startTime;
+            var endTime = DateTime.Now;
+            var modelInterval = endTime - modelTime;
 
             Console.WriteLine("Model run finished");
-            Console.WriteLine("Total elapsed time was {0} seconds", interval.TotalSeconds);
+            Console.WriteLine("Total elapsed time was {0} seconds", (endTime - beginTime).TotalSeconds);
+            Console.WriteLine("Model setup time was {0} seconds", (modelTime - beginTime).TotalSeconds);
+            Console.WriteLine("Model run time was {0} seconds", (endTime - modelTime).TotalSeconds);
 
             Console.ReadKey();
         }
