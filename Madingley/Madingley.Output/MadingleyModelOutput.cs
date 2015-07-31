@@ -8,15 +8,15 @@ namespace Madingley.Output
 {
     public class MadingleyModelOutputDataSets
     {
-        public DataSet Global { get; set; }
+        public string Global { get; set; }
 
-        public DataSet[] Cells { get; set; }
+        public string[] Cells { get; set; }
 
-        public DataSet Dispersal { get; set; }
+        public string Dispersal { get; set; }
 
-        public DataSet Grid { get; set; }
+        public string Grid { get; set; }
 
-        public DataSet NPP { get; set; }
+        public string NPP { get; set; }
     }
 
     /// <summary>

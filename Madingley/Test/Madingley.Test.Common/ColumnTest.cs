@@ -11,6 +11,12 @@ namespace Madingley.Test.Common
 
     public class ColumnTest
     {
+        public enum TestDataSetType
+        {
+            NetCDF,
+            TSV
+        }
+
         public static ColumnTest Empty = new ColumnTest(new double[] { }, null, false);
 
         public static LookupColumnTest EmptyLookup = (name) => Empty;
@@ -86,8 +92,26 @@ namespace Madingley.Test.Common
             }
         }
 
-        public static void TestDataSet(string name, LookupColumnTest lookupColumnTest, LookupColumnNames variableNames, DataSet dataSet)
+        public static void TestDataSet(string name, LookupColumnTest lookupColumnTest, LookupColumnNames variableNames, string filename, TestDataSetType type)
         {
+            var uri = (string)null;
+
+            switch (type)
+            {
+                case TestDataSetType.NetCDF:
+                    uri = "msds:nc?file=" + filename + "&openMode=readOnly";
+                    break;
+
+                case TestDataSetType.TSV:
+                    uri = "msds:csv?file=" + filename + "&openMode=readOnly&separator=tab";
+                    break;
+
+                default:
+                    throw new Exception("Unexpected test type");
+            }
+
+            var dataSet = Microsoft.Research.Science.Data.DataSet.Open(uri);
+
             var vs = dataSet.Variables.Reverse();
 
             var actualVariableNames = vs.Select(v => v.Name).ToArray();
@@ -97,15 +121,15 @@ namespace Madingley.Test.Common
             vs.ToList().ForEach(v => TestDataSetVariable(name, lookupColumnTest, v));
         }
 
-        public static void TestDataSetArray(string name, LookupColumnTest[] lookupColumnTests, LookupColumnNames variableNames, DataSet[] dataSets)
+        public static void TestDataSetArray(string name, LookupColumnTest[] lookupColumnTests, LookupColumnNames variableNames, string[] filenames, TestDataSetType type)
         {
-            Enumerable.Range(0, dataSets.Length).ToList().ForEach(
+            Enumerable.Range(0, filenames.Length).ToList().ForEach(
                 ii =>
                 {
-                    if (ii < lookupColumnTests.Length && 
+                    if (ii < lookupColumnTests.Length &&
                         lookupColumnTests[ii] != null)
                     {
-                        TestDataSet(name, lookupColumnTests[ii], variableNames, dataSets[ii]);
+                        TestDataSet(name, lookupColumnTests[ii], variableNames, filenames[ii], type);
                     }
                 });
         }
@@ -162,13 +186,17 @@ namespace Madingley.Test.Common
                     switch (v.TypeOfData.Name.ToString().ToLower())
                     {
                         case "single":
-                            var actual = (float[])v.GetData();
-
-                            actualTruncated = actual.Select(a => (double)a).Take(count).ToArray();
+                            {
+                                var actual = (float[])v.GetData();
+                                actualTruncated = actual.Select(a => (double)a).Take(count).ToArray();
+                            }
                             break;
 
                         case "double":
-                            actualTruncated = ((double[])v.GetData()).Take(count).ToArray();
+                            {
+                                var actual = (double[])v.GetData();
+                                actualTruncated = actual.Take(count).ToArray();
+                            }
                             break;
 
                         default:

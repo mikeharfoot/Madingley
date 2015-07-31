@@ -13,6 +13,12 @@ namespace Madingley.Test.Common
 
     public class Column3dTest
     {
+        public enum TestDataSetType
+        {
+            NetCDF,
+            TSV
+        }
+
         public static Column3dTest Empty = new Column3dTest(new double[,,] { }, null, false);
 
         public double[, ,] Expected { get; set; }
@@ -103,28 +109,6 @@ namespace Madingley.Test.Common
 
                     switch (v.TypeOfData.Name.ToString().ToLower())
                     {
-                        case "single":
-                            {
-                                var actual = (float[, ,])v.GetData();
-                                var count1 = column3dTest.Expected.GetLength(0);
-                                var count2 = column3dTest.Expected.GetLength(1);
-                                var count3 = column3dTest.Expected.GetLength(2);
-
-                                actualTruncated = new double[count1, count2, count3];
-
-                                for (var ii = 0; ii < count1; ii++)
-                                {
-                                    for (var jj = 0; jj < count2; jj++)
-                                    {
-                                        for (var kk = 0; kk < count3; kk++)
-                                        {
-                                            actualTruncated[ii, jj, kk] = (double)actual[ii, jj, kk];
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-
                         case "double":
                             {
                                 var actual = (double[, ,])v.GetData();
@@ -160,8 +144,26 @@ namespace Madingley.Test.Common
             }
         }
 
-        public static void TestDataSet3D(string tableName, LookupColumn3dTest lookupColumn3dTest, LookupColumnTest lookupColumnTest, LookupColumnNames variableNames, DataSet dataSet)
+        public static void TestDataSet3D(string tableName, LookupColumn3dTest lookupColumn3dTest, LookupColumnTest lookupColumnTest, LookupColumnNames variableNames, string filename, TestDataSetType type)
         {
+            var uri = (string)null;
+
+            switch (type)
+            {
+                case TestDataSetType.NetCDF:
+                    uri = "msds:nc?file=" + filename + "&openMode=readOnly";
+                    break;
+
+                case TestDataSetType.TSV:
+                    uri = "msds:csv?file=" + filename + "&openMode=readOnly&separator=tab";
+                    break;
+
+                default:
+                    throw new Exception("Unexpected test type");
+            }
+
+            var dataSet = Microsoft.Research.Science.Data.DataSet.Open(uri);
+
             var vs = dataSet.Variables.Reverse();
 
             var actualVariableNames = vs.Select(v => v.Name).ToArray();
@@ -185,27 +187,6 @@ namespace Madingley.Test.Common
 
                     switch (v.TypeOfData.Name.ToString().ToLower())
                     {
-                        case "single":
-                            {
-                                var actual = (float[, ,])v.GetData();
-                                var count1 = actual.GetLength(0);
-                                var count2 = actual.GetLength(1);
-
-                                actualTruncated = new double[count1, count2, count3];
-
-                                for (var ii = 0; ii < count1; ii++)
-                                {
-                                    for (var jj = 0; jj < count2; jj++)
-                                    {
-                                        for (var kk = 0; kk < count3; kk++)
-                                        {
-                                            actualTruncated[ii, jj, kk] = (double)actual[ii, jj, kk];
-                                        }
-                                    }
-                                }
-                            }
-                            break;
-
                         case "double":
                             {
                                 var actual = (double[, ,])v.GetData();

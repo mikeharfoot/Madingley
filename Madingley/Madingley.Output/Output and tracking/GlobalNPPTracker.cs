@@ -217,15 +217,9 @@ namespace Madingley
             NPPOutput.Dispose();
         }
 
-        public DataSet Clone()
+        public string Clone(int year)
         {
-            var dataSet = this.NPPOutput.Clone("msds:memory");
-            var dataSet2 = dataSet.Clone("msds:memory");
-
-            dataSet.Dispose();
-            dataSet = null;
-
-            return dataSet2;
+            return Utilities.CloneDataSet(this.NPPOutput, this.FileName, year);
         }
 
         public void Copy(GlobalNPPTracker existing)

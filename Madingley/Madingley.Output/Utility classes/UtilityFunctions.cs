@@ -50,15 +50,29 @@ namespace Madingley
 
         }
 
-        /// <summary>
-        /// Convert from degrees to radians
-        /// </summary>
-        /// <param name="degrees">The value in degrees to convert</param>
-        /// <returns>The value converted to radians</returns>
-        public static double DegreesToRadians(double degrees)
+        public static string MakeYearlyFileName(string fileName, int year)
         {
-            return (degrees * Math.PI / 180.0);
+            var cloneFileNameWithoutExtension = string.Format("{0}_{1}", System.IO.Path.GetFileNameWithoutExtension(fileName), year);
+            var cloneFileName = System.IO.Path.ChangeExtension(cloneFileNameWithoutExtension, System.IO.Path.GetExtension(fileName));
+
+            return System.IO.Path.Combine(System.IO.Path.GetDirectoryName(fileName), cloneFileName);
         }
 
+        public static string CloneDataSet(Microsoft.Research.Science.Data.DataSet source, string fileName, int year)
+        {
+            var cloneFileName = MakeYearlyFileName(fileName, year);
+            var targetUri = "msds:nc?file=" + cloneFileName + "&openMode=create";
+
+            var dataSet = source.Clone("msds:memory");
+            var dataSet2 = dataSet.Clone(targetUri);
+
+            dataSet.Dispose();
+            dataSet = null;
+
+            dataSet2.Dispose();
+            dataSet2 = null;
+
+            return cloneFileName;
+        }
     }
 }

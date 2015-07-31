@@ -610,15 +610,9 @@ namespace Madingley
             GridOutput.Dispose();
         }
 
-        public DataSet Clone()
+        public string Clone(int year)
         {
-            var dataSet = this.GridOutput.Clone("msds:memory");
-            var dataSet2 = dataSet.Clone("msds:memory");
-
-            dataSet.Dispose();
-            dataSet = null;
-
-            return dataSet2;
+            return Utilities.CloneDataSet(this.GridOutput, this.FileName, year);
         }
 
         public void Copy(OutputGrid existing)

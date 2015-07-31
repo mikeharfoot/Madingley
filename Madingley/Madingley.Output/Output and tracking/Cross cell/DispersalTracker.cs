@@ -108,19 +108,13 @@ namespace Madingley
             }
         }
 
-        public DataSet Clone(int year)
+        public string Clone(int year)
         {
             var extension = string.Format("year_{0}.tsv", year);
             var copyFileName = System.IO.Path.ChangeExtension(this.FileName, extension);
             System.IO.File.Copy(this.FileName, copyFileName, true);
 
-            var fileString = "msds:csv?file=" + copyFileName + "&openMode=readOnly&separator=tab";
-
-            var dataSet2 = DataSet.Open(fileString);
-
-            System.IO.File.Delete(copyFileName);
-
-            return dataSet2;
+            return copyFileName;
         }
 
         public void Copy(DispersalTracker existing)

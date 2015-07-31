@@ -438,10 +438,10 @@ namespace Madingley
 #if true
         public Object EndYear(int year)
         {
-            var globalDataSet = this.GlobalOutputs.Clone();
-            var cellDataSets = (DataSet[])null;
-            var gridDataSet = (DataSet)null;
-            var nppDataSet = (DataSet)null;
+            var globalDataSet = this.GlobalOutputs.Clone(year);
+            var cellDataSets = (string[])null;
+            var gridDataSet = (string)null;
+            var nppDataSet = (string)null;
 
             if (this.CellOutputs != null)
             {
@@ -449,14 +449,14 @@ namespace Madingley
                     this.CellOutputs.Select(
                         cell =>
                         {
-                            return cell.Clone();
+                            return cell.Clone(year);
                         }).ToArray();
             }
             else
             {
-                cellDataSets = new DataSet[] { };
-                gridDataSet = this.GridOutputs.Clone();
-                nppDataSet = this.TrackGlobalProcesses.TrackProcesses ? this.TrackGlobalProcesses.TrackNPP.Clone() : null;
+                cellDataSets = new string[] { };
+                gridDataSet = this.GridOutputs.Clone(year);
+                nppDataSet = this.TrackGlobalProcesses.TrackProcesses ? this.TrackGlobalProcesses.TrackNPP.Clone(year) : null;
             }
 
             var crossCellProcessOutputs =
