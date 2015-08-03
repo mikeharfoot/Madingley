@@ -6,56 +6,58 @@ namespace Madingley
 {
     public static class Converters
     {
-        public static Madingley.Common.Cohort ConvertCohortData(Cohort c)
+        public static Madingley.Common.Cohort ConvertCohortData(Cohort cohort)
         {
             return new Madingley.Common.Cohort(
-                (int)c.BirthTimeStep,
-                (int)c.MaturityTimeStep,
-                c.CohortID.Select(cs => (int)cs).ToArray(),
-                c.JuvenileMass,
-                c.AdultMass,
-                c.IndividualBodyMass,
-                c.IndividualReproductivePotentialMass,
-                c.MaximumAchievedBodyMass,
-                c.CohortAbundance,
-                c.Merged,
-                c.ProportionTimeActive,
-                c.TrophicIndex,
-                c.LogOptimalPreyBodySizeRatio);
+                cohort.FunctionalGroupIndex,
+                (int)cohort.BirthTimeStep,
+                (int)cohort.MaturityTimeStep,
+                cohort.CohortID.Select(cs => (int)cs).ToArray(),
+                cohort.JuvenileMass,
+                cohort.AdultMass,
+                cohort.IndividualBodyMass,
+                cohort.IndividualReproductivePotentialMass,
+                cohort.MaximumAchievedBodyMass,
+                cohort.CohortAbundance,
+                cohort.Merged,
+                cohort.ProportionTimeActive,
+                cohort.TrophicIndex,
+                cohort.LogOptimalPreyBodySizeRatio);
         }
 
-        public static Cohort ConvertCohort(Madingley.Common.Cohort c, byte functionalGroupIndex)
+        public static Cohort ConvertCohort(Madingley.Common.Cohort cohort, byte functionalGroupIndex)
         {
             return new Cohort(
-                (uint)c.BirthTimeStep,
-                (uint)c.MaturityTimeStep,
-                 c.IDs.Select(cs => (uint)cs).ToList(),
-                c.JuvenileMass,
-                c.AdultMass,
-                c.IndividualBodyMass,
-                c.IndividualReproductivePotentialMass,
-                c.MaximumAchievedBodyMass,
-                c.Abundance,
+                (uint)cohort.BirthTimeStep,
+                (uint)cohort.MaturityTimeStep,
+                 cohort.IDs.Select(cs => (uint)cs).ToList(),
+                cohort.JuvenileMass,
+                cohort.AdultMass,
+                cohort.IndividualBodyMass,
+                cohort.IndividualReproductivePotentialMass,
+                cohort.MaximumAchievedBodyMass,
+                cohort.Abundance,
                 functionalGroupIndex,
-                c.Merged,
-                c.ProportionTimeActive,
-                c.TrophicIndex,
-                c.LogOptimalPreyBodySizeRatio);
+                cohort.Merged,
+                cohort.ProportionTimeActive,
+                cohort.TrophicIndex,
+                cohort.LogOptimalPreyBodySizeRatio);
         }
 
-        public static Madingley.Common.Stock ConvertStockData(Stock c)
+        public static Madingley.Common.Stock ConvertStockData(Stock stock)
         {
             return new Madingley.Common.Stock(
-                c.IndividualBodyMass,
-                c.TotalBiomass);
+                stock.FunctionalGroupIndex,
+                stock.IndividualBodyMass,
+                stock.TotalBiomass);
         }
 
-        public static Stock ConvertStock(Madingley.Common.Stock c, byte functionalGroupIndex)
+        public static Stock ConvertStock(Madingley.Common.Stock stock, byte functionalGroupIndex)
         {
             return new Stock(
                 functionalGroupIndex,
-                c.IndividualBodyMass,
-                c.TotalBiomass);
+                stock.IndividualBodyMass,
+                stock.TotalBiomass);
         }
 
         public static FunctionalGroupDefinitions ConvertFunctionalGroupDefinitions(Madingley.Common.FunctionalGroupDefinitions data)

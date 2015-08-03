@@ -7,6 +7,7 @@ namespace Madingley.Test.Common
     {
         public static Madingley.Common.Cohort RandomCohort(Random rnd)
         {
+            var functionalGroupIndex = rnd.Next();
             var birthTimeStep = rnd.Next();
             var maturityTimeStep = rnd.Next();
             var cohortID = Enumerable.Range(0, 3).Select(i => rnd.Next()).ToArray();
@@ -22,6 +23,7 @@ namespace Madingley.Test.Common
             var logOptimalPreyBodySizeRatio = rnd.NextDouble();
 
             return new Madingley.Common.Cohort(
+                functionalGroupIndex,
                 birthTimeStep,
                 maturityTimeStep,
                 cohortID,

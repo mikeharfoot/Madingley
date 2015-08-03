@@ -13,6 +13,7 @@ namespace Madingley.Serialization
             Action<Newtonsoft.Json.JsonWriter, Madingley.Common.Cohort> JsonAddPropertyCohort = (jsonWriter, value) =>
             {
                 jsonWriter.WriteStartObject();
+                Common.Writer.PropertyInt(jsonWriter, "FunctionalGroupIndex", value.FunctionalGroupIndex);
                 Common.Writer.PropertyInt(jsonWriter, "BirthTimeStep", value.BirthTimeStep);
                 Common.Writer.PropertyInt(jsonWriter, "MaturityTimeStep", value.MaturityTimeStep);
                 Common.Writer.PropertyInlineArray(jsonWriter, "IDs", value.IDs, Common.Writer.WriteInt);
@@ -32,6 +33,7 @@ namespace Madingley.Serialization
             Action<Newtonsoft.Json.JsonWriter, Madingley.Common.Stock> JsonAddPropertyStock = (jsonWriter, value) =>
             {
                 jsonWriter.WriteStartObject();
+                Common.Writer.PropertyInt(jsonWriter, "FunctionalGroupIndex", value.FunctionalGroupIndex);
                 Common.Writer.PropertyDouble(jsonWriter, "IndividualBodyMass", value.IndividualBodyMass);
                 Common.Writer.PropertyDouble(jsonWriter, "TotalBiomass", value.TotalBiomass);
                 jsonWriter.WriteEndObject();
@@ -80,9 +82,10 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
+                        case "FunctionalGroupIndex": ret.FunctionalGroupIndex = Common.Reader.ReadInt(reader); break;
                         case "BirthTimeStep": ret.BirthTimeStep = Common.Reader.ReadInt(reader); break;
                         case "MaturityTimeStep": ret.MaturityTimeStep = Common.Reader.ReadInt(reader); break;
-                        case "IDs": ret.IDs = Common.Reader.ReadArray(reader, Common.Reader.ReadInt); break;
+                        case "IDs": ret.IDs = Common.Reader.ReadArray(reader, Common.Reader.ReadInt).ToList(); break;
                         case "JuvenileMass": ret.JuvenileMass = Common.Reader.ReadDouble(reader); break;
                         case "AdultMass": ret.AdultMass = Common.Reader.ReadDouble(reader); break;
                         case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.ReadDouble(reader); break;
@@ -117,6 +120,7 @@ namespace Madingley.Serialization
 
                     switch (property)
                     {
+                        case "FunctionalGroupIndex": ret.FunctionalGroupIndex = Common.Reader.ReadInt(reader); break;
                         case "IndividualBodyMass": ret.IndividualBodyMass = Common.Reader.ReadDouble(reader); break;
                         case "TotalBiomass": ret.TotalBiomass = Common.Reader.ReadDouble(reader); break;
                         default: throw new Exception(string.Format("Unexpected property: {0}", property));

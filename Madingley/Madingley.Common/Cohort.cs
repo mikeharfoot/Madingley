@@ -10,6 +10,11 @@ namespace Madingley.Common
     public class Cohort
     {
         /// <summary>
+        /// Index of the functional group the cohort belongs to.
+        /// </summary>
+        public int FunctionalGroupIndex { get; set; }
+
+        /// <summary>
         /// Time step when this cohort was generated.
         /// </summary>
         public int BirthTimeStep { get; set; }
@@ -22,7 +27,7 @@ namespace Madingley.Common
         /// <summary>
         /// List of all cohort IDs ever associated with individuals in this cohort.
         /// </summary>
-        public IEnumerable<int> IDs { get; set; }
+        public IList<int> IDs { get; set; }
 
         /// <summary>
         /// Mean juvenile mass of individuals in this cohort.
@@ -79,6 +84,7 @@ namespace Madingley.Common
         /// </summary>
         public Cohort()
         {
+            this.FunctionalGroupIndex = 0;
             this.BirthTimeStep = 0;
             this.MaturityTimeStep = 0;
             this.IDs = new int[] { };
@@ -97,6 +103,7 @@ namespace Madingley.Common
         /// <summary>
         /// Cohort constructor.
         /// </summary>
+        /// <param name="functionalGroupIndex">Index of the functional group the stock belongs to.</param>
         /// <param name="birthTimeStep">Birth time step.</param>
         /// <param name="maturityTimeStep">Maturity time step.</param>
         /// <param name="cohortID">List of cohort IDs.</param>
@@ -111,6 +118,7 @@ namespace Madingley.Common
         /// <param name="trophicIndex">Trophic level index.</param>
         /// <param name="logOptimalPreyBodySizeRatio">Log optimal prey body mass (as a percentage of this cohorts mass) for individuals.</param>
         public Cohort(
+            int functionalGroupIndex,
             int birthTimeStep,
             int maturityTimeStep,
             IEnumerable<int> cohortID,
@@ -125,6 +133,7 @@ namespace Madingley.Common
             double trophicIndex,
             double logOptimalPreyBodySizeRatio)
         {
+            this.FunctionalGroupIndex = functionalGroupIndex;
             this.BirthTimeStep = birthTimeStep;
             this.MaturityTimeStep = maturityTimeStep;
             this.IDs = cohortID.ToArray();
@@ -146,6 +155,7 @@ namespace Madingley.Common
         /// <param name="cohort">Existing Cohort to copy.</param>
         public Cohort(Cohort cohort)
         {
+            this.FunctionalGroupIndex = cohort.FunctionalGroupIndex;
             this.BirthTimeStep = cohort.BirthTimeStep;
             this.MaturityTimeStep = cohort.MaturityTimeStep;
             this.IDs = cohort.IDs.ToArray();
@@ -174,6 +184,7 @@ namespace Madingley.Common
             if ((Object)cohortObj == null) return false;
 
             return
+                this.FunctionalGroupIndex.Equals(cohortObj.FunctionalGroupIndex) &&
                 this.BirthTimeStep.Equals(cohortObj.BirthTimeStep) &&
                 this.MaturityTimeStep.Equals(cohortObj.MaturityTimeStep) &&
                 this.IDs.SequenceEqual(cohortObj.IDs) &&
@@ -196,6 +207,7 @@ namespace Madingley.Common
         public override int GetHashCode()
         {
             return
+                this.FunctionalGroupIndex.GetHashCode() ^
                 this.BirthTimeStep.GetHashCode() ^
                 this.MaturityTimeStep.GetHashCode() ^
                 this.IDs.GetHashCode() ^

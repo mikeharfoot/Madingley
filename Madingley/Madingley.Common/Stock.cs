@@ -8,6 +8,11 @@ namespace Madingley.Common
     public class Stock
     {
         /// <summary>
+        /// Index of the functional group the stock belongs to.
+        /// </summary>
+        public int FunctionalGroupIndex { get; set; }
+
+        /// <summary>
         /// Mean body mass of an individual in this stock.
         /// </summary>
         public double IndividualBodyMass { get; set; }
@@ -22,6 +27,7 @@ namespace Madingley.Common
         /// </summary>
         public Stock()
         {
+            this.FunctionalGroupIndex = 0;
             this.IndividualBodyMass = 0.0;
             this.TotalBiomass = 0.0;
         }
@@ -29,12 +35,15 @@ namespace Madingley.Common
         /// <summary>
         /// Stock constructor.
         /// </summary>
+        /// <param name="functionalGroupIndex">Index of the functional group the stock belongs to.</param>
         /// <param name="individualBodyMass">Mean body mass of an individual.</param>
         /// <param name="totalBiomass">Total biomass.</param>
         public Stock(
+            int functionalGroupIndex,
             double individualBodyMass,
             double totalBiomass)
         {
+            this.FunctionalGroupIndex = functionalGroupIndex;
             this.IndividualBodyMass = individualBodyMass;
             this.TotalBiomass = totalBiomass;
         }
@@ -45,6 +54,7 @@ namespace Madingley.Common
         /// <param name="stock">Stock to copy.</param>
         public Stock(Stock stock)
         {
+            this.FunctionalGroupIndex = stock.FunctionalGroupIndex;
             this.IndividualBodyMass = stock.IndividualBodyMass;
             this.TotalBiomass = stock.TotalBiomass;
         }
@@ -62,6 +72,7 @@ namespace Madingley.Common
             if ((Object)stockObj == null) return false;
 
             return
+                this.FunctionalGroupIndex.Equals(stockObj.FunctionalGroupIndex) &&
                 this.IndividualBodyMass.Equals(stockObj.IndividualBodyMass) &&
                 this.TotalBiomass.Equals(stockObj.TotalBiomass);
         }
@@ -73,6 +84,7 @@ namespace Madingley.Common
         public override int GetHashCode()
         {
             return
+                this.FunctionalGroupIndex.GetHashCode() ^
                 this.IndividualBodyMass.GetHashCode() ^
                 this.TotalBiomass.GetHashCode();
         }
