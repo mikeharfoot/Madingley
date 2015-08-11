@@ -21,11 +21,29 @@ namespace Madingley
 
             var modelSetupRoot = "../../../Model setup";
             var environmentDataRoot = "../../../Data/Original";
+            var environmentFileName = "environment.json";
 
             var beginTime = DateTime.Now;
 
             var configuration = Madingley.Configuration.Loader.Load(modelSetupRoot);
-            var environment = Madingley.Environment.Loader.Load(environmentDataRoot, modelSetupRoot);
+            var environment = (Common.Environment)null;
+
+            if (System.IO.File.Exists(environmentFileName))
+            {
+                using (var reader = new System.IO.StreamReader(environmentFileName))
+                {
+                    environment = Madingley.Serialization.Environment.Deserialize(reader);
+                }
+            }
+            else
+            {
+                environment = Madingley.Environment.Loader.Load(environmentDataRoot, modelSetupRoot);
+
+                using (var writer = new System.IO.StreamWriter(environmentFileName))
+                {
+                    Madingley.Serialization.Environment.Serialize(environment, writer);
+                }
+            }
 
             var modelTime = DateTime.Now;
 

@@ -111,6 +111,10 @@
       <Project>{a86a9d37-e890-4864-a9fb-013e25fe59bc}</Project>
       <Name>Madingley.Output</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Madingley.Serialization\Madingley.Serialization.csproj">
+      <Project>{419bc8d6-e1e1-45c4-8174-5cbeeff637b9}</Project>
+      <Name>Madingley.Serialization</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
