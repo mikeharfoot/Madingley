@@ -541,18 +541,22 @@ namespace NetCDFInterop
             {
                 case PlatformID.Win32NT:
                     var name = "netcdf.dll";
+                    // try find the file in current directory and then in directories from PATH environmental variable.
                     var path = Enumerable.Repeat(Environment.CurrentDirectory, 1)
                         .Concat(Environment.GetEnvironmentVariable("PATH").Split(';'))
                         .FirstOrDefault(d => File.Exists(Path.Combine(d, name)));
                     if (null == path)
                     {
+                        // alternatively try standard install paths.
                         var ncdir = Directory.GetDirectories(Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86))
                             .Reverse() // last version first
-                            .FirstOrDefault(d => 0 < d.IndexOf("netcdf", StringComparison.InvariantCultureIgnoreCase));
+                            .Where(d => 0 < d.IndexOf("netcdf", StringComparison.InvariantCultureIgnoreCase))
+                            .Select(d => Path.Combine(d, "bin"))
+                            .FirstOrDefault(d => File.Exists(Path.Combine(d, name)));
                         if (null != ncdir)
                         {
-                            ncdir = Path.Combine(ncdir, "bin");
-                            if (File.Exists(Path.Combine(ncdir, name))) path = ncdir;
+                            // if found we need to add the file location to PATH environmental variable to load dependent DLLs.
+                            path = ncdir;
                             Environment.SetEnvironmentVariable("PATH",
                                 Environment.GetEnvironmentVariable("PATH") + ";" + ncdir);
                         }
