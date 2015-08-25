@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.IO;
 
 using System.Diagnostics;
 
@@ -12,6 +13,23 @@ namespace Madingley
     /// </summary>
     public class Harvesting
     {
+
+
+        /// Name of the file to write data on harvesting to
+        /// </summary>
+        string HarvestFilename = "HarvestedBiomasses";
+
+        /// <summary>
+        /// A streamwriter instance to output data on mortality
+        /// </summary>
+        private StreamWriter HarvestWriter;
+
+        /// <summary>
+        /// Synchronized version of the streamwriter to output mortality data
+        /// </summary>
+        private TextWriter SyncHarvestWriter;
+
+
         //A class to hold the fisheries catch data for harvesting from marine cells.
         //Currently this data is from the UBC Sea around Us database
         InputCatchData FisheriesCatch;
@@ -20,10 +38,16 @@ namespace Madingley
         /// <summary>
         /// Constructor for harvesting class
         /// </summary>
-        public Harvesting(float[] modelLats, float[] modelLons, float cellSize)
+        public Harvesting(string outputFileSuffix, float[] modelLats,
+            float[] modelLons, float cellSize)
         {
             //FisheriesCatch = new InputCatchData(modelLats, modelLons,cellSize);
             //ApplyCatches = new ApplyFishingCatches[modelLats.Length,modelLons.Length];
+
+            HarvestWriter = new StreamWriter(HarvestFilename + outputFileSuffix + ".csv");
+            // Create a threadsafe textwriter to write outputs to 
+            SyncHarvestWriter = TextWriter.Synchronized(HarvestWriter);
+            SyncHarvestWriter.WriteLine("Latitude\tLongitude\ttime_step\tharvested biomass (g)");
         }
 
         /// <summary>
@@ -67,7 +91,7 @@ namespace Madingley
                         // the harvesting scenario
                         if (currentTimestep > burninSteps)
                         {
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
                     }
                     else if (harvestingScenario.ParamString == "fish-catch")
@@ -104,7 +128,7 @@ namespace Madingley
                         // the harvesting scenario
                         if (currentTimestep > burninSteps)
                         {
-                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment, currentTimestep);
                         }
                     }
                     else if (harvestingScenario.ParamString == "temporary")
@@ -113,7 +137,7 @@ namespace Madingley
                         // then apply the harvesting scenario
                         if ((currentTimestep > burninSteps) && (currentTimestep <= (burninSteps + impactSteps)))
                         {
-                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, harvestingScenario.ParamDouble1, cellEnvironment, currentTimestep);
                         }
                     }
                     else if (harvestingScenario.ParamString == "escalating")
@@ -126,7 +150,7 @@ namespace Madingley
                             double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
 
                     }
@@ -140,7 +164,7 @@ namespace Madingley
                             double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
                         else if (currentTimestep > (burninSteps + impactSteps))
                         {
@@ -148,7 +172,7 @@ namespace Madingley
                             double TargetBiomass = (Math.Min(50000, ((-(totalSteps - currentTimestep) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenario using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
 
                     }
@@ -163,7 +187,7 @@ namespace Madingley
                             double TargetBiomass = (Math.Min(50000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenarion using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
                     }
                     else if (harvestingScenario.ParamString == "temp-escalating-const-rate")
@@ -181,7 +205,7 @@ namespace Madingley
                             double TargetBiomass = (Math.Min(200000, (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1)));
 
                             // Apply the harvesting scenarion using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
                     }
                     else if (harvestingScenario.ParamString == "temp-escalating-const-rate-duration")
@@ -203,7 +227,7 @@ namespace Madingley
                                             (((currentTimestep - burninSteps) / 12.0) * harvestingScenario.ParamDouble1))));
 
                             // Apply the harvesting scenarion using the calculated target biomass
-                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment);
+                            ApplyHarvesting(gridCellCohorts, TargetBiomass, cellEnvironment, currentTimestep);
                         }
                     }
                     else
@@ -222,10 +246,13 @@ namespace Madingley
         /// <param name="targetBiomass">The target biomass to be harvested</param>
         /// <param name="cellEnvironment">The environment in the current grid cell</param>
         public void ApplyHarvesting(GridCellCohortHandler gridCellCohorts, double targetBiomass,
-            SortedList<string, double[]> cellEnvironment)
+            SortedList<string, double[]> cellEnvironment, uint currentTimestep)
         {
             // Create variable to hold total available animal biomass
             double TotalAvailableBiomass = 0.0;
+            double TotalBiomassTimesPreference = 0.0;
+            double TotalBiomassHarvested = 0.0;
+
 
             // Create variable to hold estimate of preference for a given cohort
             double Preference;
@@ -257,6 +284,7 @@ namespace Madingley
                     AvailableBiomass[fg][c] = (gridCellCohorts[fg][c].IndividualBodyMass * gridCellCohorts[fg][c].CohortAbundance);
                     Preference = 1 / (1 + Math.Exp(-(-8 + 0.8 * Math.Log(gridCellCohorts[fg][c].IndividualBodyMass))));
                     BiomassTimesPreference[fg][c] = AvailableBiomass[fg][c] * Preference;
+                    TotalBiomassTimesPreference += BiomassTimesPreference[fg][c];
                 }
             }
 
@@ -265,11 +293,24 @@ namespace Madingley
             {
                 for (int c = 0; c < gridCellCohorts[fg].Count; c++)
                 {
-                    BiomassHarvested = Math.Min(AvailableBiomass[fg][c], targetBiomass * BiomassTimesPreference[fg][c] / TotalAvailableBiomass);
+                    BiomassHarvested = Math.Min(AvailableBiomass[fg][c], targetBiomass * BiomassTimesPreference[fg][c] / TotalBiomassTimesPreference);
+                    TotalBiomassHarvested += BiomassHarvested;
                     gridCellCohorts[fg][c].CohortAbundance -= (BiomassHarvested / gridCellCohorts[fg][c].IndividualBodyMass);
                 }
             }
 
+            SyncHarvestWriter.WriteLine(
+                   cellEnvironment["Latitude"][0] + "," +
+                   cellEnvironment["Longitude"][0] + "," +
+                    currentTimestep + "," +
+                    TotalBiomassHarvested);
+
+        }
+
+        public void CloseStreams()
+        {
+            SyncHarvestWriter.Dispose();
+            HarvestWriter.Dispose();
         }
 
     }

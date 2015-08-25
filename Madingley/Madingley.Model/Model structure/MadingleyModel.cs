@@ -434,7 +434,7 @@ namespace Madingley
             ClimateChangeSimulator = new ClimateChange();
 
             // Initialise the harvesting impacts class
-            HarvestingSimulator = new Harvesting(EcosystemModelGrid.Lats, EcosystemModelGrid.Lons, (float)EcosystemModelGrid.LatCellSize);
+            HarvestingSimulator = new Harvesting(OutputFilesSuffix, EcosystemModelGrid.Lats, EcosystemModelGrid.Lons, (float)EcosystemModelGrid.LatCellSize);
 #if false
         }
 #endif
